@@ -4,7 +4,6 @@
 >  </br>
 
 ## Installation
-The following instructions are created for 
 1. 
 
 ## Usage
@@ -12,7 +11,6 @@ The following steps can be used to experience the full functionality of the appl
 
 \[All\] </br>
 1. </br>
-1b. 
 
 
 ## Version History
