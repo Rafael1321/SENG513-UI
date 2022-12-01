@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Start, { FormType } from './components/Start';
+import { FormType } from './components/Start/Form';
+import Start from './components/Start/Start';
 
 function App() {
   return <BrowserRouter>

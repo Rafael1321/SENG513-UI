@@ -11,36 +11,7 @@ type Props = {
     formType : FormType
 }
 
-export default function Start(props : Props) : React.ReactElement{
-        
-    return (
-        <StartPage>
-            <Agents></Agents>
-            <Form formType={props.formType}></Form>
-        </StartPage>
-    );
-}
-
-const StartPage = styled.div`
-    display: flex;
-    flex-direction: row;
-    background-color: black;
-    height: 100vh;
-    width: 100vw;
-
-    @media (max-width: 1200px) {
-        display: flex;
-        flex-direction: column-reverse;
-        align-items: center;
-        justify-content: space-around;
-        overflow-y: auto;
-        overflow-x: hidden;
-    }
-`;
-
-/* =============================================================== */ 
-
-function Form(props : Props) : React.ReactElement<Props, any>{
+export function Form(props : Props) : React.ReactElement<Props, any>{
 
     return (
         <OuterForm>
@@ -69,10 +40,12 @@ const OuterForm = styled.div`
     width: 33vw;
     background-color: #181818;
 
-    @media screen and (max-width: 1200px) {
+    @media screen and (max-width: 950px) {
         border-radius: 10px;
         padding: 5vw 2vw;
         transform: scale(1.5);
+        background-color: rgb(24, 24, 24, 0.8);
+        box-shadow: 0 0 1.0rem 0.1rem rgb(74, 183, 190); 
     }
 
     @media screen and (max-width: 700px) {
@@ -174,70 +147,5 @@ const Fields = styled.div`
             cursor: default;
             background-color: #bcbaba; 
         }
-    }
-`
-
-/* =============================================================== */ 
-
-function Agents() : React.ReactElement{
-
-    const { innerWidth: width, innerHeight: height } = window;
-    const [imgHeight, setImgHeight] = React.useState(0);
-    const imgRef = React.useRef(null);
-
-    React.useEffect(() => {
-
-        function handleWindowResize() {
-            setImgHeight(imgRef.current?.clientHeight);
-        }
-        window.addEventListener('resize', handleWindowResize);
-
-    }, []);
-
-    return (
-        <AgentContainer>    
-            <div className='text-container' style={{height: (imgHeight === 0 || (window.matchMedia("(orientation: landscape)").matches && (width <= 900 || height <= 700)))?'10%':`calc(100% - ${imgHeight}px)`}}>
-                <p>Find teammates to play Valorant with! Climb up the ranks with like-minded players and make long lasting friendships.</p>
-            </div>
-            <img ref={imgRef} src={require('../assets/images/agents_5.png')} alt="Group of Agents"></img>
-        </AgentContainer>
-    );
-}
-
-const AgentContainer = styled.div`
-    width: 67%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative; 
-
-    & div{
-        display: flex;
-        align-items: center; 
-        justify-content: center;
-        width: 100%;
-        padding: 5% 0;
-
-        & p {
-            color: white;
-            font-size: 2.2vh;
-            text-align: center;
-            padding: 0 10%;
-
-         
-        }
-    }
-
-    & img{
-        display: block;
-        width: 100%;
-        height: auto; 
-        margin: auto;
-        content:url("../assets/images/agents_5.png");
-    }
-
-    @media (max-width: 1200px) {
-        display: none;
     }
 `
