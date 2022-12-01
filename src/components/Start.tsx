@@ -27,6 +27,15 @@ const StartPage = styled.div`
     background-color: black;
     height: 100vh;
     width: 100vw;
+
+    @media (max-width: 1200px) {
+        display: flex;
+        flex-direction: column-reverse;
+        align-items: center;
+        justify-content: space-around;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
 `;
 
 /* =============================================================== */ 
@@ -57,34 +66,40 @@ function Form(props : Props) : React.ReactElement<Props, any>{
 }
 
 const OuterForm = styled.div`
-    display:flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    width: 33%;
-    min-width: 500px;
-    min-height: 800px;
+    width: 33vw;
     background-color: #181818;
+
+    @media screen and (max-width: 1200px) {
+        border-radius: 10px;
+        padding: 5vw 2vw;
+        transform: scale(1.5);
+    }
+
+    @media screen and (max-width: 700px) {
+        transform: scale(1.7);
+    }
+
+    @media screen and (max-width: 500px) {
+        transform: scale(1.5);
+    }
 `;
 
 const InnerForm = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 100%;
     justify-content: center;
+    height: 100%;
 
     & button { 
         padding: 10px;
         background-color: #F94B4B;
         border: none;
-        border-radius: 8px;
-        font-size: 1.3rem;
+        border-radius: 0.5vw;
+        font-size: 1.3vw;
         color: white;
-        width: 50%;
-        height: 5vh;
-        min-height: 50px;
+        width: auto;
+        padding: 3%;
         transition: 0.2s ease-in-out;
 
         &:hover{
@@ -104,11 +119,11 @@ const Title = styled.div`
     }
 
     & #title1{
-        font-size: 2.7rem;
+        font-size: 3.5vw;
     }
 
     & #title2{
-        font-size: 3.5rem;
+        font-size: 4.5vw;
         color: #F94B4B;
     }
 `;
@@ -122,11 +137,11 @@ const Fields = styled.div`
     margin: 15% 0;
 
     & #subtitle {
-        font-size: 1.3rem;
+        font-size: 1.2vw;
     }
 
     & .question {
-        font-size: 1.0rem;
+        font-size: 1.0vw;
 
         & a {
             color: #F94B4B;
@@ -141,20 +156,22 @@ const Fields = styled.div`
     }
 
     & input{
-        padding: 6%;
+        padding: 1vw;
         border: none;
         background-color: #e6e3e3;
-        border-radius: 8px;
-        width: 90%;
+        border-radius: 0.5vw;
+        width: 15vw;
+        height: 10px;
         margin: 5px;
         transition: 0.2s ease-in-out;
 
         &::placeholder{
             color: black;
+            font-size: 0.8vw;
         }
 
         &:hover{
-            cursor: pointer;
+            cursor: default;
             background-color: #bcbaba; 
         }
     }
@@ -207,6 +224,8 @@ const AgentContainer = styled.div`
             font-size: 2.2vh;
             text-align: center;
             padding: 0 10%;
+
+         
         }
     }
 
@@ -216,5 +235,9 @@ const AgentContainer = styled.div`
         height: auto; 
         margin: auto;
         content:url("../assets/images/agents_5.png");
+    }
+
+    @media (max-width: 1200px) {
+        display: none;
     }
 `
