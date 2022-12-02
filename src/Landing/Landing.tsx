@@ -1,8 +1,10 @@
 import * as React from "react";
 import styled from "styled-components";
+import { useState } from "react";
 
-export default function FindDuo(props: any) {
-  let findDuo = false;
+export default function Landing(props: any) {
+  const [findDuo, setFindDuo] = useState(false);
+
   return (
     <LandingPage>
       <Nav>
@@ -15,7 +17,10 @@ export default function FindDuo(props: any) {
           <button disabled id="profilePic"></button>
         </User>
       </Nav>
-      <div className="landingBody"></div>
+      <LandingContent>
+        <div id="card">PP POOPOO</div>
+        <button id="findDuo">FIND DUO</button>
+      </LandingContent>
     </LandingPage>
   );
 }
@@ -49,15 +54,15 @@ const Logo = styled.div`
 
   & #valorant {
     color: #f94b4b;
-    font-size: 3rem;
+    font-size: 2rem;
     margin: 0px;
-    padding: 0px;
+    padding-bottom: 5px;
     font-weight: 200;
   }
 
   & #duofinder {
     color: white;
-    font-size: 4rem;
+    font-size: 3rem;
     margin: 0px;
     padding: 0px;
     font-weight: 200;
@@ -69,7 +74,9 @@ const User = styled.div`
   flex-direction: row;
   margin-left: auto;
   padding-right: 1rem;
-  font-family: "Poppins";
+  font-family: "Poppins", sans-serif;
+  font-size: 1rem;
+  font-weight: 100;
 
   & #username {
     color: white;
@@ -82,5 +89,40 @@ const User = styled.div`
     border-radius: 50%;
     height: 50px;
     width: 50px;
+  }
+`;
+
+const LandingContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  & #card {
+    background-color: #282828;
+    margin: 7% 5% 5% 5%;
+    width: 760px;
+    height: 400px;
+
+    border-radius: 46px;
+    box-shadow: 0 0 7.5px #66c2a9;
+    text-align: center;
+    color: white;
+  }
+
+  & #findDuo {
+    background-color: #66c2a9;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-family: "Poppins", sans-serif;
+    font-weight: 700;
+    font-size: 1em;
+    padding: 10px 20px;
+    transition: 0.5s;
+
+    &:hover {
+      box-shadow: 0 0 7.5px #66c2a9;
+    }
   }
 `;

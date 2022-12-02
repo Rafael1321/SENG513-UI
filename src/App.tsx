@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import FindDuo from "./Landing/FindDuo";
+import Landing from "./Landing/Landing";
 
 function App() {
   return (
@@ -10,8 +10,8 @@ function App() {
         <Route path="/login" element="" />
         <Route path="/" element="" />
         <Route
-          path="/findDuo"
-          element={<FindDuo username="VividEradicator"></FindDuo>}
+          path="/landing"
+          element={<Landing username="VividEradicator"></Landing>}
         />
       </Routes>
     </BrowserRouter>
