@@ -1,6 +1,11 @@
 import * as React from 'react'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { AuthService, IAuthResponse } from '../../services/AuthService';
+import { LoggedUserContext } from '../../contexts/LoggesUserContext';
+import { CustomToast } from '../Shared/CustomToast';
 
 export enum FormType {
     Login = 0,
@@ -13,26 +18,108 @@ type Props = {
 
 export function Form(props : Props) : React.ReactElement<Props, any>{
 
+    /* Logged User Context */
+    const loggedUserContext = React.useContext(LoggedUserContext);
+
+    /* Navigation */
+    const navigate = useNavigate();
+
+    /* Form State */
+
+    const [userName, setUserName] = React.useState('');
+    const [email, setEmail] = React.useState('');
+    const [password, setPassword] = React.useState('');
+    const [confirmPassword, setConfirmPassword] = React.useState('');
+
+    /* Handlers */
+
+    // Form
+    const handleUsernameChange = (e : any) => { setUserName(e.target.value); }
+    const handleEmailChange = (e : any) => { setEmail(e.target.value); }
+    const handlePasswordChange = (e : any) => { setPassword(e.target.value); }
+    const handleConfirmPasswordChange = (e : any) => { setConfirmPassword(e.target.value); }
+
+    React.useEffect(() => {
+        if(localStorage.getItem("logged-in")){
+            navigate('./landing');
+        }
+    }, []);
+
+    // Button
+    const handleButtonClick = async () : Promise<void> => {
+
+        // Validating username and password
+        if(userName === ''){
+            toast.error("Please provide a user name.");
+            return;
+        }else if(password === ''){
+            toast.error("Please provide a password.");
+            return;
+        }
+
+        if(props.formType === FormType.Registration){
+
+            // Validation email and password
+            if(email === ''){
+                toast.error("Please provide your email.");
+                return;
+            }else if(confirmPassword){
+                toast.error("Please confirm your password.");
+                return;
+            }else if(password !== confirmPassword){
+                toast.error("Confirm password does not match password");
+                return;
+            }
+            
+            // Call API to attempt registration
+            const authResponse : IAuthResponse = await AuthService.register(userName, email, password);
+
+            if(authResponse.statusCode !== 201){ // Username already in use or Email already in use
+                toast.error(authResponse.data);
+                return;
+            }else{ 
+                loggedUserContext.updateLoggedUser(authResponse.data);
+                localStorage.setItem('logged-in', JSON.stringify(true));
+            }
+        }else{
+
+            // Call API to attempt login
+            const authResponse : IAuthResponse = await AuthService.login(userName, password);
+
+            if(authResponse.statusCode !== 200){  // Wrong email and password combination
+                toast.error(authResponse.data);
+                return;
+            }else{ 
+                loggedUserContext.updateLoggedUser(authResponse.data);
+                localStorage.setItem('logged-in', JSON.stringify(true));
+            }
+        }
+        navigate('./landing');
+    }
+
     return (
-        <OuterForm>
-            <InnerForm>
-                <Title>
-                    <p id="title1">VALORANT</p>
-                    <p id="title2">DUOFINDER</p>
-                </Title>
-                <Fields>
-                    <p id="subtitle">{props.formType === FormType.Registration?'CREATE ACCOUNT':'LOGIN'}</p>
-                    <input type='text' placeholder="USERNAME"></input>
-                    {props.formType === FormType.Registration?<input type='email' placeholder="EMAIL"></input>:''}
-                    <input type='password' placeholder="PASSWORD"></input>
-                    {props.formType === FormType.Registration?<input type='password' placeholder="CONFIRM PASSWORD"></input>:''}
-                    {props.formType === FormType.Registration?
-                        <p className='question'>ALREADY HAVE AN ACCOUNT?<Link to='/login'> LOGIN</Link></p>:
-                        <p className="question">DON'T HAVE AN ACCOUNT?<Link to='/register'> REGISTER</Link></p>}
-                </Fields>
-                <button>{props.formType === FormType.Registration?'SIGNUP':'START'}</button>
-            </InnerForm>
-        </OuterForm>
+        <>
+            <CustomToast></CustomToast>
+            <OuterForm>
+                <InnerForm>
+                    <Title>
+                        <p id="title1">VALORANT</p>
+                        <p id="title2">DUOFINDER</p>
+                    </Title>
+                    <Fields>
+                        <p id="subtitle">{props.formType === FormType.Registration?'CREATE ACCOUNT':'LOGIN'}</p>
+                        <input type='text' placeholder="USERNAME" onChange={handleUsernameChange}></input>
+                        {props.formType === FormType.Registration?<input type='email' placeholder="EMAIL" onChange={handleEmailChange}></input>:''}
+                        <input type='password' placeholder="PASSWORD" onChange={handlePasswordChange}></input>
+                        {props.formType === FormType.Registration?<input type='password' placeholder="CONFIRM PASSWORD" onChange={handleConfirmPasswordChange}></input>:''}
+                        {props.formType === FormType.Registration?
+                            <p className='question'>ALREADY HAVE AN ACCOUNT?<Link to='/login'> LOGIN</Link></p>:
+                            <p className="question">DON'T HAVE AN ACCOUNT?<Link to='/register'> REGISTER</Link></p>}
+                    </Fields>
+                    <button onClick={handleButtonClick}>{props.formType === FormType.Registration?'SIGNUP':'START'}</button>
+                </InnerForm>
+            </OuterForm>
+        </>
     );
 }
 
