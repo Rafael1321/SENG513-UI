@@ -1,9 +1,31 @@
 import * as React from "react";
 import styled from "styled-components";
 import { useState } from "react";
+import Profile from "./Profile";
+import FindDuo from "./FindDuo";
+import MatchFound from "./MatchFound";
 
 export default function Landing(props: any) {
+  let matchFound = false;
   const [findDuo, setFindDuo] = useState(false);
+
+  function clickedFindDuo() {
+    setFindDuo(true);
+  }
+
+  function clickedCancel() {
+    setFindDuo(false);
+  }
+
+  const displayCard = () => {
+    if (!findDuo) {
+      return <Profile setFindDuo={clickedFindDuo}></Profile>;
+    } else if (findDuo && !matchFound) {
+      return <FindDuo setFindDuo={clickedCancel} imgSrc=""></FindDuo>;
+    } else {
+      return <MatchFound></MatchFound>;
+    }
+  };
 
   return (
     <LandingPage>
@@ -17,10 +39,7 @@ export default function Landing(props: any) {
           <button disabled id="profilePic"></button>
         </User>
       </Nav>
-      <LandingContent>
-        <div id="card">PP POOPOO</div>
-        <button id="findDuo">FIND DUO</button>
-      </LandingContent>
+      <div>{displayCard()}</div>
     </LandingPage>
   );
 }
@@ -89,40 +108,5 @@ const User = styled.div`
     border-radius: 50%;
     height: 50px;
     width: 50px;
-  }
-`;
-
-const LandingContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-
-  & #card {
-    background-color: #282828;
-    margin: 7% 5% 5% 5%;
-    width: 760px;
-    height: 400px;
-
-    border-radius: 46px;
-    box-shadow: 0 0 7.5px #66c2a9;
-    text-align: center;
-    color: white;
-  }
-
-  & #findDuo {
-    background-color: #66c2a9;
-    border: none;
-    border-radius: 8px;
-    color: white;
-    font-family: "Poppins", sans-serif;
-    font-weight: 700;
-    font-size: 1em;
-    padding: 10px 20px;
-    transition: 0.5s;
-
-    &:hover {
-      box-shadow: 0 0 7.5px #66c2a9;
-    }
   }
 `;
