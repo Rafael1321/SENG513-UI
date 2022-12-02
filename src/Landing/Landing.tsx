@@ -7,6 +7,7 @@ import MatchFound from "./MatchFound";
 
 export default function Landing(props: any) {
   let matchFound = false;
+  let playerIconSrc = "/Images/reyna.png";
   const [findDuo, setFindDuo] = useState(false);
 
   function clickedFindDuo() {
@@ -21,8 +22,10 @@ export default function Landing(props: any) {
     if (!findDuo) {
       return <Profile setFindDuo={clickedFindDuo}></Profile>;
     } else if (findDuo && !matchFound) {
-      return <FindDuo setFindDuo={clickedCancel} imgSrc=""></FindDuo>;
-    } else {
+      return (
+        <FindDuo setFindDuo={clickedCancel} imgSrc={playerIconSrc}></FindDuo>
+      );
+    } else if (findDuo && matchFound) {
       return <MatchFound></MatchFound>;
     }
   };
@@ -36,7 +39,11 @@ export default function Landing(props: any) {
         </Logo>
         <User>
           <p id="username">{props.username}</p>
-          <button disabled id="profilePic"></button>
+          <img
+            id="profilePic"
+            src={"/Images/reyna.png"}
+            alt="Player Icon"
+          ></img>
         </User>
       </Nav>
       <div>{displayCard()}</div>
