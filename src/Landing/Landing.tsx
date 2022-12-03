@@ -104,7 +104,7 @@ const Logo = styled.div`
     transition: all 0.5s ease-in-out;
 
     @media (max-width: 769px) {
-      font-size: 1.5rem;
+      font-size: 1.35rem;
     }
 
     @media (max-width: 480px) {
@@ -121,10 +121,10 @@ const Logo = styled.div`
     transition: all 0.5s ease-in-out;
 
     @media (max-width: 769px) {
-      font-size: 2.5rem;
+      font-size: 2rem;
     }
     @media (max-width: 480px) {
-      font-size: 2rem;
+      font-size: 1.5rem;
     }
   }
   @media (max-width: 769px) {
@@ -154,6 +154,7 @@ const User = styled.div`
     border-radius: 50%;
     height: 50px;
     width: 50px;
+
     @media (max-width: 769px) {
       height: 40px;
       width: 40px;
@@ -163,7 +164,7 @@ const User = styled.div`
   @media (max-width: 769px) {
     font-size: 0.75rem;
     padding-right: 0;
-    margin: 1% auto;
+    margin: 2.5% auto;
   }
 `;
 
@@ -209,7 +210,7 @@ const FindDuo = styled.button`
   }
 
   @media (max-width: 769px) {
-    margin-bottom: 5%;
+    margin: 5%;
   }
 `;
 
@@ -229,5 +230,8 @@ const Cancel = styled.button`
   &:hover {
     box-shadow: 0 0 7.5px #66c2a9;
     cursor: pointer;
+  }
+  @media (max-width: 769px) {
+    margin: 5%;
   }
 `;

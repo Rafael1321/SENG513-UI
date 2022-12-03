@@ -21,21 +21,24 @@ export default function LandingCard(props: any) {
 const Card = styled.div`
   background-color: #282828;
   margin: 5%;
-  width: 720px;
-  height: 400px;
+  width: 50vw;
+  height: 55vh;
 
   border-radius: 46px;
   box-shadow: 0 0 7.5px #66c2a9;
   text-align: center;
   color: white;
-  transition: all 0.25s ease-in-out;
 
   display: flex;
   flex-direction: column;
   justify-content: center;
 
+  @media (max-width: 1025px) {
+    width: 75vw;
+  }
+
   @media (max-width: 769px) {
-    width: 400px;
-    height: 500px;
+    width: 80vw;
+    height: 65vh;
   }
 `;
