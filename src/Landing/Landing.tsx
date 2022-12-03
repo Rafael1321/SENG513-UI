@@ -1,12 +1,11 @@
 import * as React from "react";
 import styled from "styled-components";
 import { useState } from "react";
-import Profile from "./Profile";
-import FindDuo from "./FindDuo";
-import MatchFound from "./MatchFound";
+
+import LandingCard from "./LandingCard";
 
 export default function Landing(props: any) {
-  let matchFound = false;
+  let duoFound = false;
   let playerIconSrc = "/Images/reyna.png";
   const [findDuo, setFindDuo] = useState(false);
 
@@ -18,18 +17,6 @@ export default function Landing(props: any) {
     setFindDuo(false);
   }
 
-  const displayCard = () => {
-    if (!findDuo) {
-      return <Profile setFindDuo={clickedFindDuo}></Profile>;
-    } else if (findDuo && !matchFound) {
-      return (
-        <FindDuo setFindDuo={clickedCancel} imgSrc={playerIconSrc}></FindDuo>
-      );
-    } else if (findDuo && matchFound) {
-      return <MatchFound></MatchFound>;
-    }
-  };
-
   return (
     <LandingPage>
       <Nav>
@@ -39,24 +26,35 @@ export default function Landing(props: any) {
         </Logo>
         <User>
           <p id="username">{props.username}</p>
-          <img
-            id="profilePic"
-            src={"/Images/reyna.png"}
-            alt="Player Icon"
-          ></img>
+          <img id="profilePic" src={playerIconSrc} alt="Player Icon"></img>
         </User>
       </Nav>
-      <LandingContent>{displayCard()}</LandingContent>
+      <LandingContent>
+        <Container>
+          <LandingCard
+            findDuo={findDuo}
+            duoFound={duoFound}
+            imgSrc={playerIconSrc}
+          ></LandingCard>
+          {findDuo ? (
+            <Cancel onClick={clickedCancel}>&#10005; CANCEL</Cancel>
+          ) : (
+            <FindDuo onClick={clickedFindDuo}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 512 512"
+                id="magnifyingGlass"
+              >
+                <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z" />
+              </svg>
+              FIND DUO
+            </FindDuo>
+          )}
+        </Container>
+      </LandingContent>
     </LandingPage>
   );
 }
-
-const LandingContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  height: 70%;
-`;
 
 const LandingPage = styled.div`
   background-color: #181818;
@@ -65,6 +63,10 @@ const LandingPage = styled.div`
   min-height: 100vh;
   min-width: 100vw;
   box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
 `;
 
 const Nav = styled.div`
@@ -162,5 +164,70 @@ const User = styled.div`
     font-size: 0.75rem;
     padding-right: 0;
     margin: 1% auto;
+  }
+`;
+
+const LandingContent = styled.div`
+  display: flex;
+  flex: row;
+  justify-content: center;
+  height: 80vh;
+`;
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+`;
+
+const FindDuo = styled.button`
+  background-color: #66c2a9;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+  font-size: 1em;
+  padding: 10px 20px;
+  transition: 0.5s;
+
+  display: flex;
+  flex-direction: row;
+  width: 150px;
+
+  &:hover {
+    box-shadow: 0 0 7.5px #66c2a9;
+    cursor: pointer;
+  }
+
+  & #magnifyingGlass {
+    fill: white;
+    width: 16px;
+    height: 16px;
+    padding: 3px 10px 5px 0px;
+  }
+
+  @media (max-width: 769px) {
+    margin-bottom: 5%;
+  }
+`;
+
+const Cancel = styled.button`
+  background-color: #66c2a9;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+  font-size: 1em;
+  padding: 10px 20px;
+  transition: 0.5s;
+
+  width: 150px;
+
+  &:hover {
+    box-shadow: 0 0 7.5px #66c2a9;
+    cursor: pointer;
   }
 `;
