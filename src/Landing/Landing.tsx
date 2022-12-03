@@ -66,6 +66,14 @@ const Nav = styled.div`
   justify-content: center;
   position: relative;
   padding-top: 1rem;
+  transition: all 0.25s ease-in-out;
+
+  @media (max-width: 769px) {
+    position: static;
+    flex-direction: column;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
 `;
 
 const Logo = styled.div`
@@ -84,6 +92,15 @@ const Logo = styled.div`
     margin: 0px;
     padding-bottom: 5px;
     font-weight: 200;
+    transition: all 0.5s ease-in-out;
+
+    @media (max-width: 769px) {
+      font-size: 1.5rem;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 1rem;
+    }
   }
 
   & #duofinder {
@@ -92,6 +109,18 @@ const Logo = styled.div`
     margin: 0px;
     padding: 0px;
     font-weight: 200;
+    transition: all 0.5s ease-in-out;
+
+    @media (max-width: 769px) {
+      font-size: 2.5rem;
+    }
+    @media (max-width: 480px) {
+      font-size: 2rem;
+    }
+  }
+  @media (max-width: 769px) {
+    position: static;
+    margin-left: 50%;
   }
 `;
 
@@ -102,7 +131,8 @@ const User = styled.div`
   padding-right: 1rem;
   font-family: "Poppins", sans-serif;
   font-size: 1rem;
-  font-weight: 100;
+  font-weight: 300;
+  transition: all 0.25s ease-in-out;
 
   & #username {
     color: white;
@@ -115,5 +145,15 @@ const User = styled.div`
     border-radius: 50%;
     height: 50px;
     width: 50px;
+    @media (max-width: 769px) {
+      height: 40px;
+      width: 40px;
+    }
+  }
+
+  @media (max-width: 769px) {
+    font-size: 0.75rem;
+    padding-right: 0;
+    margin: 2.5% auto 2.5% auto;
   }
 `;

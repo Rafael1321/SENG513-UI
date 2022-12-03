@@ -1,5 +1,5 @@
 import * as React from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 
 export default function FindDuo(props: any) {
   return (
@@ -41,19 +41,36 @@ const Card = styled.div`
     border: 5px solid #66c2a9;
     height: 9rem;
     width: 9rem;
+    z-index: 4;
   }
 
   & #teammate {
-    filter: brightness(40%);
+    filter: brightness(45%);
   }
 `;
 
-const Line = styled.hr`
+const Bounce = keyframes`
+    100%{
+        transform: translateX(100%);
+    }
+    50%{
+        transform:translate(0);
+ 
+    }
+    0%{
+        transform: translateX(-100%);
+        z-index: 2;
+    }
+`;
+
+const Line = styled.span`
   border: none;
-  border-top: 5px dotted #50b1a4;
-  height: 2px;
-  width: 30%;
+  border-top: 2.5px solid #66c2a9;
+  box-shadow: 0 0 5px white;
+
+  width: 20%;
   margin: 0;
+  animation: ${Bounce} 2.5s ease-in-out infinite alternate;
 `;
 
 const Cancel = styled.button`
@@ -69,5 +86,6 @@ const Cancel = styled.button`
 
   &:hover {
     box-shadow: 0 0 7.5px #66c2a9;
+    cursor: pointer;
   }
 `;
