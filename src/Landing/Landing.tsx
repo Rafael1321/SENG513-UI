@@ -46,17 +46,24 @@ export default function Landing(props: any) {
           ></img>
         </User>
       </Nav>
-      <div>{displayCard()}</div>
+      <LandingContent>{displayCard()}</LandingContent>
     </LandingPage>
   );
 }
+
+const LandingContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 70%;
+`;
 
 const LandingPage = styled.div`
   background-color: #181818;
   margin: 0px;
   padding: 0px;
-  height: 100vh;
-  width: 100vw;
+  min-height: 100vh;
+  min-width: 100vw;
   box-sizing: border-box;
 `;
 
@@ -72,7 +79,7 @@ const Nav = styled.div`
     position: static;
     flex-direction: column;
     justify-content: center;
-    flex-wrap: wrap;
+    padding-top: 1.5rem;
   }
 `;
 
@@ -120,7 +127,7 @@ const Logo = styled.div`
   }
   @media (max-width: 769px) {
     position: static;
-    margin-left: 50%;
+    transform: translateX(0);
   }
 `;
 
@@ -154,6 +161,6 @@ const User = styled.div`
   @media (max-width: 769px) {
     font-size: 0.75rem;
     padding-right: 0;
-    margin: 2.5% auto 2.5% auto;
+    margin: 1% auto;
   }
 `;

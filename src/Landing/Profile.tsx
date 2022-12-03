@@ -29,7 +29,7 @@ const LandingContent = styled.div`
 
 const Card = styled.div`
   background-color: #282828;
-  margin: 7% 5% 5% 5%;
+  margin: 5%;
   width: 720px;
   height: 400px;
 
@@ -37,6 +37,12 @@ const Card = styled.div`
   box-shadow: 0 0 7.5px #66c2a9;
   text-align: center;
   color: white;
+  transition: all 0.25s ease-in-out;
+
+  @media (max-width: 769px) {
+    width: 400px;
+    height: 500px;
+  }
 `;
 
 const FindDuo = styled.button`
@@ -63,5 +69,9 @@ const FindDuo = styled.button`
     width: 16px;
     height: 16px;
     padding: 3px 10px 5px 0px;
+  }
+
+  @media (max-width: 769px) {
+    margin-bottom: 5%;
   }
 `;
