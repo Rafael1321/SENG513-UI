@@ -6,7 +6,7 @@ import LandingCard from "./LandingCard";
 
 export default function Landing(props: any) {
   let duoFound = false;
-  let playerIconSrc = "/Images/reyna.png";
+  let playerIconSrc = "/Images/Icons/Astra_icon.webp";
   const [findDuo, setFindDuo] = useState(false);
 
   function clickedFindDuo() {
@@ -154,6 +154,7 @@ const User = styled.div`
     border-radius: 50%;
     height: 50px;
     width: 50px;
+    background-color: #425852;
 
     @media (max-width: 769px) {
       height: 40px;
