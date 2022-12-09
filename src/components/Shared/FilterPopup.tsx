@@ -2,6 +2,7 @@ import * as React from 'react'
 import styled from 'styled-components';
 import { LoggedUserContext } from '../../contexts/LoggesUserContext';
 import { GenderPicker } from './GenderPicker';
+import { RankSlider } from './RankSlider';
 
 type Props = {
     triggered : boolean;
@@ -71,7 +72,7 @@ export function FilterPopup(props : Props) : React.ReactElement<Props, any> {
                         <div id='rank-disparity' className='row'>
                             <p>Rank Disparity:</p>
                             <div className="ranks">
-                                {/* <input type="range" min="1" max="100" value="50" id="myRange"></input> */}
+                                <RankSlider/>
                             </div>
                         </div>
                     </div>
@@ -262,7 +263,7 @@ const PopupContent = styled.div`
                     display: flex;
                     height: 100%;
                     width: 100%;
-                    justify-content: center;
+                    justify-content: left;
                     align-items: center;
 
                     & input{
