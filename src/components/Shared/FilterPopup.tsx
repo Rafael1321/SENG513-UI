@@ -3,6 +3,17 @@ import styled from 'styled-components';
 import { LoggedUserContext } from '../../contexts/LoggesUserContext';
 import { GenderPicker } from './GenderPicker';
 import { RankSlider } from './RankSlider';
+import { FilterContext } from '../../contexts/FilterContext';
+
+export interface AgeRange{
+    minAge: number;
+    maxAge: number;
+}
+
+export enum GameMode{
+    competitive = 0,
+    casual = 1
+}
 
 type Props = {
     triggered : boolean;
@@ -15,8 +26,9 @@ type PopupProps = {
 
 export function FilterPopup(props : Props) : React.ReactElement<Props, any> {
 
-    /* Logged user context */
+    /* Logged user and filter contexts */
     const loggedUserContext = React.useContext(LoggedUserContext);
+    const filterContex = React.useContext(FilterContext);
 
     /* Age Range Height */
     const [ageRangeHeight, setAgeRangeHeight] = React.useState<number>(0);
@@ -35,8 +47,36 @@ export function FilterPopup(props : Props) : React.ReactElement<Props, any> {
         window.addEventListener('resize', handleWindowResize);
     }, []);
 
-    function handleSave(){
+    /* Handlers */ 
 
+    function handleServerPrefChange(){
+        // Update filter context here
+    }
+
+    function handleGameModeChange(){
+        // Update filter context here
+    }
+
+    function handleAgeRangeChange(){
+        // Update filter context here
+    }
+
+    function handleSave(){
+        try{
+
+            // Update filter's context
+
+            // Retrieve filter's context 
+
+            // Make a POST request to API using filter service
+
+        }catch(err){
+            throw err
+        }
+    }
+
+    function handleCancel(){
+        props.closeMe();
     }
 
     return (

@@ -1,5 +1,13 @@
 import * as React from 'react'
 import styled from 'styled-components';
+import { FilterContext } from '../../contexts/FilterContext';
+
+export enum Gender{
+    allGenders = 0,
+    woman = 1,
+    man = 2,
+    nonBinary = 3    
+}
 
 interface IPos{
     left : number;
@@ -7,6 +15,9 @@ interface IPos{
 }
 
 export function GenderPicker() : React.ReactElement{
+
+    /* Filter context */
+    const filterContex = React.useContext(FilterContext);
 
     const allGendersInput = React.useRef(null);
     const [horizontalLinePos, setHorizontalLinePos] = React.useState<IPos>({left:0,top:0});
@@ -26,6 +37,16 @@ export function GenderPicker() : React.ReactElement{
         window.addEventListener('resize', handleWindowResize);
 
     }, []);
+
+    /* Handlers */
+
+    function handleGenderChange(){
+        // Update filter context here
+    }
+
+    /* Helpers */ 
+
+    // Add a function to load things based on filters
 
     return (
         <PickerContainer>

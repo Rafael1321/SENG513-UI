@@ -1,6 +1,7 @@
 import { Slider } from '@mui/material';
 import * as React from 'react'
 import styled from 'styled-components';
+import { FilterContext } from '../../contexts/FilterContext';
 
 export enum RankType{
     iron = 1,
@@ -29,6 +30,9 @@ export interface IRank{
 
 export function RankSlider() : React.ReactElement{
     
+    /* Filter Context */
+    const filterContex = React.useContext(FilterContext);
+
     /* Constants */
     const marks = [{value: 0.8, label: ''}, {value: 1,label: ''},{value: 1.2,label: ''},{value: 1.8,label: ''},
                    {value: 2,label: ''},{value: 2.2,label: ''},{value: 2.8,label: ''},{value: 3,label: ''},
@@ -47,6 +51,8 @@ export function RankSlider() : React.ReactElement{
             return;
         }
         setValue([newValue[0], newValue[1]]);
+
+        // Change filter context here
     };
 
     /* Helper Functions */
