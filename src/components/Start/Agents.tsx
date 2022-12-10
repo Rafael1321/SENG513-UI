@@ -26,7 +26,7 @@ export function Agents(props : Props) : React.ReactElement<Props, any>{
             <div className='text-container' style={{height: (imgHeight === 0 || (window.matchMedia("(orientation: landscape)").matches && (width <= 900 || height <= 700)))?'10%':`calc(100% - ${imgHeight}px)`}}>
                 <p>Find teammates to play Valorant with! Climb up the ranks with like-minded players and make long lasting friendships.</p>
             </div>
-            <img ref={imgRef} alt="Group of Agents"></img>
+            {/* <img ref={imgRef} alt="Group of Agents"></img> */}
         </AgentContainer>
     );
 }
@@ -63,12 +63,12 @@ const AgentContainer = styled.div((props : Props) =>`
         position: relative;
         width: ${props.formType === FormType.Login?'88%':'86%'};
 
-        content:url(${props.formType === FormType.Login?require("../../assets/images/agents_5.png"):require("../../assets/images/agents_2.png")});
+        /* content:url(${props.formType === FormType.Login?"../../assets/images/agents_5.png":"../../assets/images/agents_2.png"}); */
 
         @media only screen and (max-width: 950px){
             width: 100%;
             height: auto;
-            content:url(${require("../../assets/images/agents_3.png")});
+            // content:url(${"../../assets/images/agents_3.png"}); 
         }
 
         @media only screen and (max-width: 950px){
@@ -77,7 +77,7 @@ const AgentContainer = styled.div((props : Props) =>`
         }
 
         @media only screen and (max-width: 700px){
-            content:url(${require("../../assets/images/agent_1.png")});
+            /* content:url(${"../../assets/images/agent_1.png"});  */
         } 
     }
 
