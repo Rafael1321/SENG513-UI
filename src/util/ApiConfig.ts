@@ -9,5 +9,5 @@ export class ApiConfig{
 
     /* Filters */
     public static saveFilters = () => this.baseRoute + ``;
-    public static retrieveFilters = () => this.baseRoute + ``;
+    public static retrieveFilters = (userId : string) => this.baseRoute + ``;
 }

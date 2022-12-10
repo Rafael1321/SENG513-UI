@@ -9,13 +9,16 @@ export interface IFiltersResponse {
 
 export class FiltersService{
 
-    public static save = async (filters : IFilters) : Promise<IFiltersResponse> => {
+    public static save = async (userId : string, filters : IFilters) : Promise<IFiltersResponse> => {
 
         let response = null;
         await axios({
             method: 'post',
             url: ApiConfig.saveFilters(),
-            data: filters
+            data: {
+                userId: userId,
+                filters:filters
+            }
         }).then((response : any) => {
             response = {
                 data:response.data,
@@ -30,12 +33,12 @@ export class FiltersService{
         return response;
     }
     
-    public static retrieve = async () : Promise<IFiltersResponse> => {
+    public static retrieve = async (userId: string) : Promise<IFiltersResponse> => {
     
         let response = null;
         await axios({
             method: 'get',
-            url: ApiConfig.retrieveFilters(),
+            url: ApiConfig.retrieveFilters(userId),
         }).then((response : any) => {
             response = {
                 data:response.data,

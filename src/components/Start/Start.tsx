@@ -11,9 +11,15 @@ type Props = {
 
 export default function Start(props : Props) : React.ReactElement{
         
+    const [triggered, setTriggered] = React.useState(true);
+
+    function handleCloseMe(){
+        setTriggered(false);
+    }
+
     return (
         <StartPage>
-            <FilterPopup closeMe={()=>{}} triggered={true}></FilterPopup>
+            <FilterPopup closeMe={handleCloseMe} triggered={triggered}></FilterPopup>
             <Agents formType={props.formType}></Agents>
             <Form formType={props.formType}></Form>
         </StartPage>

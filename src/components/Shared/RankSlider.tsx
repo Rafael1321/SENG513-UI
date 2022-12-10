@@ -53,6 +53,7 @@ export function RankSlider() : React.ReactElement{
         setValue([newValue[0], newValue[1]]);
 
         // Change filter context here
+        filterContex.updateRankDisparity([toRank(newValue[0]), toRank(newValue[1])]);
     };
 
     /* Helper Functions */

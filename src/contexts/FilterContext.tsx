@@ -6,18 +6,18 @@ import { IRank } from "../components/Shared/RankSlider";
 export interface IFilters {
     serverPreference: number;
     gameMode : GameMode;
-    rankDisparity : IRank;
+    rankDisparity : IRank[];
     ageRange : AgeRange;
-    genders : Gender[];
+    genders : boolean[];
 }
 
 export type FiltersContextType = {
     filters : IFilters,
     updateServerPreference : (serverPreference : number) => void,
     updateGameMode : (gameMode : GameMode) => void,
-    updateRankDisparity : (rankDisparity : IRank) => void,
+    updateRankDisparity : (rankDisparity : IRank[]) => void,
     updateAgeRange : (ageRange : AgeRange) => void,
-    updateGender : (genders : Gender[]) => void,
+    updateGender : (genders : boolean[]) => void,
     updateFilter : (filters : IFilters) => void
 };
 
@@ -39,7 +39,7 @@ export function FilterProvider({children} : Props) {
         setFilters({...filters, gameMode: gameMode});
     }
 
-    function updateRankDisparity(rankDisparity : IRank) : void{
+    function updateRankDisparity(rankDisparity : IRank[]) : void{
         setFilters({...filters, rankDisparity: rankDisparity});
     }
 
@@ -47,7 +47,7 @@ export function FilterProvider({children} : Props) {
         setFilters({...filters, ageRange: ageRange});
     }
     
-    function updateGender(genders : Gender[]) : void{
+    function updateGender(genders : boolean[]) : void{
         setFilters({...filters, genders: genders});
     }
 

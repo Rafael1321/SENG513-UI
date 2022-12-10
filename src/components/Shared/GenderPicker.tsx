@@ -1,6 +1,8 @@
 import * as React from 'react'
+import { toast } from 'react-toastify';
 import styled from 'styled-components';
 import { FilterContext } from '../../contexts/FilterContext';
+import { CustomToast } from './CustomToast';
 
 export enum Gender{
     allGenders = 0,
@@ -19,8 +21,13 @@ export function GenderPicker() : React.ReactElement{
     /* Filter context */
     const filterContex = React.useContext(FilterContext);
 
-    const allGendersInput = React.useRef(null);
+    /* State */
     const [horizontalLinePos, setHorizontalLinePos] = React.useState<IPos>({left:0,top:0});
+    const [genders, setGenders] = React.useState<boolean[]>([true, true, true, true]);
+
+    /* Refs */
+
+    const allGendersInput = React.useRef(null);
 
     React.useEffect(() => {
 
@@ -40,30 +47,70 @@ export function GenderPicker() : React.ReactElement{
 
     /* Handlers */
 
-    function handleGenderChange(){
-        // Update filter context here
+    function handleGenderChange(event : any, gender : Gender){
+        
+        // Make sure that at least one gender is selected
+        let newGenders : boolean[] = [genders[Gender.allGenders], genders[Gender.woman], genders[Gender.man], genders[Gender.nonBinary]];
+        if(gender === Gender.allGenders && event.target.checked){ // if all genders is selected, select all other checkboxes
+            newGenders[Gender.allGenders] = true;
+            newGenders[Gender.man] = true;
+            newGenders[Gender.woman] = true;
+            newGenders[Gender.nonBinary] = true;
+        }else if(gender === Gender.allGenders && !event.target.checked){ // if all gender is deselected, deselect all but one
+            newGenders[Gender.allGenders] = false;
+            newGenders[Gender.man] = false;
+            newGenders[Gender.woman] = true;
+            newGenders[Gender.nonBinary] = false;
+        }else if(genders[Gender.allGenders] && gender !== Gender.allGenders && !event.target.checked){ // if all genders is selected, and one other checkbox is unselected
+            newGenders[Gender.allGenders] = false;
+            newGenders[Gender.man] = genders[Gender.man];
+            newGenders[Gender.woman] = genders[Gender.woman];
+            newGenders[Gender.nonBinary] = genders[Gender.nonBinary];
+            newGenders[gender] = event.target.checked;
+        }else if(gender !== Gender.allGenders && event.target.checked && !genders[Gender.allGenders]){
+            newGenders[gender] = true;
+            newGenders[Gender.allGenders] = (genders[Gender.man] && genders[Gender.woman]) || 
+                                            (genders[Gender.nonBinary] && genders[Gender.woman]) ||
+                                            (genders[Gender.man] && genders[Gender.nonBinary])
+        }else{
+            newGenders[Gender.allGenders] = genders[Gender.allGenders];
+            newGenders[Gender.man] = genders[Gender.man];
+            newGenders[Gender.woman] = genders[Gender.woman];
+            newGenders[Gender.nonBinary] = genders[Gender.nonBinary];
+            newGenders[gender] = event.target.checked;
+        }
+
+        // Make sure there is at least one gender selected
+        if(!(newGenders[Gender.woman] || newGenders[Gender.man] || newGenders[Gender.nonBinary])){
+            toast.error("At least one gender must be selected");
+            return;
+        }
+
+        setGenders(newGenders);
+        filterContex.updateGender(newGenders);
     }
 
     /* Helpers */ 
 
     // Add a function to load things based on filters
 
-    return (
+    return (<>
+        <CustomToast/>
         <PickerContainer>
             <div className='checkbox-row'>
-                <input type="checkbox" ref={allGendersInput}></input>
+                <input type="checkbox" ref={allGendersInput} onChange={(e:any) => handleGenderChange(e, Gender.allGenders)} checked={genders[Gender.allGenders]}></input>
                 <label>All Genders</label>
             </div>
             <div className='checkbox-row indent'>
-                <input type="checkbox"></input>
+                <input type="checkbox" onChange={(e:any) => handleGenderChange(e, Gender.woman)} checked={genders[Gender.woman]}></input>
                 <label>Woman</label>
             </div>
             <div className='checkbox-row indent'>
-                <input type="checkbox"></input>
+                <input type="checkbox" onChange={(e:any) => handleGenderChange(e, Gender.man)} checked={genders[Gender.man]}></input>
                 <label>Man</label>
             </div>
             <div className='checkbox-row indent'>
-                <input type="checkbox"></input>
+                <input type="checkbox" onChange={(e:any) => handleGenderChange(e, Gender.nonBinary)} checked={genders[Gender.nonBinary]}></input>
                 <label>NB</label>
             </div>
             <div className='vertical-line' style={{top:horizontalLinePos.top, left:horizontalLinePos.left}}></div>
@@ -71,7 +118,7 @@ export function GenderPicker() : React.ReactElement{
             <div id='horizontal2' className='horizontal-line' style={{top:horizontalLinePos.top, left:horizontalLinePos.left}}></div>
             <div id='horizontal3' className='horizontal-line' style={{top:horizontalLinePos.top, left:horizontalLinePos.left}}></div>
         </PickerContainer>
-    );
+    </>);
 }
 
 const PickerContainer = styled.div`

@@ -4,6 +4,9 @@ import { LoggedUserContext } from '../../contexts/LoggesUserContext';
 import { GenderPicker } from './GenderPicker';
 import { RankSlider } from './RankSlider';
 import { FilterContext } from '../../contexts/FilterContext';
+import { CustomToast } from './CustomToast';
+import { toast } from 'react-toastify';
+import { FiltersService, IFiltersResponse } from '../../services/FiltersService';
 
 export interface AgeRange{
     minAge: number;
@@ -32,8 +35,14 @@ export function FilterPopup(props : Props) : React.ReactElement<Props, any> {
 
     /* Age Range Height */
     const [ageRangeHeight, setAgeRangeHeight] = React.useState<number>(0);
+    const [compChecked, setCompChecked] = React.useState<boolean>(true);
+
+    /* Refs */
     const serverPrefDiv = React.useRef(null);
     const gameModeTitle = React.useRef(null);
+
+    const minAgeInput = React.useRef(null);
+    const maxAgeInput = React.useRef(null);
 
     React.useEffect(() => {
         let serverPrefDivHeight = serverPrefDiv?.current?.clientHeight ?? 0
@@ -49,37 +58,62 @@ export function FilterPopup(props : Props) : React.ReactElement<Props, any> {
 
     /* Handlers */ 
 
-    function handleServerPrefChange(){
-        // Update filter context here
+    function handleServerPrefChange(event : any){
+        filterContex.updateServerPreference(Number(event.target.value));
     }
 
-    function handleGameModeChange(){
-        // Update filter context here
+    function handleGameModeChange(event : any, gameMode : GameMode){
+        setCompChecked(gameMode === GameMode.competitive); 
+        filterContex.updateGameMode(gameMode);
     }
 
-    function handleAgeRangeChange(){
-        // Update filter context here
+    function handleAgeRangeChange(event : any, isMin : boolean){
+
+        // Check that value is a number
+        if(isNaN(Number(event.target.value))){
+            toast.error(`The ${isMin?'min':'max'} age must be an integer number.`);
+            if(isMin) minAgeInput.current.value = ""
+            else      maxAgeInput.current.value = ""
+            return;
+        }
+
+        let newValue = Number(event.target.value);
+        let newAges : AgeRange = null;
+        if(isMin){
+            if(newValue > filterContex.filters.ageRange.maxAge){
+                toast.error(`The min age must be less than or equal to the max age.`);
+                minAgeInput.current.value = ""
+                return;
+            }
+            newAges = {minAge:event.target.value, ...filterContex.filters.ageRange};
+        }else{
+            if(newValue < filterContex.filters.ageRange.minAge){
+                toast.error(`The max age must be greater than or equal to the min age.`);
+                maxAgeInput.current.value = ""
+                return;
+            }
+            newAges = {...filterContex.filters.ageRange, maxAge:event.target.value};
+        }
+
+        filterContex.updateAgeRange(newAges);
     }
 
-    function handleSave(){
+    async function handleSave(){
         try{
+            // Call API to attempt save of filters
+            const filterResponse : IFiltersResponse = await FiltersService.save(loggedUserContext.loggedUser.id, filterContex.filters);
 
-            // Update filter's context
-
-            // Retrieve filter's context 
-
-            // Make a POST request to API using filter service
-
+            if(filterResponse.statusCode !== 200){ // Username already in use or Email already in use
+                toast.error(filterResponse.data);
+                return;
+            }
         }catch(err){
             throw err
         }
     }
 
-    function handleCancel(){
-        props.closeMe();
-    }
-
-    return (
+    return ( <>
+        <CustomToast/>
         <Popup triggered={props.triggered}>
             <PopupContent>
                 <div id='header'>
@@ -91,8 +125,8 @@ export function FilterPopup(props : Props) : React.ReactElement<Props, any> {
                         <div style={{height: '25%'}} id='server-pref' className='row' ref={serverPrefDiv}>
                             <p>Sever Preferences:</p>
                             <div className='selects'>
-                                <select className="sever-preferences">
-                                    <option value="us-central">US Central</option>
+                                <select className="sever-preferences" onChange={handleServerPrefChange}>
+                                    <option value="1">US Central</option>
                                 </select>
                             </div>
                         </div>
@@ -100,11 +134,11 @@ export function FilterPopup(props : Props) : React.ReactElement<Props, any> {
                             <p ref={gameModeTitle}>Game Mode:</p>
                             <div className="radios">
                                 <div className='radio-group'> 
-                                    <input type="radio"value="Competitive"></input>
+                                    <input type="radio"value="Competitive" onChange={(e:any) => handleGameModeChange(e, GameMode.competitive)} checked={compChecked}/>
                                     <label>Competitive</label> 
                                 </div> 
                                 <div className='radio-group'>
-                                    <input type="radio" value="Casual"/>
+                                    <input type="radio" value="Casual" onChange={(e:any) => handleGameModeChange(e, GameMode.casual)} checked={!compChecked}/>
                                     <label>Casual</label>
                                 </div> 
                             </div>
@@ -120,9 +154,9 @@ export function FilterPopup(props : Props) : React.ReactElement<Props, any> {
                         <div id='age-range' style={{height: `calc(100% - (100% - ${ageRangeHeight}px))`}} className='row'>
                             <p>Age Range:</p>
                             <div className='ages'>
-                                <input type='text' placeholder='Min' maxLength={2}></input>
+                                <input ref={minAgeInput} type='text' placeholder='Min' maxLength={2} onChange={(e:any) => handleAgeRangeChange(e, true)}></input>
                                 <p>to</p>
-                                <input type='text' placeholder='Max' maxLength={2}></input>
+                                <input ref={maxAgeInput} type='text' placeholder='Max' maxLength={2} onChange={(e:any) => handleAgeRangeChange(e, false)}></input>
                             </div>
                         </div>
                         <div id='match-me-with' style={{height: `calc(100% - ${ageRangeHeight}px)`}} className='row'>
@@ -139,7 +173,7 @@ export function FilterPopup(props : Props) : React.ReactElement<Props, any> {
                 </div>
             </PopupContent>
         </Popup>
-    );
+    </>);
 }
 
 const Popup = styled.div( (props : PopupProps) => `
