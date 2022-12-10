@@ -42,17 +42,11 @@ export function RankSlider() : React.ReactElement{
 
       /* Handlers */
 
-    const handleChange = (event: Event, newValue: number | number[], activeThumb: number) : void => {
-        if (!Array.isArray(newValue) || !inCorrectRange(newValue[0]) || !inCorrectRange(newValue[1])) {
+    const handleChange = (event: Event, newValue: number | number[], activeThumb: number) : void => {      
+        if (!Array.isArray(newValue) || newValue[0] >= newValue[1] || !inCorrectRange(newValue[0]) || !inCorrectRange(newValue[1])) {
             return;
         }
-        let minSeparation = (value[1] === 9.0?0.8:0.6);
-
-        if (activeThumb === 0) {
-            setValue([Math.min(newValue[0], value[1] - minSeparation), value[1]]);
-        } else {
-            setValue([value[0], Math.max(newValue[1], value[0] + minSeparation)]);
-        }
+        setValue([newValue[0], newValue[1]]);
     };
 
     /* Helper Functions */
@@ -70,15 +64,36 @@ export function RankSlider() : React.ReactElement{
         return result;   
     }
 
-    function toSliderRank() : number {
-        return 0;
+    function toRankLevel(val : number) : RankLevel {
+        let decimalPart = Number((val % 1).toFixed(2));
+        let ans : RankLevel;
+        if(decimalPart === 0.80)      ans = RankLevel.one
+        else if(decimalPart === 0.00) ans = RankLevel.two
+        else                          ans = RankLevel.three
+        return ans;
     }
 
-    function toRank() : IRank {
-        return {rankLevel:1, rankType:1};
+    function toRankType(val : number) : RankType{
+        let integerPart = val - Number((val % 1).toFixed(2));
+        let decimalPart = Number((val % 1).toFixed(2));
+        if(decimalPart === 0.80) integerPart += 1;
+        return integerPart
     }
 
-    return (<>
+    function toSliderRank(rankType : RankType, rankLevel : RankLevel) : number {
+
+        let decimal : number = 0.0;
+        if(rankLevel === RankLevel.one) decimal = -0.20;
+        else                            decimal = 0.20;
+
+        return rankType + decimal;
+    }
+
+    function toRank(val : number) : IRank {
+        return {rankType:toRankType(val), rankLevel: toRankLevel(val)} as IRank;
+    }
+
+    return (
         <OuterContainer>
             <CustomSlider value={value} onChange={handleChange} valueLabelDisplay="off"
                           disableSwap min={0.6} max={9.2} step={0.1} marks={marks}/>
@@ -94,17 +109,14 @@ export function RankSlider() : React.ReactElement{
                 <img style={{marginLeft:'6.0%'}} src={require('../../assets/images/ranks/rank_9.png')} alt="rank 9"></img>
             </RankIcons>
         </OuterContainer>
-    </>)
+    );
 }
 
 const OuterContainer = styled.div`
     display: flex;
     flex-direction: column;
-    /* width: 90%; */
-    /* width: 22vw; */
     width: 90%;
     height: 4vw;
-    /* height: auto; */
 `;
 
 const CustomSlider = styled(Slider)`
@@ -152,19 +164,3 @@ const RankIcons = styled.div`
         padding: 0.4vw 0 0 0;
     }
 `;
-
-const Icon = styled.div`
-    display: flex; 
-    align-items: center; 
-    justify-content: center;
-    background-color: blue;
-    width: auto;
-    /* width: 7.5%;   */
-    
- 
-`;
-
-// const Separator = styled.div`
-//     background-color: red;
-//     width: calc(32.5%/8);  
-// `;
