@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import Button from "../Shared/Button";
 import HistoryCard from "./HistoryCard";
 import styled from "styled-components";
+import { EmblaCarousel } from "./EmblaCarousel";
 
 type Props = {};
 
@@ -10,6 +11,10 @@ enum HistoryCardSize {
     Two = "20%",
     Three = "30%",
 }
+
+const SLIDE_COUNT = 5;
+const slides = Array.from(Array(SLIDE_COUNT).keys());
+console.log(slides);
 
 function ChatHistory(props: Props): React.ReactElement {
     return (
@@ -26,8 +31,9 @@ function ChatHistory(props: Props): React.ReactElement {
                 </Menu>
 
                 <HistoryContainer>
+                    <EmblaCarousel slides={([...slides])} />
                     {/* <HistoryCard size={HistoryCardSize.Three} /> */}
-                    <HistoryCard
+                    {/* <HistoryCard
                         url={"Images/Astra.webp"}
                         username={"VividEradicator"}
                         message={"Ur mom"}
@@ -44,6 +50,7 @@ function ChatHistory(props: Props): React.ReactElement {
                         width={HistoryCardSize.One}
                         zIndex={"3"}
                     />
+                    
                     <HistoryCard
                         url={"Images/Chamber.webp"}
                         username={"ArcticFox"}
@@ -51,7 +58,8 @@ function ChatHistory(props: Props): React.ReactElement {
                         isMain={false}
                         width={HistoryCardSize.Two}
                         zIndex={"1"}
-                    />
+                    /> */}
+
 
                     {/* <HistoryCard size={HistoryCardSize.Three} /> */}
                 </HistoryContainer>

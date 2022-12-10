@@ -3,7 +3,14 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
+    "@emotion/react": "^11.10.5",
+    "@emotion/styled": "^11.10.5",
+    "@mui/material": "^5.10.17",
     "axios": "^1.2.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "embla-carousel": "^7.0.5",
+    "embla-carousel-autoplay": "^7.0.5",
+    "embla-carousel-react": "^7.0.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.3.0",
@@ -38,11 +45,11 @@
     ]
   },
   "devDependencies": {
-    "ts-loader": "^9.3.1",
-    "webpack-cli": "^4.10.0",
     "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
     "@types/react-router-dom": "^5.3.3",
-    "@types/styled-components": "^5.1.26"
+    "@types/styled-components": "^5.1.26",
+    "ts-loader": "^9.3.1",
+    "webpack-cli": "^4.10.0"
   }
 }
