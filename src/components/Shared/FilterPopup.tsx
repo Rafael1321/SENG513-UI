@@ -48,7 +48,7 @@ export function FilterPopup(props : Props) : React.ReactElement<Props, any> {
                 </div>
                 <div id='body'>
                     <div id='left'>
-                        <div id='server-pref' className='row' ref={serverPrefDiv}>
+                        <div style={{height: '25%'}} id='server-pref' className='row' ref={serverPrefDiv}>
                             <p>Sever Preferences:</p>
                             <div className='selects'>
                                 <select className="sever-preferences">
@@ -56,7 +56,7 @@ export function FilterPopup(props : Props) : React.ReactElement<Props, any> {
                                 </select>
                             </div>
                         </div>
-                        <div id='game-mode' className='row'>
+                        <div style={{height: '25%'}} id='game-mode' className='row'>
                             <p ref={gameModeTitle}>Game Mode:</p>
                             <div className="radios">
                                 <div className='radio-group'> 
@@ -69,7 +69,7 @@ export function FilterPopup(props : Props) : React.ReactElement<Props, any> {
                                 </div> 
                             </div>
                         </div>
-                        <div id='rank-disparity' className='row'>
+                        <div style={{height: '50%'}} id='rank-disparity' className='row'>
                             <p>Rank Disparity:</p>
                             <div className="ranks">
                                 <RankSlider/>
@@ -264,7 +264,8 @@ const PopupContent = styled.div`
                     height: 100%;
                     width: 100%;
                     justify-content: left;
-                    align-items: center;
+                    margin-top: 3%;
+                    /* align-items: center; */
 
                     & input{
                         width: 85%;
@@ -329,14 +330,14 @@ const PopupContent = styled.div`
                     justify-content: left;
                     width: 100%;
                     height: 100%;
-                    align-items: center;
+                    margin-top: 7%;
                 }
             }
         }
     }
 
     & #footer{
-        height: 20%;
+        height: 15%;
         display: flex;
         flex-direction: row;
         justify-content: center;
