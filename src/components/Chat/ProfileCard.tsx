@@ -38,7 +38,6 @@ export default function ProfileCard(
 
 const Wrapper = styled("div")`
   background-color: #282828;
-  float: right;
   width: 27vw;
   max-width: 400px;
   height: 70vh;
@@ -49,12 +48,13 @@ const Wrapper = styled("div")`
   flex-direction: column;
   flex-wrap: wrap;
   @media all and (max-width: 900px){
-    flex-direction:row;
+    // flex-direction:row;
     width: 80vw;
-    height:3vh;
+    height:20vh;
     padding: 2vh;
-    max-width: 700px
+   
     max-height: 200px;
+    border-radius: 20px; 
   }
 `;
 
@@ -68,6 +68,11 @@ const Icon = styled.img<{ imgSrc: string }>`
   margin-left: auto;
   margin-right: auto;
   display: block;
+  @media all and (max-width: 900px){
+    width: 5vw;
+    height: 5vw;
+
+  }
 `;
 const Username = styled.p`
   text-align: center;
