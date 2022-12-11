@@ -16,33 +16,32 @@ export default function ProfileCard(
   props: Props
 ): React.ReactElement<Props, any> {
   return (
-    <>
-      <Wrapper>
-        <Icon imgSrc={props.imgSrc} />
-        <Username>{props.userName}</Username>
-        <BasicInfo>{props.basicInfo}</BasicInfo>
-        <Ranks>
-          <RankLabel>
-            <RankImg imgSrc={props.valRank} />
-            RANK
-          </RankLabel>
-          <RankLabel style={{ textAlign: "center" }}>
-            <RankImg imgSrc={props.chatRank} />
-            REPUTATION
-          </RankLabel>
-        </Ranks>
-        <AboutContainer>
-          <Label>ABOUT ME:</Label>
-          <AboutMe>{props.aboutMe}</AboutMe>
-        </AboutContainer>
-      </Wrapper>
-    </>
+    <Wrapper>
+      <Icon imgSrc={props.imgSrc} />
+      <Username>{props.userName}</Username>
+      <BasicInfo>{props.basicInfo}</BasicInfo>
+      <Ranks>
+        <RankLabel>
+          <RankImg imgSrc={props.valRank} />
+          RANK
+        </RankLabel>
+        <RankLabel style={{ textAlign: "center" }}>
+          <RankImg imgSrc={props.chatRank} />
+          REPUTATION
+        </RankLabel>
+      </Ranks>
+      <AboutContainer>
+        <Label>ABOUT ME:</Label>
+        <AboutMe>{props.aboutMe}</AboutMe>
+      </AboutContainer>
+    </Wrapper>
   );
 }
 
 const Wrapper = styled("div")`
   background-color: #282828;
-  width: 27vw;
+  margin: 10px;
+  width: 20vw;
   max-width: 400px;
   height: 70vh;
   padding: 5vh;
@@ -54,6 +53,8 @@ const Wrapper = styled("div")`
   @media all and (max-width: 800px) {
     width: 90vw;
     max-width: 90%;
+    top: 1;
+    position: absolute;
     height: 13vh;
     padding: 2vh;
     filter: drop-shadow(0px 0px 5px #66c2a9);

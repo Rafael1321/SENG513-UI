@@ -1,11 +1,13 @@
 import * as React from "react";
 import styled from "styled-components";
 import ProfileCard from "./ProfileCard";
+import ChatBox from "./ChatBox";
 
 export default function ChatBody() {
   return (
     <>
       <Wrapper>
+        <ChatBox chatTimer="10"/>
         <ProfileCard
           imgSrc="/assets/jettFurry.png"
           userName="IMNOTAFURRY"
@@ -21,7 +23,10 @@ export default function ChatBody() {
 }
 
 const Wrapper = styled.div`
+  height: 100%;
+  width: 100%;
   display: flex;
   flex-wrap: wrap;
   margin: 20px;
+  justify-content: center;
 `;
