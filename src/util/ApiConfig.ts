@@ -7,4 +7,8 @@ export class ApiConfig{
     /* Start */
     public static loginRoute = () => this.baseRoute + `users/login`;
     public static registerRoute = () => this.baseRoute + `users/register`;
+
+    /* Filters */
+    public static saveFilters = () => this.baseRoute + ``;
+    public static retrieveFilters = (userId : string) => this.baseRoute + ``;
 }

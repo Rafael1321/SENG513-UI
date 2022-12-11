@@ -165,6 +165,10 @@ const OuterForm = styled.div`
     @media screen and (max-width: 500px) {
         transform: scale(1.5);
     }
+
+    @media screen and (max-height: 400px) and (orientation:landscape){
+        transform: scale(1.0)
+    }
 `;
 
 const InnerForm = styled.div`
@@ -203,11 +207,11 @@ const Title = styled.div`
 
     & #title1{
         font-size: 3.5vw;
+        color: #F94B4B;
     }
 
     & #title2{
         font-size: 4.5vw;
-        color: #F94B4B;
     }
 `;
 
