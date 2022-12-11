@@ -4,8 +4,9 @@ import styled from 'styled-components';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { AuthService, IAuthResponse } from '../../services/AuthService';
-import { LoggedUserContext } from '../../contexts/LoggesUserContext';
+import { LoggedUserContext } from '../../contexts/LoggedUserContext';
 import { CustomToast } from '../Shared/CustomToast';
+import { IUser } from '../../models/AuthModels';
 
 export enum FormType {
     Login = 0,
@@ -39,18 +40,18 @@ export function Form(props : Props) : React.ReactElement<Props, any>{
     const handlePasswordChange = (e : any) => { setPassword(e.target.value); }
     const handleConfirmPasswordChange = (e : any) => { setConfirmPassword(e.target.value); }
 
-    React.useEffect(() => {
-        if(localStorage.getItem("logged-in")){
-            navigate('./landing');
-        }
-    }, []);
+    // React.useEffect(() => {
+    //     if(localStorage.getItem("logged-in")){
+    //         navigate('./landing');
+    //     }
+    // }, []);
 
     // Button
     const handleButtonClick = async () : Promise<void> => {
 
         // Validating username and password
-        if(userName === ''){
-            toast.error("Please provide a user name.");
+        if(email === ''){
+            toast.error("Please provide email.");
             return;
         }else if(password === ''){
             toast.error("Please provide a password.");
@@ -59,11 +60,8 @@ export function Form(props : Props) : React.ReactElement<Props, any>{
 
         if(props.formType === FormType.Registration){
 
-            // Validation email and password
-            if(email === ''){
-                toast.error("Please provide your email.");
-                return;
-            }else if(confirmPassword){
+            // Validation password
+            if(confirmPassword){
                 toast.error("Please confirm your password.");
                 return;
             }else if(password !== confirmPassword){
@@ -72,29 +70,28 @@ export function Form(props : Props) : React.ReactElement<Props, any>{
             }
             
             // Call API to attempt registration
-            const authResponse : IAuthResponse = await AuthService.register(userName, email, password);
+            // const authResponse : IAuthResponse = await AuthService.register(userName, email, password);
 
-            if(authResponse.statusCode !== 201){ // Username already in use or Email already in use
-                toast.error(authResponse.data);
-                return;
-            }else{ 
-                loggedUserContext.updateLoggedUser(authResponse.data);
-                localStorage.setItem('logged-in', JSON.stringify(true));
-            }
+            // if(authResponse.statusCode !== 201){ // Username already in use or Email already in use
+            //     toast.error(authResponse.data);
+            //     return;
+            // }else{ 
+            //     loggedUserContext.updateLoggedUser(authResponse.data);
+            //     localStorage.setItem('logged-in', JSON.stringify(true));
+            // }
         }else{
 
             // Call API to attempt login
-            const authResponse : IAuthResponse = await AuthService.login(userName, password);
+            const authResponse : IAuthResponse = await AuthService.login({email:email, password:password});
 
             if(authResponse.statusCode !== 200){  // Wrong email and password combination
-                toast.error(authResponse.data);
+                toast.error(authResponse.data as String);
                 return;
             }else{ 
-                loggedUserContext.updateLoggedUser(authResponse.data);
-                localStorage.setItem('logged-in', JSON.stringify(true));
+                loggedUserContext.updateLoggedUser(authResponse.data as IUser);
             }
         }
-        navigate('./landing');
+        // navigate('./landing');
     }
 
     return (
@@ -108,8 +105,8 @@ export function Form(props : Props) : React.ReactElement<Props, any>{
                     </Title>
                     <Fields>
                         <p id="subtitle">{props.formType === FormType.Registration?'CREATE ACCOUNT':'LOGIN'}</p>
-                        <input type='text' placeholder="USERNAME" onChange={handleUsernameChange}></input>
-                        {props.formType === FormType.Registration?<input type='email' placeholder="EMAIL" onChange={handleEmailChange}></input>:''}
+                        {props.formType === FormType.Registration?<input type='text' placeholder="DISPLAY NAME" onChange={handleUsernameChange}></input>:''}
+                        <input type='email' placeholder="EMAIL" onChange={handleEmailChange}></input>
                         <input type='password' placeholder="PASSWORD" onChange={handlePasswordChange}></input>
                         {props.formType === FormType.Registration?<input type='password' placeholder="CONFIRM PASSWORD" onChange={handleConfirmPasswordChange}></input>:''}
                         {props.formType === FormType.Registration?

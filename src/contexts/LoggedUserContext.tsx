@@ -1,14 +1,10 @@
 import React from "react";
-
-export interface ILoggedUser {
-    id?: string;
-    userName : string;
-    email : string;
-}
+import { IUser } from "../models/AuthModels";
+import env from "ts-react-dotenv";
 
 export type LoggedUserContextType = {
-    loggedUser : ILoggedUser,
-    updateLoggedUser : (loggedUser : ILoggedUser) => void
+    loggedUser : IUser,
+    updateLoggedUser : (loggedUser : IUser) => void
 };
 
 type Props = {
@@ -19,9 +15,13 @@ export const LoggedUserContext = React.createContext<LoggedUserContextType | nul
 
 export function LoggedUserProvider({children} : Props) { 
 
-    const [loggedUser, setLoggedUser] = React.useState<ILoggedUser | null>(null);
+    const [loggedUser, setLoggedUser] = React.useState<IUser | null>(null);
     
-    const updateLoggedUser = (loggedUser: ILoggedUser) : void => {
+    React.useEffect(() => {
+        if(env.DEBUG as Boolean) console.log(loggedUser);
+    }, [loggedUser]); 
+
+    const updateLoggedUser = (loggedUser: IUser) : void => {
         setLoggedUser(loggedUser);
     }
 

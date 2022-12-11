@@ -10,12 +10,13 @@
     "react-scripts": "5.0.1",
     "react-toastify": "^9.1.1",
     "styled-components": "^5.3.6",
+    "ts-react-dotenv": "^0.2.3",
     "usehooks-ts": "^2.6.0"
   },
   "scripts": {
     "magic": "webpack",
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "react-dotenv && react-scripts start",
+    "build": "react-dotenv && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
