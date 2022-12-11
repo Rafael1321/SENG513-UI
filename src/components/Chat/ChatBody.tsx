@@ -2,12 +2,26 @@ import * as React from "react";
 import styled from "styled-components";
 import ProfileCard from "./ProfileCard";
 import ChatBox from "./ChatBox";
-
+import { useState, useEffect } from "react";
+import { alertClasses } from "@mui/material";
 export default function ChatBody() {
-  return (
+  
+  const [timer, setTimer] = useState(10)
+
+  const interval = setInterval(() => {
+    
+    if(timer!==0){
+        setTimer(timer-1)
+        console.log(timer)  
+    }else{
+        console.log("you outta time bestie");
+    }
+  }, 60000);
+  
+    return (
     <Wrapper>
       <RightColContainer>
-        <TopText> 🕐 You have 10 minutes remaining!</TopText>
+        <TopText> 🕐 You have {timer} minutes remaining!</TopText>
         <ChatBox chatTimer="10" />
         <ChatInput placeholder="Message">
   
