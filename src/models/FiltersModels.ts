@@ -35,11 +35,6 @@ export enum RankLevel{
     three = 3
 }
 
-export interface IRank{
-    rankType : RankType
-    rankLevel : RankLevel
-}
-
 export enum Gender{
     allGenders = 0,
     woman = 1,
@@ -52,7 +47,7 @@ export enum Gender{
 export interface IFilters {
     serverPreference: ServerPreference;
     gameMode : GameMode;
-    rankDisparity : IRank[];
+    rankDisparity : number[];
     ageRange : number[];
     genders : boolean[];
 }

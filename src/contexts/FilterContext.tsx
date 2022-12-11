@@ -1,11 +1,11 @@
 import React from "react";
-import { GameMode, IFilters, IRank } from "../models/FiltersModels";
+import { GameMode, IFilters } from "../models/FiltersModels";
 
 export type FiltersContextType = {
     filters : IFilters,
     updateServerPreference : (serverPreference : number) => void,
     updateGameMode : (gameMode : GameMode) => void,
-    updateRankDisparity : (rankDisparity : IRank[]) => void,
+    updateRankDisparity : (rankDisparity : number[]) => void,
     updateAgeRange : (ageRange : number[]) => void,
     updateGender : (genders : boolean[]) => void,
     updateFilter : (filters : IFilters) => void
@@ -29,7 +29,7 @@ export function FilterProvider({children} : Props) {
         setFilters({...filters, gameMode: gameMode});
     }
 
-    function updateRankDisparity(rankDisparity : IRank[]) : void{
+    function updateRankDisparity(rankDisparity : number[]) : void{
         setFilters({...filters, rankDisparity: rankDisparity});
     }
 

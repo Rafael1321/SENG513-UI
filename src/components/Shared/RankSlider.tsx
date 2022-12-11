@@ -2,7 +2,7 @@ import { Slider } from '@mui/material';
 import * as React from 'react'
 import styled from 'styled-components';
 import { FilterContext } from '../../contexts/FilterContext';
-import { IRank, RankLevel, RankType } from '../../models/FiltersModels';
+import { RankLevel, RankType } from '../../models/FiltersModels';
 
 export function RankSlider() : React.ReactElement{
     
@@ -29,7 +29,7 @@ export function RankSlider() : React.ReactElement{
         setValue([newValue[0], newValue[1]]);
 
         // Change filter context here
-        filterContex.updateRankDisparity([toRank(newValue[0]), toRank(newValue[1])]);
+        filterContex.updateRankDisparity([...toRank(newValue[0]), ...toRank(newValue[1])]);
     };
 
     /* Helper Functions */
@@ -72,8 +72,8 @@ export function RankSlider() : React.ReactElement{
         return rankType + decimal;
     }
 
-    function toRank(val : number) : IRank {
-        return {rankType:toRankType(val), rankLevel: toRankLevel(val)} as IRank;
+    function toRank(val : number) : number[] {
+        return [toRankType(val), toRankLevel(val)]
     }
 
     return (
