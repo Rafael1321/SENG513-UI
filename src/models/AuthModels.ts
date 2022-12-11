@@ -1,5 +1,7 @@
 /* DTOs */
 
+import { GameMode, Gender } from "./FiltersModels";
+
 export interface IRegisterDTO{
     displayName : string;
     gameName : string;
@@ -12,6 +14,15 @@ export interface IRegisterDTO{
 export interface ILoginDTO{
     email: string;
     password: string;
+}
+
+export interface IUpdateDTO{
+    userId: string,
+    displayName : string,
+    age : number,
+    gender : Gender, 
+    playerType : GameMode,
+    aboutMe: string
 }
 
 /* View Models */

@@ -8,6 +8,7 @@ export class ApiConfig{
     /* Start */
     public static loginRoute = () => this.baseRoute + `users/login`;
     public static registerRoute = () => this.baseRoute + `users/register`;
+    public static updateUserRoute = () => this.baseRoute + `users/update`;
 
     /* Filters */
     public static upsertFiltersRoute = () => this.baseRoute + `filters`;
