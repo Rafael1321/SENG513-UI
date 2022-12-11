@@ -7,6 +7,9 @@ import { AuthService, IAuthResponse } from '../../services/AuthService';
 import { LoggedUserContext } from '../../contexts/LoggedUserContext';
 import { CustomToast } from '../Shared/CustomToast';
 import { IUser } from '../../models/AuthModels';
+import { FiltersService, IFiltersResponse } from '../../services/FiltersService';
+import { FilterContext } from '../../contexts/FilterContext';
+import { IFilters } from '../../models/FiltersModels';
 
 export enum FormType {
     Login = 0,
@@ -21,6 +24,7 @@ export function Form(props : Props) : React.ReactElement<Props, any>{
 
     /* Logged User Context */
     const loggedUserContext = React.useContext(LoggedUserContext);
+    const filterContex = React.useContext(FilterContext);
 
     /* Navigation */
     const navigate = useNavigate();
@@ -93,7 +97,13 @@ export function Form(props : Props) : React.ReactElement<Props, any>{
                 setLoading(false);
                 return;
             }else{ 
+
                 loggedUserContext.updateLoggedUser(authResponse.data as IUser);
+
+                // Creating default filters for new user 
+                const filtersResponse : IFiltersResponse = await FiltersService.upsert({userId: ((authResponse.data as IUser)._id as string), filters: null});
+                filterContex.updateFilter(filtersResponse.data as IFilters);
+
                 setLoading(false);
             }
 
@@ -109,7 +119,13 @@ export function Form(props : Props) : React.ReactElement<Props, any>{
                 setLoading(false);
                 return;
             }else{ 
+
                 loggedUserContext.updateLoggedUser(authResponse.data as IUser);
+
+                // Retrieving existing filters for user 
+                const filtersResponse : IFiltersResponse = await FiltersService.retrieve({userId: ((authResponse.data as IUser)._id as string)});
+                filterContex.updateFilter(filtersResponse.data as IFilters);
+
                 setLoading(false);
             }
         }

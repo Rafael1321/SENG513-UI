@@ -1,22 +1,12 @@
 import React from "react";
-import { AgeRange, GameMode } from '../components/Shared/FilterPopup';
-import { Gender } from "../components/Shared/GenderPicker";
-import { IRank } from "../components/Shared/RankSlider";
-
-export interface IFilters {
-    serverPreference: number;
-    gameMode : GameMode;
-    rankDisparity : IRank[];
-    ageRange : AgeRange;
-    genders : boolean[];
-}
+import { GameMode, IFilters, IRank } from "../models/FiltersModels";
 
 export type FiltersContextType = {
     filters : IFilters,
     updateServerPreference : (serverPreference : number) => void,
     updateGameMode : (gameMode : GameMode) => void,
     updateRankDisparity : (rankDisparity : IRank[]) => void,
-    updateAgeRange : (ageRange : AgeRange) => void,
+    updateAgeRange : (ageRange : number[]) => void,
     updateGender : (genders : boolean[]) => void,
     updateFilter : (filters : IFilters) => void
 };
@@ -43,7 +33,7 @@ export function FilterProvider({children} : Props) {
         setFilters({...filters, rankDisparity: rankDisparity});
     }
 
-    function updateAgeRange(ageRange : AgeRange) : void{
+    function updateAgeRange(ageRange : number[]) : void{
         setFilters({...filters, ageRange: ageRange});
     }
     

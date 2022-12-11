@@ -11,7 +11,6 @@ export class AuthService{
 
     public static login = async (loginDTO : ILoginDTO) : Promise<IAuthResponse> => {
         try{
-            console.log(ApiConfig.loginRoute());
             let response = await axios({method: 'post', url: ApiConfig.loginRoute(), data: loginDTO});
             return {data:response?.data, statusCode:response?.status};
         }catch(err){

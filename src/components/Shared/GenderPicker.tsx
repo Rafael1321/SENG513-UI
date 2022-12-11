@@ -2,14 +2,8 @@ import * as React from 'react'
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
 import { FilterContext } from '../../contexts/FilterContext';
+import { Gender } from '../../models/FiltersModels';
 import { CustomToast } from './CustomToast';
-
-export enum Gender{
-    allGenders = 0,
-    woman = 1,
-    man = 2,
-    nonBinary = 3    
-}
 
 interface IPos{
     left : number;

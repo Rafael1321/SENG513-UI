@@ -1,4 +1,5 @@
 import { EnvConfig } from "./EnvConfig";
+import { IRetrieveDTO } from '../models/FiltersModels';
 
 export class ApiConfig{
 
@@ -9,6 +10,6 @@ export class ApiConfig{
     public static registerRoute = () => this.baseRoute + `users/register`;
 
     /* Filters */
-    public static saveFilters = () => this.baseRoute + ``;
-    public static retrieveFilters = (userId : string) => this.baseRoute + ``;
+    public static upsertFiltersRoute = () => this.baseRoute + `filters`;
+    public static retrieveFiltersRoute = (retrieveDTO : IRetrieveDTO) => this.baseRoute + `filters/${retrieveDTO.userId}`;
 }
