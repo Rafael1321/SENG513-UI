@@ -8,7 +8,6 @@ interface Props {
 export default function ChatBox(props: Props): React.ReactElement<Props, any> {
   return (
     <Wrapper>
-      <Timer> 🕐 You have {props.chatTimer} minutes remaining!</Timer>
     </Wrapper>
   );
 }
@@ -19,8 +18,15 @@ const Wrapper = styled.div`
   width: 65vw;
   height: 80vh;
   margin: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  @media all and (max-width: 1400px) {
+    width: 90vw;
+    height: 30vh;
+    padding: 3vh;
+    order:2;
+    border-radius: 20px;
+    // background-color: #181818;
+  }
 `;
-const Timer = styled.p`
-  text-align: center;
-  font-size: 1vw;
-`;
+

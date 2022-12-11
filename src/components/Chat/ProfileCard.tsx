@@ -49,30 +49,40 @@ const Wrapper = styled("div")`
   filter: drop-shadow(0px 0px 10px #66c2a9);
   display: flex;
   flex-direction: column;
-  flex-wrap: wrap;
-  @media all and (max-width: 800px) {
+  overflow: scroll;
+ 
+  @media all and (max-width: 1400px) {
+    order: 1;
+    flex-wrap: wrap;
     width: 90vw;
     max-width: 90%;
-    top: 1;
-    position: absolute;
     height: 13vh;
-    padding: 2vh;
+    padding: 3vh;
     filter: drop-shadow(0px 0px 5px #66c2a9);
     max-height: 200px;
     border-radius: 20px;
+    
+  }
+  @media all and (max-height: 1000px) {
+    min-height: 10vw;
+    
   }
 `;
 
 const Icon = styled.img<{ imgSrc: string }>`
   content: url(${(props) => props.imgSrc});
   border-radius: 50%;
-  width: 13vw;
+  width: 10vw;
   max-width: 200px;
   max-height: 200px;
   aspect-ratio: 1;
   margin-left: auto;
   margin-right: auto;
   display: block;
+  @media all and(max-height: 1000px) {
+    width: 10%;
+    height: 10%;
+  }
 `;
 const Username = styled.p`
   text-align: center;
@@ -92,9 +102,10 @@ const Ranks = styled.div`
   margin-left: auto;
   margin-right: auto;
   justify-content: space-between;
-  @media all and (max-width: 800px) {
+  @media all and (max-width: 1400px) {
     flex-direction: column;
     width: 10%;
+    justify-content: center;
     margin-top: auto;
     margin-bottom: auto;
   }
@@ -108,6 +119,10 @@ const RankImg = styled.img<{ imgSrc: string }>`
   max-width: 54px;
   height: 5vw;
   max-height: 54px;
+  @media all and(max-height: 1000px) {
+    height: 10%;
+    max-height: 10%;
+  }
 `;
 
 const AboutContainer = styled.div`
@@ -115,7 +130,7 @@ const AboutContainer = styled.div`
   overflow: scroll;
   margin-left: auto;
   margin-right: auto;
-  @media all and (max-width: 800px) {
+  @media all and (max-width: 1400px) {
     width: 40%;
     height: 90%;
   }
@@ -131,9 +146,8 @@ const Label = styled.p`
   text-align: left;
   font-size: min(20px, 2vw);
   font-weight: 600;
-
-  @media all and (max-width: 800) {
-    visibility: hidden;
+  @media all and (max-width: 1400px) {
+    // visibility: hidden;
     margin: 0;
   }
 `;
@@ -142,7 +156,7 @@ const RankLabel = styled(Label)`
   font-size: min(20px, 1.5vw);
   display: flex;
   flex-direction: column;
-  @media all and (max-width: 800) {
-    max-width: 54px;
+  @media all and (max-width: 1400px) {
+    // visibility: hidden;
   }
 `;
