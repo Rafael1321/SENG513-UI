@@ -1,8 +1,8 @@
-import env from "ts-react-dotenv";
+import { EnvConfig } from "./EnvConfig";
 
 export class ApiConfig{
 
-    private static baseRoute : string = `http://${env.API_HOST}:${env.API_PORT}/`;
+    private static baseRoute : string = `http://${EnvConfig.API_HOST}:${EnvConfig.API_PORT}/`;
 
     /* Start */
     public static loginRoute = () => this.baseRoute + `users/login`;

@@ -1,6 +1,6 @@
 import React from "react";
 import { IUser } from "../models/AuthModels";
-import env from "ts-react-dotenv";
+import { EnvConfig } from '../util/EnvConfig';
 
 export type LoggedUserContextType = {
     loggedUser : IUser,
@@ -18,7 +18,7 @@ export function LoggedUserProvider({children} : Props) {
     const [loggedUser, setLoggedUser] = React.useState<IUser | null>(null);
     
     React.useEffect(() => {
-        if(env.DEBUG as Boolean) console.log(loggedUser);
+        if(EnvConfig.DEBUG) console.log(loggedUser);
     }, [loggedUser]); 
 
     const updateLoggedUser = (loggedUser: IUser) : void => {

@@ -27,41 +27,53 @@ export function Form(props : Props) : React.ReactElement<Props, any>{
 
     /* Form State */
 
-    const [userName, setUserName] = React.useState('');
+    const [displayName, setDisplayName] = React.useState('');
+    const [gameName, setGameName] = React.useState('');
+    const [tag, setTag] = React.useState('');
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [confirmPassword, setConfirmPassword] = React.useState('');
 
+    const [loading, setLoading] = React.useState<boolean>(false);
+
     /* Handlers */
 
     // Form
-    const handleUsernameChange = (e : any) => { setUserName(e.target.value); }
-    const handleEmailChange = (e : any) => { setEmail(e.target.value); }
+    const handleDisplayNameChange = (e : any) => { setDisplayName(e.target.value.toLowerCase()); }
+    const handleGameNameChange = (e : any) => { setGameName(e.target.value); }
+    const handleTagChange = (e : any) => { setTag(e.target.value.toUpperCase()); }
+
+    const handleEmailChange = (e : any) => { setEmail(e.target.value.toLowerCase()); }
     const handlePasswordChange = (e : any) => { setPassword(e.target.value); }
     const handleConfirmPasswordChange = (e : any) => { setConfirmPassword(e.target.value); }
-
-    // React.useEffect(() => {
-    //     if(localStorage.getItem("logged-in")){
-    //         navigate('./landing');
-    //     }
-    // }, []);
 
     // Button
     const handleButtonClick = async () : Promise<void> => {
 
-        // Validating username and password
-        if(email === ''){
+        if(loading){ // avoid multiple requests sent to api
+            toast.error("Please wait, your request is being processed.");
+            return; 
+        }
+
+        // Email and password
+        if(!email){
             toast.error("Please provide email.");
             return;
-        }else if(password === ''){
+        }else if(!password){
             toast.error("Please provide a password.");
             return;
         }
 
         if(props.formType === FormType.Registration){
 
-            // Validation password
-            if(confirmPassword){
+            // Password, GameName and Tag validation
+            if(!gameName){
+                toast.error("Please provide a game name");
+                return;
+            }else if(!tag){
+                toast.error("Please provide a tag");
+                return;
+            }else if(!confirmPassword){
                 toast.error("Please confirm your password.");
                 return;
             }else if(password !== confirmPassword){
@@ -69,29 +81,39 @@ export function Form(props : Props) : React.ReactElement<Props, any>{
                 return;
             }
             
-            // Call API to attempt registration
-            // const authResponse : IAuthResponse = await AuthService.register(userName, email, password);
+            setLoading(true);
 
-            // if(authResponse.statusCode !== 201){ // Username already in use or Email already in use
-            //     toast.error(authResponse.data);
-            //     return;
-            // }else{ 
-            //     loggedUserContext.updateLoggedUser(authResponse.data);
-            //     localStorage.setItem('logged-in', JSON.stringify(true));
-            // }
+            // Call API to attempt registration
+            let newUser = { displayName: displayName, gameName : gameName, tagLine : tag,
+                email : email, password : password, avatarImage : 'test.png'};
+            const authResponse : IAuthResponse = await AuthService.register(newUser);
+
+            if(authResponse.statusCode !== 201){ // Username already in use or Email already in use
+                toast.error(authResponse.data as String);
+                setLoading(false);
+                return;
+            }else{ 
+                loggedUserContext.updateLoggedUser(authResponse.data as IUser);
+                setLoading(false);
+            }
+
         }else{
+
+            setLoading(true);
 
             // Call API to attempt login
             const authResponse : IAuthResponse = await AuthService.login({email:email, password:password});
 
             if(authResponse.statusCode !== 200){  // Wrong email and password combination
                 toast.error(authResponse.data as String);
+                setLoading(false);
                 return;
             }else{ 
                 loggedUserContext.updateLoggedUser(authResponse.data as IUser);
+                setLoading(false);
             }
         }
-        // navigate('./landing');
+        navigate('../landing');
     }
 
     return (
@@ -105,7 +127,11 @@ export function Form(props : Props) : React.ReactElement<Props, any>{
                     </Title>
                     <Fields>
                         <p id="subtitle">{props.formType === FormType.Registration?'CREATE ACCOUNT':'LOGIN'}</p>
-                        {props.formType === FormType.Registration?<input type='text' placeholder="DISPLAY NAME" onChange={handleUsernameChange}></input>:''}
+                        {props.formType === FormType.Registration?<input type='text' placeholder="DISPLAY NAME (optional)" onChange={handleDisplayNameChange}></input>:''}
+                        {props.formType === FormType.Registration?<InputPair>
+                            <input id='game-name' type='text' placeholder="GAME NAME" onChange={handleGameNameChange}></input>
+                            <input id='tag' type='text' placeholder="TAG" onChange={handleTagChange}></input>
+                        </InputPair>:''}
                         <input type='email' placeholder="EMAIL" onChange={handleEmailChange}></input>
                         <input type='password' placeholder="PASSWORD" onChange={handlePasswordChange}></input>
                         {props.formType === FormType.Registration?<input type='password' placeholder="CONFIRM PASSWORD" onChange={handleConfirmPasswordChange}></input>:''}
@@ -225,6 +251,7 @@ const Fields = styled.div`
         &::placeholder{
             color: black;
             font-size: 0.8vw;
+            opacity: 50%;
         }
 
         &:hover{
@@ -232,4 +259,17 @@ const Fields = styled.div`
             background-color: #bcbaba; 
         }
     }
-`
+`;
+
+const InputPair = styled.div`
+    display: flex;
+    flex-direction: row;
+
+    & #game-name{
+        width: 9.5vw;
+    }
+
+    & #tag{
+        width: 3vw;
+    }
+`;

@@ -11,19 +11,20 @@ export class AuthService{
 
     public static login = async (loginDTO : ILoginDTO) : Promise<IAuthResponse> => {
         try{
+            console.log(ApiConfig.loginRoute());
             let response = await axios({method: 'post', url: ApiConfig.loginRoute(), data: loginDTO});
-            return {data:response.data, statusCode:response.status};
+            return {data:response?.data, statusCode:response?.status};
         }catch(err){
-            return {data:err.response.data, statusCode:err.response.status};
+            return {data:err?.response?.data, statusCode:err?.response?.status};
         }
     }
     
     public static register = async (registerDTO : IRegisterDTO) : Promise<IAuthResponse> => {
         try{
             let response = await axios({method: 'post', url: ApiConfig.registerRoute(),data: registerDTO})
-            return {data:response.data, statusCode:response.status};
+            return {data:response?.data, statusCode:response?.status};
         }catch(err){
-            return {data:err.response.data, statusCode:err.response.status};
+            return {data:err?.response?.data, statusCode:err?.response?.status};
         }
     }
 }
