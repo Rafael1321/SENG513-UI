@@ -1,6 +1,6 @@
 import axios from 'axios';
+import { IRetrieveDTO, IUpsertDTO } from '../models/FiltersModels';
 import { ApiConfig } from '../util/ApiConfig';
-import { IFilters } from '../contexts/FilterContext';
 
 export interface IFiltersResponse {
     data : any;
@@ -9,47 +9,23 @@ export interface IFiltersResponse {
 
 export class FiltersService{
 
-    public static save = async (userId : string, filters : IFilters) : Promise<IFiltersResponse> => {
-
-        let response = null;
-        await axios({
-            method: 'post',
-            url: ApiConfig.saveFilters(),
-            data: {
-                userId: userId,
-                filters:filters
-            }
-        }).then((response : any) => {
-            response = {
-                data:response.data,
-                statusCode:response.status
-            }
-        }).catch( (err : any) => {
-            response = {
-                data:null,
-                statuCode: err.response.status
-            } 
-        });
-        return response;
+    public static retrieve = async (retrieveDTO : IRetrieveDTO) : Promise<IFiltersResponse> => {
+    
+        try{
+            let response = await axios({method: 'get', url: ApiConfig.retrieveFiltersRoute(retrieveDTO)});
+            return {data:response?.data, statusCode:response?.status};
+        }catch(err){
+            return {data:err?.response?.data, statusCode:err?.response?.status};
+        }
     }
-    
-    public static retrieve = async (userId: string) : Promise<IFiltersResponse> => {
-    
-        let response = null;
-        await axios({
-            method: 'get',
-            url: ApiConfig.retrieveFilters(userId),
-        }).then((response : any) => {
-            response = {
-                data:response.data,
-                statusCode:response.status
-            }
-        }).catch( (err : any) => {
-            response = {
-                data:null,
-                statuCode: err.response.status
-            } 
-        });
-        return response;
+
+    public static upsert = async (upsertDTO : IUpsertDTO) : Promise<IFiltersResponse> => {
+
+        try{
+            let response = await axios({method: 'post', url: ApiConfig.upsertFiltersRoute(), data: upsertDTO});
+            return {data:response?.data, statusCode:response?.status};
+        }catch(err){
+            return {data:err?.response?.data, statusCode:err?.response?.status};
+        }
     }
 }

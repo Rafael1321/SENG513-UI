@@ -2,31 +2,7 @@ import { Slider } from '@mui/material';
 import * as React from 'react'
 import styled from 'styled-components';
 import { FilterContext } from '../../contexts/FilterContext';
-
-export enum RankType{
-    iron = 1,
-    bronze = 2,
-    silver = 3,
-    gold = 4,
-    platinum = 5,
-    diamond = 6,
-    ascendent = 7,
-    immortal = 8,
-    radiant = 9
-}
-
-export enum RankLevel{
-    one = 1,
-    two = 2,
-    three = 3
-}
-
-// Represents a rank composed of two parts:
-// Rank Type and Rank Level 
-export interface IRank{
-    rankType : RankType
-    rankLevel : RankLevel
-}
+import { IRank, RankLevel, RankType } from '../../models/FiltersModels';
 
 export function RankSlider() : React.ReactElement{
     

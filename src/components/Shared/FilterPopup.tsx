@@ -1,22 +1,13 @@
 import * as React from 'react'
 import styled from 'styled-components';
-import { LoggedUserContext } from '../../contexts/LoggesUserContext';
+import { LoggedUserContext } from '../../contexts/LoggedUserContext';
 import { GenderPicker } from './GenderPicker';
 import { RankSlider } from './RankSlider';
 import { FilterContext } from '../../contexts/FilterContext';
 import { CustomToast } from './CustomToast';
 import { toast } from 'react-toastify';
 import { FiltersService, IFiltersResponse } from '../../services/FiltersService';
-
-export interface AgeRange{
-    minAge: number;
-    maxAge: number;
-}
-
-export enum GameMode{
-    competitive = 0,
-    casual = 1
-}
+import { GameMode } from '../../models/FiltersModels';
 
 type Props = {
     triggered : boolean;
@@ -78,21 +69,21 @@ export function FilterPopup(props : Props) : React.ReactElement<Props, any> {
         }
 
         let newValue = Number(event.target.value);
-        let newAges : AgeRange = null;
+        let newAges : number[] = null;
         if(isMin){
-            if(newValue > filterContex.filters.ageRange.maxAge){
+            if(newValue > filterContex.filters.ageRange[1]){
                 toast.error(`The min age must be less than or equal to the max age.`);
                 minAgeInput.current.value = ""
                 return;
             }
-            newAges = {minAge:event.target.value, ...filterContex.filters.ageRange};
+            newAges = [event.target.value, filterContex.filters.ageRange[1]];
         }else{
-            if(newValue < filterContex.filters.ageRange.minAge){
+            if(newValue < filterContex.filters.ageRange[0]){
                 toast.error(`The max age must be greater than or equal to the min age.`);
                 maxAgeInput.current.value = ""
                 return;
             }
-            newAges = {...filterContex.filters.ageRange, maxAge:event.target.value};
+            newAges = [filterContex.filters.ageRange[1], event.target.value];
         }
 
         filterContex.updateAgeRange(newAges);
@@ -101,7 +92,7 @@ export function FilterPopup(props : Props) : React.ReactElement<Props, any> {
     async function handleSave(){
         try{
             // Call API to attempt save of filters
-            const filterResponse : IFiltersResponse = await FiltersService.save(loggedUserContext.loggedUser.id, filterContex.filters);
+            const filterResponse : IFiltersResponse = await FiltersService.upsert({userId:loggedUserContext.loggedUser._id, filters:filterContex.filters});
 
             if(filterResponse.statusCode !== 200){ // Username already in use or Email already in use
                 toast.error(filterResponse.data);
