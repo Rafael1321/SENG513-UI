@@ -16,6 +16,40 @@ const SLIDE_COUNT = 5;
 const slides = Array.from(Array(SLIDE_COUNT).keys());
 console.log(slides);
 
+export type Chat = {
+    key: number;
+    username: string;
+    profile_url: string;
+    last_message: string;
+}
+
+const history = [
+    {
+        key: 0,
+        username: "VividEradicator",
+        profile_url: "Images/astra.webp",
+        last_message: "Suggondeez"
+    },
+    {
+        key: 1,
+        username: "IAMNOTAFURRY",
+        profile_url: "Images/chamber.webp",
+        last_message: "Bro what are you even saying man?"   //Overflow
+    },
+    {
+        key: 2,
+        username: "ArcticFox",
+        profile_url: "Images/chamber.webp",
+        last_message: "I love chamber so much!"
+    },
+    {
+        key: 3,
+        username: "Malder",
+        profile_url: "Images/chamber.webp",
+        last_message: "Wtf is this carousel"
+    }
+]
+
 function ChatHistory(props: Props): React.ReactElement {
     return (
         <Wrapper>
@@ -31,40 +65,15 @@ function ChatHistory(props: Props): React.ReactElement {
                 </Menu>
 
                 <HistoryContainer>
-                    <EmblaCarousel slides={([...slides])} />
+                    <EmblaCarousel slides={[...slides]} history={history} />
                     {/* <HistoryCard size={HistoryCardSize.Three} /> */}
-                    {/* <HistoryCard
-                        url={"Images/Astra.webp"}
-                        username={"VividEradicator"}
-                        message={"Ur mom"}
-                        isMain={false}
-                        width={HistoryCardSize.Two}
-                        zIndex={"1"}
-                    />
-
-                    <HistoryCard
-                        url={"Images/Chamber.webp"}
-                        username={"IAMNOTAFURRY"}
-                        message={"Bro what are you saying"}
-                        isMain={true}
-                        width={HistoryCardSize.One}
-                        zIndex={"3"}
-                    />
                     
-                    <HistoryCard
-                        url={"Images/Chamber.webp"}
-                        username={"ArcticFox"}
-                        message={"Ur mom"}
-                        isMain={false}
-                        width={HistoryCardSize.Two}
-                        zIndex={"1"}
-                    /> */}
 
 
                     {/* <HistoryCard size={HistoryCardSize.Three} /> */}
                 </HistoryContainer>
 
-                <ChatContainer />
+                <ChatContainer>.</ChatContainer>
             </HistorySection>
 
             <InfoCardSection></InfoCardSection>
@@ -75,6 +84,7 @@ function ChatHistory(props: Props): React.ReactElement {
         </Wrapper>
     );
 }
+
 
 const Menu = styled.nav`
     position: relative;
@@ -129,6 +139,9 @@ const ChatContainer = styled.div`
 
     background-color: #282828;
     border-radius: 44px;
+
+    display: flex;
+    justify-content: center;
     /* border: red solid 1px; */
 `;
 

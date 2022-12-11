@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import ProfilePicture from "../Shared/ProfilePicture";
 
@@ -12,34 +12,63 @@ type Props = {
 };
 
 export default function HistoryCard(props: Props): React.ReactElement {
+    const [width, setWidth] = useState("30%");
+
+    useEffect(() => {
+        setWidth(props.width);
+    }, [props.width]);
+
     return (
-        <Wrapper isMain={props.isMain} width={props.width} zIndex={props.zIndex}>
-            <UserInfoContainer>
-                <ProfilePicture size={"100%"} url={props.url} showBorder={false} />
-                <UsernameWrapper>
-                    <Username>{props.username}</Username>
-                </UsernameWrapper>
-            </UserInfoContainer>
-            <MessagesWrapper>
-                <Messages>{props.message}</Messages>
-            </MessagesWrapper>
-        </Wrapper>
+        <WrapperOuter width={props.width}>
+            <WrapperInner>
+                <Container isMain={props.isMain} zIndex={props.zIndex}>
+                    <UserInfoContainer>
+                        <ProfilePicture size={"100%"} url={props.url} showBorder={false} />
+                        <UsernameWrapper>
+                            <Username>{props.username}</Username>
+                        </UsernameWrapper>
+                    </UserInfoContainer>
+                    <MessagesWrapper>
+                        <Messages>{props.message}</Messages>
+                    </MessagesWrapper>
+                </Container>
+            </WrapperInner>
+        </WrapperOuter>
     );
 }
-
-const Wrapper = styled.div<{ isMain: boolean; width: string; zIndex: string }>`
+const WrapperOuter = styled.div<{ width: string }>`
     position: relative;
-    aspect-ratio: 9/5;
-    width: ${(props) => props.width};
+    min-width: 40%;
+    /* This needs to be the same as the margin in .embla_container*/
+    padding-left: 5px;
+
+`;
+
+const WrapperInner = styled.div`
+    position: relative;
+    overflow: hidden;
+    height: 190px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;
+
+const Container = styled.div<{ isMain: boolean; zIndex: string }>`
+    position: relative;
+    width: 95%;
+    height: 95%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     background: #282828;
-    box-shadow: ${(props) => (props.isMain ? "0px 0px 15px #66c2a9" : "none")};
+    box-shadow: ${(props) => (props.isMain ? "0px 0px 8px #66c2a9" : "none")};
     border-radius: 10px;
-    z-index: ${(props) => (props.zIndex)};
-    opacity: ${(props) => (props.isMain ? "1.0" : 0.6)};
+    z-index: ${(props) => props.zIndex};
+    opacity: ${(props) => (props.isMain ? "1.0" : 0.2)};
+    overflow: hidden;
+    transition: all 1s;
+
 `;
 
 const MessagesWrapper = styled.div`
