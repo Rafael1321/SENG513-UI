@@ -8,9 +8,11 @@ export default function LandingCard(props: any) {
   const displayCard = () => {
     if (!props.findDuo) {
       return <Profile></Profile>;
-    } else if (props.findDuo && !props.matchFound) {
-      return <FindDuo imgSrc={props.imgSrc}></FindDuo>;
-    } else if (props.findDuo && props.matchFound) {
+    // TODO: UNCOMMENT WHEN YOU GET IT WORKING
+    //} else if (props.findDuo && !props.matchFound) {
+    //  return <FindDuo imgSrc={props.imgSrc}></FindDuo>;
+    //} else if (props.findDuo && props.matchFound) {
+    }else if (props.findDuo) {
       return <MatchFound></MatchFound>;
     }
   };

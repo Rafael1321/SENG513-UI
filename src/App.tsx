@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Landing from "./Landing/Landing";
+import MatchFound from "./Landing/MatchFound";
 
 function App() {
   return (
