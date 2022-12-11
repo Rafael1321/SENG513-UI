@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { FormType } from './components/Start/Form';
 import Start from './components/Start/Start';
 import { FilterProvider } from './contexts/FilterContext';
-import { LoggedUserProvider } from './contexts/LoggesUserContext';
+import { LoggedUserProvider } from './contexts/LoggedUserContext';
 
 function App() {
 

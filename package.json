@@ -7,6 +7,7 @@
     "@emotion/styled": "^11.10.5",
     "@mui/material": "^5.10.17",
     "axios": "^1.2.0",
+    "env-cmd": "^10.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.3.0",
@@ -17,7 +18,7 @@
   },
   "scripts": {
     "magic": "webpack",
-    "start": "react-scripts start",
+    "start": "env-cmd -f ./.env react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
