@@ -35,3 +35,6 @@ dist/*# See https://help.github.com/articles/ignoring-files/ for more about igno
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+public/images
+.env
