@@ -50,14 +50,15 @@ const Wrapper = styled("div")`
   display: flex;
   flex-direction: column;
   overflow: scroll;
- 
   @media all and (max-width: 1400px) {
+      margin-left: auto;
+      margin-right: auto;
     order: 1;
     flex-wrap: wrap;
     width: 90vw;
-    max-width: 90%;
+    max-width: 90vw;
     height: 13vh;
-    padding: 3vh;
+    padding: 2vh;
     filter: drop-shadow(0px 0px 5px #66c2a9);
     max-height: 200px;
     border-radius: 20px;
