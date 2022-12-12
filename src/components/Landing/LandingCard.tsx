@@ -9,7 +9,8 @@ export default function LandingCard(props: any) {
     if (!props.findDuo) {
       return <Profile></Profile>;
     } else if (props.findDuo && !props.matchFound) {
-      return <FindDuo imgSrc={props.imgSrc}></FindDuo>;
+      // return <FindDuo imgSrc={props.imgSrc}></FindDuo>;
+      return <MatchFound></MatchFound>;
     } else if (props.findDuo && props.matchFound) {
       return <MatchFound></MatchFound>;
     }
@@ -30,14 +31,17 @@ const Card = styled.div`
 
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-evenly;
 
   @media (max-width: 1025px) {
     width: 75vw;
+    justify-content: space-evenly;
   }
 
   @media (max-width: 769px) {
     width: 80vw;
     height: 65vh;
+    display: flex;
+    justify-content: space-evenly;
   }
 `;
