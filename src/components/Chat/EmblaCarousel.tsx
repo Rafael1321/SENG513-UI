@@ -61,13 +61,6 @@ export const EmblaCarousel = (props: Props) => {
         <Container>
             <div className="embla__viewport" ref={viewportRef}>
                 <div className="embla__container">
-                    {/* {props.slides.map((index: any) => (
-                        <div className="embla__slide" key={index}>
-                            <div className="embla__slide__inner">
-                                <img className="embla__slide__img" src={mediaByIndex(index)} alt="A cool cat." />
-                            </div>
-                        </div>
-                    ))} */}
 
                     {props.history.map((chat: Chat) => (
                         <HistoryCard
@@ -81,20 +74,11 @@ export const EmblaCarousel = (props: Props) => {
                         />
                     ))}
 
-                    {/* {props.history.map((chat: Chat) => (
-                        // <HistoryCard
-                        //     width={main === chat.key ? HistoryCardSize.One : HistoryCardSize.Two}
-                        //     key={chat.key}
-                        //     url={chat.profile_url}
-                        //     username={chat.username}
-                        //     message={chat.last_message}
-                        //     isMain={main === chat.key}
-                        //     zIndex={main === chat.key ? "3" : "1"}
-                        // />
-                        <TestSlide>test</TestSlide>
-                    ))} */}
                 </div>
             </div>
+            
+            <div className="e"></div>
+
             <PrevButton onClick={scrollPrev} enabled={prevBtnEnabled} />
             <NextButton onClick={scrollNext} enabled={nextBtnEnabled} />
         </Container>

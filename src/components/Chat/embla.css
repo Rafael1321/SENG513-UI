@@ -10,6 +10,7 @@
 .embla__viewport {
   overflow: hidden;
   width: 100%;
+  box-shadow: inset -100px 4px 40px rgba(24, 24, 24, 0.4);
 }
 
 .embla__viewport.is-draggable {
