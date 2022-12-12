@@ -39,13 +39,13 @@ export default function FindDuo(props: any) {
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
-    socketContext.socket.emit('find_matching', loggedUserContext.loggedUser._id);
+    socketContext.emit('find_matching', loggedUserContext.loggedUser._id);
 
-    socketContext.socket.on('error_find_matching',(msg : string) => {
+    socketContext.on('error_find_matching',(msg : string) => {
       if(EnvConfig.DEBUG) console.log(msg);
     });
 
-    socketContext.socket.on('success_find_matching', (msg : string) => {
+    socketContext.on('success_find_matching', (msg : string) => {
       if(EnvConfig.DEBUG) console.log(msg);
     });
 

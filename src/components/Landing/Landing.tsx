@@ -1,13 +1,36 @@
 import * as React from "react";
 import styled from "styled-components";
-import { useState } from "react";
+import { useState, useEffect, useContext } from "react";
 
 import LandingCard from "./LandingCard";
+import { LoggedUserContext } from '../../contexts/LoggedUserContext';
+import { SocketContext } from '../../contexts/SocketContext';
+import { EnvConfig } from '../../util/EnvConfig';
 
 export default function Landing(props: any) {
-  let duoFound = false;
-  let playerIconSrc = "/Images/Icons/Astra_icon.webp";
-  const [findDuo, setFindDuo] = useState(false);
+  
+  // Constants
+  const playerIconSrc = "/Images/Icons/Astra_icon.webp";
+
+  // State 
+  const [duoFound, setDuoFound] = useState<boolean>(false);
+  const [findDuo, setFindDuo] = useState<boolean>(false);
+
+  // Contexts
+  const loggedUserContext = useContext(LoggedUserContext);
+  const socketContext = useContext(SocketContext);
+
+  useEffect(() => {
+    socketContext.emit('user_connected', loggedUserContext.loggedUser._id);
+
+    socketContext.on('error_user_connected', (msg : string) => {
+      if(EnvConfig.DEBUG) console.log(msg);
+    });
+
+    socketContext.on('success_user_connected', (msg : string) => {
+      if(EnvConfig.DEBUG) console.log(msg);
+    });
+  }, [])
 
   /* Handlers */
 
