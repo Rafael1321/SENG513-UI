@@ -49,7 +49,6 @@ const Wrapper = styled("div")`
   filter: drop-shadow(0px 0px 10px #66c2a9);
   display: flex;
   flex-direction: column;
-  overflow: scroll;
   justify-content: center;
   @media all and (max-width: 1400px) {
     margin-left: auto;

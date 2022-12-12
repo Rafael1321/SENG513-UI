@@ -192,20 +192,14 @@ const ChatInput = styled.input`
 
 const ChatBtn = styled.div`
   text-align: center;
-
   color: #ffffff;
   font-family: "Arimo", sans-serif;
   font-size: 20px;
-
   right: 20px;
   border: 0;
   position: absolute;
-  
   cursor: pointer;
-
   @media all and (max-width: 1400px) {
-    width: 90vw;
-    height: 5vh;
     margin-top: 0;
     padding: 1vh;
   }
