@@ -115,6 +115,8 @@ const Container = styled.div`
     height: 100%;
     margin-left: auto;
     margin-right: auto;
+    display: flex;
+    align-items: center;
 `;
 
 // const EmblaSlide = styled.div<{ width: string }>`

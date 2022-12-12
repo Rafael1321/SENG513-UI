@@ -12,11 +12,11 @@ type Props = {
 };
 
 export default function HistoryCard(props: Props): React.ReactElement {
-    const [width, setWidth] = useState("30%");
+    // const [width, setWidth] = useState("30%");
 
-    useEffect(() => {
-        setWidth(props.width);
-    }, [props.width]);
+    // useEffect(() => {
+    //     setWidth(props.width);
+    // }, [props.width]);
 
     return (
         <WrapperOuter width={props.width}>
@@ -38,7 +38,8 @@ export default function HistoryCard(props: Props): React.ReactElement {
 }
 const WrapperOuter = styled.div<{ width: string }>`
     position: relative;
-    min-width: 40%;
+    min-width: 20%;
+    aspect-ratio: 31/18;
     /* This needs to be the same as the margin in .embla_container*/
     padding-left: 5px;
 

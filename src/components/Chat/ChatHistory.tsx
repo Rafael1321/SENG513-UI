@@ -47,174 +47,175 @@ const history = [
 
 function ChatHistory(props: Props): React.ReactElement {
     return (
-        // <Wrapper>
-        //     <HistorySection>
-        //         <Menu>
-        //             <Button url={"Images/back.png"} text={"BACK"} width={"160px"} height={"70px"} />
-        //             <SearchContainer>
-        //                 <SearchIconWrapper>
-        //                     <SearchIcon url={"Icons/search.png"} />
-        //                 </SearchIconWrapper>
-        //                 <SearchInput placeholder="Search Message History" />
-        //             </SearchContainer>
-        //         </Menu>
+        <>
+            <Wrapper>
+                <HistorySection>
+                    <Menu>
+                        <Button url={"Images/back.png"} text={"BACK"} width={"160px"} height={"70px"} />
+                        {/* <SearchContainer>
+                        <SearchIconWrapper>
+                            <SearchIcon url={"Icons/search.png"} />
+                        </SearchIconWrapper>
+                        <SearchInput placeholder="Search Message History" />
+                    </SearchContainer> */}
+                    </Menu>
 
-        //         <HistoryContainer>
-        //             <EmblaCarousel slides={[...slides]} history={history} />
-        //         </HistoryContainer>
+                    <HistoryContainer>
+                        <EmblaCarousel slides={[...slides]} history={history} />
+                    </HistoryContainer>
 
-        //         <ChatContainer>.</ChatContainer>
-        //     </HistorySection>
+                    <ChatContainer>.</ChatContainer>
+                </HistorySection>
 
-        //     <InfoCardSection>
-        //         <Button text={"RATE PLAYER"} width={"160px"} height={"70px"} />
+                <InfoCardSection>
+                    <Button text={"RATE PLAYER"} width={"160px"} height={"70px"} />
 
-        //         <ProfileCard imgSrc="Images/astra.webp" userName="IAMNOTAFURRY" chatRank="30" userType="gamer" aboutMe="test"></ProfileCard>
-        //     </InfoCardSection>
-
-        // </Wrapper>
+                    {/* <ProfileCard imgSrc="Images/astra.webp" userName="IAMNOTAFURRY" chatRank="30" userType="gamer" aboutMe="test"></ProfileCard> */}
+                </InfoCardSection>
+            </Wrapper>
+        </>
     );
 }
 
+const Menu = styled.nav`
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+`;
 
+const HistorySection = styled.section`
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 70%;
+    height: 100%;
+    flex: 1;
+    * {
+        box-sizing: border-box;
+    }
+`;
 
-// const Menu = styled.nav`
-//     position: relative;
-//     height: 10%;
-//     width: 100%;
-// `;
+const InfoCardSection = styled.aside`
+    position: relative;
+    width: 25%;
+    height: 100%;
 
-// const HistorySection = styled.section`
-//     position: relative;
-//     display: flex;
-//     flex-direction: column;
-//     justify-content: space-evenly;
-//     align-items: center;
-//     max-width: 70%;
-//     height: 100%;
-//     flex: 1;
-//     * {
-//         box-sizing: border-box;
-//     }
-// `;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+`;
 
-// const InfoCardSection = styled.aside`
-//     position: relative;
-//     width: 25%;
-//     height: 100%;
+const HistoryContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    width: 100%;
+    height: 30%;
 
-//     display: flex;
-//     flex-direction: column;
-//     justify-content: space-between;
-//     align-items: center;
-// `;
+    /* border: red solid 1px; */
+`;
 
-// const HistoryContainer = styled.div`
-//     display: flex;
-//     justify-content: center;
-//     align-items: center;
-//     position: relative;
-//     width: 100%;
-//     height: 30%;
+const ChatContainer = styled.div`
+    position: relative;
+    width: 100%;
+    height: 50%;
 
-//     /* border: red solid 1px; */
-// `;
+    padding: 5%;
+    outline: 1px red;
 
-// const ChatContainer = styled.div`
-//     position: relative;
-//     width: 100%;
-//     height: 50%;
+    background-color: #282828;
+    border-radius: 44px;
 
-//     padding: 5%;
-//     outline: 1px red;
+    display: flex;
+    justify-content: center;
+    /* border: red solid 1px; */
+`;
 
-//     background-color: #282828;
-//     border-radius: 44px;
+const SearchContainer = styled.div`
+    position: absolute;
+    width: 425px;
+    height: 53px;
 
-//     display: flex;
-//     justify-content: center;
-//     /* border: red solid 1px; */
-// `;
+    top: 1px;
+    right: 1px;
 
-// const SearchContainer = styled.div`
-//     position: absolute;
-//     width: 425px;
-//     height: 53px;
+    display: flex;
+    align-items: center;
 
-//     top: 1px;
-//     right: 1px;
+    background: #282828;
 
-//     display: flex;
-//     align-items: center;
+    border-radius: 44px;
+`;
 
-//     background: #282828;
+const SearchInput = styled.input`
+    position: relative;
+    background: none;
+    flex-grow: 1;
+    border: none;
 
-//     border-radius: 44px;
-// `;
+    // increase specificity
+    && {
+        font-family: "Arimo";
+        font-style: normal;
+        font-weight: 400;
+        font-size: 19px;
+        line-height: 22px;
+        text-decoration-color: blue;
+        text-align: left;
+    }
 
-// const SearchInput = styled.input`
-//     position: relative;
-//     background: none;
-//     flex-grow: 1;
-//     border: none;
+    && :focus,
+    :focus {
+        outline: none;
+    }
 
-//     // increase specificity
-//     && {
-//         font-family: "Arimo";
-//         font-style: normal;
-//         font-weight: 400;
-//         font-size: 19px;
-//         line-height: 22px;
-//         text-decoration-color: blue;
-//         text-align: left;
-//     }
+    /* identical to box height */
+`;
 
-//     && :focus,
-//     :focus {
-//         outline: none;
-//     }
+const SearchIconWrapper = styled.div`
+    position: relative;
+    aspect-ratio: 1;
+    height: 100%;
 
-//     /* identical to box height */
-// `;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`;
 
-// const SearchIconWrapper = styled.div`
-//     position: relative;
-//     aspect-ratio: 1;
-//     height: 100%;
+const SearchIcon = styled.img<{ url: string }>`
+    position: relative;
+    height: 50%;
+    font-style: normal;
+    & * {
+        font-weight: 700;
+        font-size: 26px;
+        line-height: 30px;
+        text-align: center;
 
-//     display: flex;
-//     align-items: center;
-//     justify-content: center;
-// `;
+        color: #ffffff;
+    }
+    aspect-ratio: 1;
 
-// const SearchIcon = styled.img<{ url: string }>`
-//     position: relative;
-//     height: 50%;
-//     aspect-ratio: 1;
+    content: url(${(props) => props.url});
+`;
 
-//     content: url(${(props) => props.url});
-// `;
+const Wrapper = styled.main`
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    padding: 2%;
+    box-sizing: border-box;
 
-// const Wrapper = styled.main`
-//     position: relative;
-//     width: 100vw;
-//     height: 100vh;
-//     padding: 2%;
-//     box-sizing: border-box;
-//     display: flex;
-//     justify-content: space-between;
-//     align-items: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 
-//     & * {
-//         font-family: "Arimo";
-//         font-style: normal;
-//         font-weight: 700;
-//         font-size: 26px;
-//         line-height: 30px;
-//         text-align: center;
-
-//         color: #ffffff;
-//     }
-// `;
+    font-family: "Arimo";
+`;
 
 export default ChatHistory;
