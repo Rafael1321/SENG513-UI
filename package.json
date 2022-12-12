@@ -3,15 +3,23 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
+    "@emotion/react": "^11.10.5",
+    "@emotion/styled": "^11.10.5",
+    "@mui/material": "^5.10.17",
+    "axios": "^1.2.0",
+    "env-cmd": "^10.1.0",
+    "@mui/styled-engine-sc": "^5.10.16",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.1",
+    "react-toastify": "^9.1.1",
+    "styled-components": "^5.3.6",
     "usehooks-ts": "^2.6.0"
   },
   "scripts": {
     "magic": "webpack",
-    "start": "react-scripts start",
+    "start": "env-cmd -f ./.env react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -35,10 +43,11 @@
     ]
   },
   "devDependencies": {
-    "ts-loader": "^9.3.1",
-    "webpack-cli": "^4.10.0",
     "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
-    "@types/react-router-dom": "^5.3.3"
+    "@types/react-router-dom": "^5.3.3",
+    "@types/styled-components": "^5.1.26",
+    "ts-loader": "^9.3.1",
+    "webpack-cli": "^4.10.0"
   }
 }
