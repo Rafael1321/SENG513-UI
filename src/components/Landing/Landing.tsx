@@ -3,51 +3,90 @@ import styled from "styled-components";
 import { useState, useEffect, useContext } from "react";
 
 import LandingCard from "./LandingCard";
-import { LoggedUserContext } from '../../contexts/LoggedUserContext';
-import { SocketContext } from '../../contexts/SocketContext';
-import { EnvConfig } from '../../util/EnvConfig';
+import { LoggedUserContext } from "../../contexts/LoggedUserContext";
+import { SocketContext } from "../../contexts/SocketContext";
+import { EnvConfig } from "../../util/EnvConfig";
 
 export default function Landing(props: any) {
-  
   // Constants
-  const playerIconSrc = "/Images/Icons/Astra_icon.webp";
+  const playerIconSrc: string = "/images/Sova_icon.webp";
+  let playerIconIndex: number = 17;
 
-  // State 
+  // REYNA ASTRA AND RAZE IMAGES ARE SMALLER THAN THE REST, FIX BY CROPPING LATER
+  const backgroundAgents: Array<string> = [
+    "/images/Astra.png",
+    "/images/Breach.png",
+    "/images/Brimstone.png",
+    "/images/Chamber.png",
+    "/images/Cypher.png",
+    "/images/Fade.png",
+    "/images/Harbor.png",
+    "/images/Jett.png",
+    "/images/KAYO.png",
+    "/images/Killjoy.png",
+    "/images/Neon.png",
+    "/images/Omen.png",
+    "/images/Phoenix.png",
+    "/images/Raze.png",
+    "/images/Reyna.png",
+    "/images/Sage.png",
+    "/images/Skye.png",
+    "/images/Sova.png",
+    "/images/Viper.png",
+    "/images/Yoru.png",
+  ];
+
+  // State
   const [duoFound, setDuoFound] = useState<boolean>(false);
   const [findDuo, setFindDuo] = useState<boolean>(false);
+  const [agentIndex, setAgentIndex] = useState(0);
 
   // Contexts
   const loggedUserContext = useContext(LoggedUserContext);
   const socketContext = useContext(SocketContext);
 
   useEffect(() => {
-    socketContext.emit('user_connected', loggedUserContext.loggedUser._id);
+    socketContext.emit("user_connected", loggedUserContext?.loggedUser?._id);
 
-    socketContext.on('error_user_connected', (msg : string) => {
-      if(EnvConfig.DEBUG) console.log(msg);
+    socketContext.on("error_user_connected", (msg: string) => {
+      if (EnvConfig.DEBUG) console.log(msg);
     });
 
-    socketContext.on('success_user_connected', (msg : string) => {
-      if(EnvConfig.DEBUG) console.log(msg);
+    socketContext.on("success_user_connected", (msg: string) => {
+      if (EnvConfig.DEBUG) console.log(msg);
     });
-  }, [])
+  }, []);
+
+  useEffect(() => {
+    let index: number = playerIconIndex;
+    while (playerIconIndex === index) {
+      index = Math.floor(Math.random() * 20);
+    }
+    setAgentIndex(index);
+  }, []);
 
   /* Handlers */
 
-  function clickedFindDuo() : void {
+  function clickedFindDuo(): void {
     setFindDuo(true);
   }
 
-  function clickedCancel() : void {
+  function clickedCancel(): void {
     setFindDuo(false);
   }
 
   /* Helper Functions */
 
-  function getButton() : any{
-    return findDuo ? <Cancel onClick={clickedCancel}>&#10005; CANCEL</Cancel> : (
+  function getButton(): any {
+    return findDuo ? (
+      <Cancel onClick={clickedCancel}>&#10005; CANCEL</Cancel>
+    ) : (
       <FindDuo onClick={clickedFindDuo}>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" id="magnifyingGlass">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 512 512"
+          id="magnifyingGlass"
+        >
           <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z" />
         </svg>
         FIND DUO
@@ -68,10 +107,16 @@ export default function Landing(props: any) {
         </User>
       </Nav>
       <LandingContent>
+        <Agent src={backgroundAgents[playerIconIndex]}></Agent>
         <Container>
-          <LandingCard findDuo={findDuo} duoFound={duoFound} imgSrc={playerIconSrc}/>
+          <LandingCard
+            findDuo={findDuo}
+            duoFound={duoFound}
+            imgSrc={playerIconSrc}
+          />
           {getButton()}
         </Container>
+        <Agent src={backgroundAgents[agentIndex]}></Agent>
       </LandingContent>
     </LandingPage>
   );
@@ -193,7 +238,8 @@ const User = styled.div`
 const LandingContent = styled.div`
   display: flex;
   flex: row;
-  justify-content: center;
+  justify-content: space-evenly;
+
   height: 80vh;
 `;
 
@@ -220,7 +266,7 @@ const FindDuo = styled.button`
   width: 150px;
 
   &:hover {
-    box-shadow: 0 0 7.5px #66c2a9;
+    box-shadow: 0 0 10px #66c2a9;
     cursor: pointer;
   }
 
@@ -250,10 +296,17 @@ const Cancel = styled.button`
   width: 150px;
 
   &:hover {
-    box-shadow: 0 0 7.5px #66c2a9;
+    box-shadow: 0 0 10px #66c2a9;
     cursor: pointer;
   }
   @media (max-width: 769px) {
     margin: 5%;
   }
+`;
+
+const Agent = styled.img`
+  filter: brightness(25%) drop-shadow(0 0 7.5px #66c2aa6c);
+  width: 20vw;
+  height: 80vh;
+  object-fit: cover;
 `;

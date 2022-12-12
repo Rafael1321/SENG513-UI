@@ -2,57 +2,55 @@ import * as React from "react";
 import styled, { keyframes } from "styled-components";
 import { useState, useEffect } from "react";
 import { SocketContext } from "../../contexts/SocketContext";
-import { LoggedUserContext } from '../../contexts/LoggedUserContext';
-import { EnvConfig } from '../../util/EnvConfig';
+import { LoggedUserContext } from "../../contexts/LoggedUserContext";
+import { EnvConfig } from "../../util/EnvConfig";
 
 export default function FindDuo(props: any) {
-  
   // Constants
   const agents: Array<string> = [
-    "/images/icons/Astra_icon.webp",
-    "/images/icons/Breach_icon.webp",
-    "/images/icons/Brimstone_icon.webp",
-    "/images/icons/Chamber_icon.webp",
-    "/images/icons/Cypher_icon.webp",
-    "/images/icons/Fade_icon.webp",
-    "/images/icons/Harbor_icon.webp",
-    "/images/icons/Jett_icon.webp",
-    "/images/icons/KAYO_icon.webp",
-    "/images/icons/Killjoy_icon.webp",
-    "/images/icons/Neon_icon.webp",
-    "/images/icons/Omen_icon.webp",
-    "/images/icons/Phoenix_icon.webp",
-    "/images/icons/Raze_icon.webp",
-    "/images/icons/Reyna_icon.webp",
-    "/images/icons/Sage_icon.webp",
-    "/images/icons/Skye_icon.webp",
-    "/images/icons/Sova_icon.webp",
-    "/images/icons/Viper_icon.webp",
-    "/images/icons/Yoru_icon.webp",
+    "/images/Astra_icon.webp",
+    "/images/Breach_icon.webp",
+    "/images/Brimstone_icon.webp",
+    "/images/Chamber_icon.webp",
+    "/images/Cypher_icon.webp",
+    "/images/Fade_icon.webp",
+    "/images/Harbor_icon.webp",
+    "/images/Jett_icon.webp",
+    "/images/KAYO_icon.webp",
+    "/images/Killjoy_icon.webp",
+    "/images/Neon_icon.webp",
+    "/images/Omen_icon.webp",
+    "/images/Phoenix_icon.webp",
+    "/images/Raze_icon.webp",
+    "/images/Reyna_icon.webp",
+    "/images/Sage_icon.webp",
+    "/images/Skye_icon.webp",
+    "/images/Sova_icon.webp",
+    "/images/Viper_icon.webp",
+    "/images/Yoru_icon.webp",
   ];
 
   // Contexts
   const loggedUserContext = React.useContext(LoggedUserContext);
-  const socketContext =  React.useContext(SocketContext);
+  const socketContext = React.useContext(SocketContext);
 
   // State
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
-    socketContext.emit('find_matching', loggedUserContext.loggedUser._id);
+    socketContext.emit("find_matching", loggedUserContext?.loggedUser?._id);
 
-    socketContext.on('error_find_matching',(msg : string) => {
-      if(EnvConfig.DEBUG) console.log(msg);
+    socketContext.on("error_find_matching", (msg: string) => {
+      if (EnvConfig.DEBUG) console.log(msg);
     });
 
-    socketContext.on('success_find_matching', (msg : string) => {
-      if(EnvConfig.DEBUG) console.log(msg);
+    socketContext.on("success_find_matching", (msg: string) => {
+      if (EnvConfig.DEBUG) console.log(msg);
     });
-
   }, []);
 
   useEffect(() => {
-    setTimeout(changeAgent, 750);
+    setTimeout(changeAgent, 1000);
   });
 
   // Helper functions
@@ -80,24 +78,24 @@ const FindDuoContainer = styled.div`
   padding: 0 15%;
 
   & img,
-    div {
-      border-radius: 50%;
-      border: 5px solid #66c2a9;
-      height: 9rem;
-      width: 9rem;
-      z-index: 4;
-      transition: all 0.5s ease-in-out;
-      background-color: #266152;
+  div {
+    border-radius: 50%;
+    border: 5px solid #66c2a9;
+    height: 9rem;
+    width: 9rem;
+    z-index: 4;
+    transition: all 0.5s ease-in-out;
+    background-color: #266152;
 
-      @media (max-width: 1025px) {
-        height: 8rem;
-        width: 8rem;
-      }
+    @media (max-width: 1025px) {
+      height: 8rem;
+      width: 8rem;
+    }
 
-      @media (max-width: 480px) {
-        height: 7rem;
-        width: 7rem;
-      }
+    @media (max-width: 480px) {
+      height: 7rem;
+      width: 7rem;
+    }
   }
 
   @media (max-width: 769px) {
