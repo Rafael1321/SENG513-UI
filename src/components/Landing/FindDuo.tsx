@@ -1,9 +1,14 @@
 import * as React from "react";
 import styled, { keyframes } from "styled-components";
 import { useState, useEffect } from "react";
+import { SocketContext } from "../../contexts/SocketContext";
+import { LoggedUserContext } from '../../contexts/LoggedUserContext';
+import { EnvConfig } from '../../util/EnvConfig';
 
 export default function FindDuo(props: any) {
-  let agents: Array<string> = [
+  
+  // Constants
+  const agents: Array<string> = [
     "/images/icons/Astra_icon.webp",
     "/images/icons/Breach_icon.webp",
     "/images/icons/Brimstone_icon.webp",
@@ -26,15 +31,35 @@ export default function FindDuo(props: any) {
     "/images/icons/Yoru_icon.webp",
   ];
 
+  // Contexts
+  const loggedUserContext = React.useContext(LoggedUserContext);
+  const socketContext =  React.useContext(SocketContext);
+
+  // State
   const [index, setIndex] = useState(0);
 
-  function changeAgent() {
-    index + 1 > 19 ? setIndex(0) : setIndex(index + 1);
-  }
+  useEffect(() => {
+    socketContext.socket.emit('find_matching', loggedUserContext.loggedUser._id);
+
+    socketContext.socket.on('error_find_matching',(msg : string) => {
+      if(EnvConfig.DEBUG) console.log(msg);
+    });
+
+    socketContext.socket.on('success_find_matching', (msg : string) => {
+      if(EnvConfig.DEBUG) console.log(msg);
+    });
+
+  }, []);
 
   useEffect(() => {
     setTimeout(changeAgent, 750);
   });
+
+  // Helper functions
+
+  function changeAgent() {
+    index + 1 > 19 ? setIndex(0) : setIndex(index + 1);
+  }
 
   return (
     <FindDuoContainer>

@@ -4,16 +4,26 @@ import Profile from "./Profile";
 import FindDuo from "./FindDuo";
 import MatchFound from "./MatchFound";
 
-export default function LandingCard(props: any) {
+type Props = {
+  findDuo : boolean,
+  duoFound : boolean,
+  imgSrc : string
+}
+
+export default function LandingCard(props: Props) {
+  
+  /* Helper Functions */
+
   const displayCard = () => {
     if (!props.findDuo) {
       return <Profile></Profile>;
-    } else if (props.findDuo && !props.matchFound) {
+    } else if (props.findDuo && !props.duoFound) {
       return <FindDuo imgSrc={props.imgSrc}></FindDuo>;
-    } else if (props.findDuo && props.matchFound) {
+    } else if (props.findDuo && props.duoFound) {
       return <MatchFound></MatchFound>;
     }
   };
+
   return <Card>{displayCard()}</Card>;
 }
 

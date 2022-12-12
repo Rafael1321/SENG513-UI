@@ -10,7 +10,7 @@ type Props = {
     children?: React.ReactNode;
 };
 
-const SocketContext = React.createContext<SocketContextType | null>(null);
+export const SocketContext = React.createContext<SocketContextType | null>(null);
 
 export function SocketProvider({children} : Props) { 
 
