@@ -13,7 +13,7 @@ export function Agents(props : Props) : React.ReactElement<Props, any>{
     const imgRef = React.useRef(null);
 
     React.useEffect(() => {
-
+        setImgHeight(imgRef.current?.clientHeight);
         function handleWindowResize() {
             setImgHeight(imgRef.current?.clientHeight);
         }
@@ -33,7 +33,6 @@ export function Agents(props : Props) : React.ReactElement<Props, any>{
 
 const AgentContainer = styled.div((props : Props) =>`
     width: 67%;
-    height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -60,13 +59,16 @@ const AgentContainer = styled.div((props : Props) =>`
 
     & img{
         display: block;
-        position: relative;
+        position: absolute;
+        bottom: 0;
         width: ${props.formType === FormType.Login?'88%':'86%'};
 
+        content:url(${props.formType === FormType.Login?"/images/start_screen/agents_5.png":"/images/start_screen/agents_2.png"});
 
         @media only screen and (max-width: 950px){
             width: 100%;
             height: auto;
+            content:url(${"/images/start_screen/agents_3.png"});
         }
 
         @media only screen and (max-width: 950px){
@@ -75,7 +77,13 @@ const AgentContainer = styled.div((props : Props) =>`
         }
 
         @media only screen and (max-width: 700px){
+            content:url($"/images/start_screen/agent_1.png"});
         } 
+
+        @media only screen and (max-width: 700px) and (orientation: landscape){
+            width: auto;
+            height: 100%;
+        }
     }
 
     @media (max-width: 950px) {
