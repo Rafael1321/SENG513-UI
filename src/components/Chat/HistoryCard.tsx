@@ -41,8 +41,11 @@ const WrapperOuter = styled.div<{ width: string }>`
     min-width: 20%;
     aspect-ratio: 31/18;
     /* This needs to be the same as the margin in .embla_container*/
-    padding-left: 5px;
+    padding-left: 1px;
 
+    @media all and (max-width: 1400px) {
+        min-width: 70%;
+    }
 `;
 
 const WrapperInner = styled.div`
@@ -69,7 +72,6 @@ const Container = styled.div<{ isMain: boolean; zIndex: string }>`
     opacity: ${(props) => (props.isMain ? "1.0" : 0.2)};
     overflow: hidden;
     transition: all 1s;
-
 `;
 
 const MessagesWrapper = styled.div`

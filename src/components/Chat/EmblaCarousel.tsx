@@ -112,7 +112,6 @@ const Container = styled.div`
     position: relative;
     padding: 2%;
     width: 100%;
-    height: 100%;
     margin-left: auto;
     margin-right: auto;
     display: flex;

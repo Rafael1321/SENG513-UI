@@ -29,7 +29,7 @@
     -khtml-user-select: none;
     -webkit-tap-highlight-color: transparent;
     /* This needs to be the same as the margin in History Card */
-    margin-left: -5px;
+    margin-left: -1px;
 }
 
 

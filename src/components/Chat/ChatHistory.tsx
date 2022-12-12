@@ -52,12 +52,12 @@ function ChatHistory(props: Props): React.ReactElement {
                 <HistorySection>
                     <Menu>
                         <Button url={"Images/back.png"} text={"BACK"} width={"160px"} height={"70px"} />
-                        {/* <SearchContainer>
-                        <SearchIconWrapper>
-                            <SearchIcon url={"Icons/search.png"} />
-                        </SearchIconWrapper>
-                        <SearchInput placeholder="Search Message History" />
-                    </SearchContainer> */}
+                        <SearchContainer>
+                            <SearchIconWrapper>
+                                <SearchIcon url={"Icons/search.png"} />
+                            </SearchIconWrapper>
+                            <SearchInput placeholder="Search Message History" />
+                        </SearchContainer>
                     </Menu>
 
                     <HistoryContainer>
@@ -70,7 +70,16 @@ function ChatHistory(props: Props): React.ReactElement {
                 <InfoCardSection>
                     <Button text={"RATE PLAYER"} width={"160px"} height={"70px"} />
 
-                    {/* <ProfileCard imgSrc="Images/astra.webp" userName="IAMNOTAFURRY" chatRank="30" userType="gamer" aboutMe="test"></ProfileCard> */}
+
+                    <ProfileCard
+                        imgSrc="Images/astra.webp"
+                        userName="IAMNOTAFURRY"
+                        chatRank="Images/chamber.webp"
+                        userType="gamer"
+                        valRank="Images/chamber.webp"
+                        basicInfo="I am basic info"
+                        aboutMe="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+                    ></ProfileCard>
                 </InfoCardSection>
             </Wrapper>
         </>
@@ -90,12 +99,18 @@ const HistorySection = styled.section`
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    max-width: 70%;
+    width: 70%;
     height: 100%;
     flex: 1;
-    * {
-        box-sizing: border-box;
+
+        width: 100%;
+
+
+    @media all and (max-width: 1400px) {
+        height: 50%;
+        width: 100%;
     }
+
 `;
 
 const InfoCardSection = styled.aside`
@@ -107,6 +122,10 @@ const InfoCardSection = styled.aside`
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
+
+    @media all and (max-width: 1400px) {
+        display: none;
+    }
 `;
 
 const HistoryContainer = styled.div`
@@ -123,7 +142,7 @@ const HistoryContainer = styled.div`
 const ChatContainer = styled.div`
     position: relative;
     width: 100%;
-    height: 50%;
+    height: 70%;
 
     padding: 5%;
     outline: 1px red;
@@ -205,6 +224,10 @@ const SearchIcon = styled.img<{ url: string }>`
 `;
 
 const Wrapper = styled.main`
+    * {
+        box-sizing: border-box;
+    }
+
     position: relative;
     width: 100vw;
     height: 100vh;
@@ -214,6 +237,10 @@ const Wrapper = styled.main`
     display: flex;
     justify-content: space-between;
     align-items: center;
+    @media all and (max-width: 1400px) {
+        flex-direction: column-reverse;
+        padding: 5%;
+    }
 
     font-family: "Arimo";
 `;
