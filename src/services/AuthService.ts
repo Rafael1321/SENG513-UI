@@ -20,7 +20,7 @@ export class AuthService{
     
     public static register = async (registerDTO : IRegisterDTO) : Promise<IAuthResponse> => {
         try{
-            let response = await axios({method: 'post', url: ApiConfig.registerRoute(),data: registerDTO})
+            let response = await axios({method: 'post', url: ApiConfig.registerRoute(),data: registerDTO});
             return {data:response?.data, statusCode:response?.status};
         }catch(err){
             return {data:err?.response?.data, statusCode:err?.response?.status};
@@ -29,7 +29,16 @@ export class AuthService{
 
     public static update = async (updateDTO : IUpdateDTO) : Promise<IAuthResponse> => {
         try{
-            let response = await axios({method: 'put', url: ApiConfig.updateUserRoute(),data: updateDTO})
+            let response = await axios({method: 'put', url: ApiConfig.updateUserRoute(),data: updateDTO});
+            return {data:response?.data, statusCode:response?.status};
+        }catch(err){
+            return {data:err?.response?.data, statusCode:err?.response?.status};
+        }
+    }
+
+    public static find = async (userId : string) : Promise<IAuthResponse> => {
+        try{
+            let response = await axios({method: 'get', url: ApiConfig.findUserRoute(userId)});
             return {data:response?.data, statusCode:response?.status};
         }catch(err){
             return {data:err?.response?.data, statusCode:err?.response?.status};
