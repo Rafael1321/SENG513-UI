@@ -1,10 +1,64 @@
 import * as React from "react";
 import styled from "styled-components";
+import { useState, useEffect } from "react";
 
-// HARKE IF YOU ARE READING THIS, THIS IS THE FILE YOU MANIPULATE
 export default function MatchFound(props: any) {
+  const [countdown, setCountdown] = React.useState(3);
+
+  React.useEffect(() => {
+    if (countdown > 0) {
+      // Use setTimeout to schedule an update to the countdown state
+      // every 2 seconds. When the countdown reaches 0, clear the
+      // timeout so the interval stops.
+      const timeout = setTimeout(() => {
+        setCountdown(countdown - 1);
+      }, 2000);
+      return () => {
+        clearTimeout(timeout);
+      };
+    }
+  }, [countdown]);
+
+  return (
+    <div>
+      {countdown > 0 ? (
+        // If the countdown is greater than 0, render the countdown
+        // in a red, centered, font-size 100px element.
+        <div
+          style={{
+            color: 'red',
+            fontSize: '10vw', // Use vw units for the font size to make it responsive
+            textAlign: 'center',
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: '50vw', // Use vw units for the element width to make it responsive
+            height: '50vh', // Use vh units for the element height to make it responsive
+          }}
+        >
+          {"Match Found!\n"+countdown}
+        </div>
+      ) : (
+        // If the countdown is 0 or less, don't render anything.
+        <div />
+      )}
+      <FindDuoText>Match Found!</FindDuoText>
+      <FindDuoContainer>
+        <Teammate icon={props.imgSrc}>
+          <p>{props.name}</p>
+        </Teammate>
+        <Teammate icon={"Images/Icons/Astra_icon.webp"}>
+          <p>Astra</p>
+        </Teammate>
+      </FindDuoContainer>
+    </div>
+  );
+}/*
+export default function MatchFound(props: any) {
+
   // Red text at the center of the screen which counts down from 3 to 0
-  var countdown = document.createElement('div');
+  var countdown = document.createElement('countdown');
   countdown.style.color = 'red';
   countdown.style.fontSize = '100px';
   countdown.style.textAlign = 'center';
@@ -12,7 +66,8 @@ export default function MatchFound(props: any) {
   countdown.style.top = '50%';
   countdown.style.left = '50%';
   countdown.style.transform = 'translate(-50%, -50%)';
-  document.body.appendChild(countdown);
+  document.getElementsByName('div')[0].appendChild(countdown);
+
   var count = 3;
   var countdownInterval = setInterval(function() {
     countdown.innerHTML = ""+count;
@@ -21,250 +76,96 @@ export default function MatchFound(props: any) {
       clearInterval(countdownInterval);
       countdown.innerHTML = '';
     }
-  }, 1000);
- 
-  return <div></div>;
+  }, 2000);
 
-}
-
-/*
-import * as React from "react";
-import styled from "styled-components";
-import { useState } from "react";
-
-import LandingCard from "./LandingCard";
-
-export default function Landing(props: any) {
-  let duoFound = false;
-  let playerIconSrc = "/Images/Icons/Astra_icon.webp";
-  const [findDuo, setFindDuo] = useState(false);
-
-  function clickedFindDuo() {
-    setFindDuo(true);
-  }
-
-  function clickedCancel() {
-    setFindDuo(false);
-  }
-
-  return (
-    <LandingPage>
-      <Nav>
-        <Logo>
-          <h2 id="valorant">VALORANT</h2>
-          <h1 id="duofinder">DUOFINDER</h1>
-        </Logo>
-        <User>
-          <p id="username">{props.username}</p>
-          <img id="profilePic" src={playerIconSrc} alt="Player Icon"></img>
-        </User>
-      </Nav>
-      <LandingContent>
-        <Container>
-          <LandingCard
-            findDuo={findDuo}
-            duoFound={duoFound}
-            imgSrc={playerIconSrc}
-          ></LandingCard>
-          {findDuo ? (
-            <Cancel onClick={clickedCancel}>&#10005; CANCEL</Cancel>
-          ) : (
-            <FindDuo onClick={clickedFindDuo}>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 512 512"
-                id="magnifyingGlass"
-              >
-                <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z" />
-              </svg>
-              FIND DUO
-            </FindDuo>
-          )}
-        </Container>
-      </LandingContent>
-    </LandingPage>
+  return(
+    <div>
+    <FindDuoText>Match Found!</FindDuoText>
+    <FindDuoContainer>
+      <Teammate icon={props.imgSrc}>
+        <p>{props.name}</p>
+      </Teammate>
+      <Teammate icon={"Images/Icons/Astra_icon.webp"}>
+        <p>Astra</p>
+      </Teammate>
+    </FindDuoContainer>
+    </div>
   );
 }
+*/
 
-const LandingPage = styled.div`
-  background-color: #181818;
-  margin: 0px;
-  padding: 0px;
-  min-height: 100vh;
-  min-width: 100vw;
-  box-sizing: border-box;
+const Teammate = styled.div<{ icon: string }>`
+  min-width: 9rem;
+  min-height: 9rem;
+
+  background: linear-gradient(rgba(0, 0, 0, 1), rgba(8, 71, 50, 0.2)),
+    url(${(props) => props.icon});
+
+  background-size: contain;
+  background-repeat: no-repeat;
 
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: center;
+  border-color: rgb(102, 194, 169, 0.5);
+
+  & #question-mark {
+    font-size: 5rem;
+    font-weight: 600;
+
+    color: #c3c3c3;
+    z-index: 6;
+  }
+
+  @media (max-width: 1025px) {
+    min-height: 8rem;
+    min-width: 8rem;
+  }
+  @media (max-width: 480px) {
+    min-height: 7rem;
+    min-width: 7rem;
+  }
 `;
 
-const Nav = styled.div`
+const FindDuoText = styled.div`
+  min-width: 9rem;
+  min-height: 9rem;
+
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+`;
+
+const FindDuoContainer = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: center;
-  position: relative;
-  padding-top: 1rem;
-  transition: all 0.25s ease-in-out;
-
-  @media (max-width: 769px) {
-    position: static;
-    flex-direction: column;
-    justify-content: center;
-    padding-top: 1.5rem;
-  }
-`;
-
-const Logo = styled.div`
-  display: flex;
-  flex-direction: column;
-  text-align: center;
-  position: absolute;
-  font-family: "valorant";
-
-  left: 50%;
-  transform: translateX(-50%);
-
-  & #valorant {
-    color: #f94b4b;
-    font-size: 2rem;
-    margin: 0px;
-    padding-bottom: 5px;
-    font-weight: 200;
-    transition: all 0.5s ease-in-out;
-
-    @media (max-width: 769px) {
-      font-size: 1.35rem;
-    }
-
-    @media (max-width: 480px) {
-      font-size: 1rem;
-    }
-  }
-
-  & #duofinder {
-    color: white;
-    font-size: 3rem;
-    margin: 0px;
-    padding: 0px;
-    font-weight: 200;
-    transition: all 0.5s ease-in-out;
-
-    @media (max-width: 769px) {
-      font-size: 2rem;
-    }
-    @media (max-width: 480px) {
-      font-size: 1.5rem;
-    }
-  }
-  @media (max-width: 769px) {
-    position: static;
-    transform: translateX(0);
-  }
-`;
-
-const User = styled.div`
-  display: flex;
-  flex-direction: row;
-  margin-left: auto;
-  padding-right: 1rem;
-  font-family: "Poppins", sans-serif;
-  font-size: 1rem;
-  font-weight: 300;
-  transition: all 0.25s ease-in-out;
-
-  & #username {
-    color: white;
-    padding-right: 0.5rem;
-  }
-
-  & #profilePic {
-    background-color: white;
-    border: none;
-    border-radius: 50%;
-    height: 50px;
-    width: 50px;
-    background-color: #425852;
-
-    @media (max-width: 769px) {
-      height: 40px;
-      width: 40px;
-    }
-  }
-
-  @media (max-width: 769px) {
-    font-size: 0.75rem;
-    padding-right: 0;
-    margin: 2.5% auto;
-  }
-`;
-
-const LandingContent = styled.div`
-  display: flex;
-  flex: row;
-  justify-content: center;
-  height: 80vh;
-`;
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
   justify-content: space-around;
   align-items: center;
-`;
+  padding: 0 15%;
 
-const FindDuo = styled.button`
-  background-color: #66c2a9;
-  border: none;
-  border-radius: 8px;
-  color: white;
-  font-family: "Poppins", sans-serif;
-  font-weight: 700;
-  font-size: 1em;
-  padding: 10px 20px;
-  transition: 0.5s;
+  & img,
+  div {
+    border-radius: 50%;
+    border: 5px solid #66c2a9;
+    height: 9rem;
+    width: 9rem;
+    z-index: 4;
+    transition: all 0.5s ease-in-out;
+    background-color: #266152;
 
-  display: flex;
-  flex-direction: row;
-  width: 150px;
+    @media (max-width: 1025px) {
+      height: 8rem;
+      width: 8rem;
+    }
 
-  &:hover {
-    box-shadow: 0 0 7.5px #66c2a9;
-    cursor: pointer;
-  }
-
-  & #magnifyingGlass {
-    fill: white;
-    width: 16px;
-    height: 16px;
-    padding: 3px 10px 5px 0px;
+    @media (max-width: 480px) {
+      height: 7rem;
+      width: 7rem;
+    }
   }
 
   @media (max-width: 769px) {
-    margin: 5%;
+    flex-direction: column;
   }
 `;
-
-const Cancel = styled.button`
-  background-color: #66c2a9;
-  border: none;
-  border-radius: 8px;
-  color: white;
-  font-family: "Poppins", sans-serif;
-  font-weight: 700;
-  font-size: 1em;
-  padding: 10px 20px;
-  transition: 0.5s;
-
-  width: 150px;
-
-  &:hover {
-    box-shadow: 0 0 7.5px #66c2a9;
-    cursor: pointer;
-  }
-  @media (max-width: 769px) {
-    margin: 5%;
-  }
-`;
-
- * */
