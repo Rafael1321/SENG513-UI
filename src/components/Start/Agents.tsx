@@ -63,12 +63,10 @@ const AgentContainer = styled.div((props : Props) =>`
         position: relative;
         width: ${props.formType === FormType.Login?'88%':'86%'};
 
-        /* content:url(${props.formType === FormType.Login?"../../assets/images/agents_5.png":"../../assets/images/agents_2.png"}); */
 
         @media only screen and (max-width: 950px){
             width: 100%;
             height: auto;
-            // content:url(${"../../assets/images/agents_3.png"}); 
         }
 
         @media only screen and (max-width: 950px){
@@ -77,7 +75,6 @@ const AgentContainer = styled.div((props : Props) =>`
         }
 
         @media only screen and (max-width: 700px){
-            /* content:url(${"../../assets/images/agent_1.png"});  */
         } 
     }
 
