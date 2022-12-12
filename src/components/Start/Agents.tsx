@@ -63,12 +63,12 @@ const AgentContainer = styled.div((props : Props) =>`
         bottom: 0;
         width: ${props.formType === FormType.Login?'88%':'86%'};
 
-        content:url(${props.formType === FormType.Login?require("../../assets/images/agents_5.png"):require("../../assets/images/agents_2.png")});
+        content:url(${props.formType === FormType.Login?"/images/start_screen/agents_5.png":"/images/start_screen/agents_2.png"});
 
         @media only screen and (max-width: 950px){
             width: 100%;
             height: auto;
-            content:url(${require("../../assets/images/agents_3.png")});
+            content:url(${"/images/start_screen/agents_3.png"});
         }
 
         @media only screen and (max-width: 950px){
@@ -77,7 +77,7 @@ const AgentContainer = styled.div((props : Props) =>`
         }
 
         @media only screen and (max-width: 700px){
-            content:url(${require("../../assets/images/agent_1.png")});
+            content:url($"/images/start_screen/agent_1.png"});
         } 
 
         @media only screen and (max-width: 700px) and (orientation: landscape){

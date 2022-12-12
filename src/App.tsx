@@ -5,7 +5,7 @@ import Start from './components/Start/Start';
 import { FilterProvider } from './contexts/FilterContext';
 import { LoggedUserProvider } from './contexts/LoggedUserContext';
 import { MatchedUserProvider } from './contexts/MatchedUserContext';
-import Landing from "./Landing/Landing";
+import Landing from "./components/Landing/Landing";
 
 function App() {
 

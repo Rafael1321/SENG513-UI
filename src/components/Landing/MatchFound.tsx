@@ -2,7 +2,6 @@ import * as React from "react";
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 
-
 export default function MatchFound(props: any) {
   const [countdown, setCountdown] = React.useState(3);
 
