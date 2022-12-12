@@ -146,15 +146,15 @@ const Btn = styled.div<{ btnColor: string }>`
 `;
 const ChatInputContainer = styled.div`
   background-color: #182828;
-  width: 60vw;
+  width: 55vw;
+  padding-right: 10vh;
   height: 6vh;
   margin-top: 30px;
   border-radius: 20px;
   color: #dedbdb;
-  justify-content: center;
-  display: block;
-  position: relative;
   display: flex;
+  position: relative;
+  
   @media all and (max-width: 1400px) {
     width: 90vw;
     height: 5vh;
@@ -164,11 +164,11 @@ const ChatInputContainer = styled.div`
 `;
 const ChatInput = styled.input`
   background-color: #282828;
-  width: 55vw;
-  height: 6vh;
-  padding-left: 5vh;
-  padding-right: 5vh;
-  margin-top: 30px;
+  position :relative;
+  width: 100%;
+  height: 100%;
+//   padding-left: 5vh;
+//   padding-right: 5vh;
   border-radius: 20px;
   color: #dedbdb;
   font-family: "Arimo", sans-serif;
@@ -178,6 +178,9 @@ const ChatInput = styled.input`
   outline: none;
   border: 0;
   position: absolute;
+  &:placeholder {
+    padding: 10px;
+  }
   @media all and (max-width: 1400px) {
     width: 90vw;
     height: 5vh;
@@ -187,23 +190,17 @@ const ChatInput = styled.input`
 `;
 
 const ChatBtn = styled.div`
-  background-color: #282818;
-  text-align: right;
-  width: 55vw;
-  height: 6vh;
-  padding-left: 5vh;
-  padding-right: 5vh;
-  margin-top: 30px;
-  border-radius: 20px;
+  text-align: center;
+
   color: #ffffff;
   font-family: "Arimo", sans-serif;
   font-size: 20px;
-  justify-content: center;
+  flex-start: end;
+
+  right: 1px;
   display: block;
-  outline: none;
   border: 0;
   position: absolute;
-  top: 1;
   cursor: pointer;
   @media all and (max-width: 1400px) {
     width: 90vw;
