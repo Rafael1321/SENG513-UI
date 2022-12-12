@@ -6,6 +6,12 @@ import LandingCard from "./LandingCard";
 import { LoggedUserContext } from '../../contexts/LoggedUserContext';
 import { SocketContext } from '../../contexts/SocketContext';
 import { EnvConfig } from '../../util/EnvConfig';
+import { IMatchingResponse, MatchingService } from "../../services/MatchingService";
+import { FilterContext } from '../../contexts/FilterContext';
+import { MatchedUserContext } from '../../contexts/MatchedUserContext';
+import { toast } from "react-toastify";
+import { IUser } from "../../models/AuthModels";
+import { AuthService, IAuthResponse } from '../../services/AuthService';
 
 export default function Landing(props: any) {
   
@@ -18,28 +24,77 @@ export default function Landing(props: any) {
 
   // Contexts
   const loggedUserContext = useContext(LoggedUserContext);
+  const matchedUserContext = useContext(MatchedUserContext);
+  const filterContext = useContext(FilterContext);
   const socketContext = useContext(SocketContext);
 
   useEffect(() => {
-    socketContext.emit('user_connected', loggedUserContext.loggedUser._id);
+    socketContext.emit('user_connected', loggedUserContext?.loggedUser?._id);
 
-    socketContext.on('error_user_connected', (msg : string) => {
-      if(EnvConfig.DEBUG) console.log(msg);
-    });
-
-    socketContext.on('success_user_connected', (msg : string) => {
-      if(EnvConfig.DEBUG) console.log(msg);
-    });
-  }, [])
+    // Messages from server
+    socketContext.on('error_user_connected', handleSuccessOrError);
+    socketContext.on('success_user_connected', handleSuccessOrError);
+    socketContext.on('error_find_matching', handleSuccessOrError);
+    socketContext.on('success_find_matching', handleSuccessOrError);
+    socketContext.on('error_stop_matching', handleSuccessOrError);
+    socketContext.on('success_stop_matching', handleSuccessOrError);
+    socketContext.on('match_found', handleMatchFound);
+  }, []);
 
   /* Handlers */
+  function handleSuccessOrError(res : any) : void{
+    if(EnvConfig.DEBUG) console.log(res);
+  }
 
-  function clickedFindDuo() : void {
+  async function handleMatchFound(res : any) : Promise<void>{
+
+    const matchedWithId : string = res.matchedWithId;
+
+    // Request a info of specified user from api 
+    const authResponse : IAuthResponse = await AuthService.find(matchedWithId);
+    
+    if(authResponse.statusCode !== 200){
+      toast.error(authResponse.data as string)
+      setFindDuo(false);
+      socketContext.emit('stop_matching', loggedUserContext?.loggedUser?._id);
+      return;
+    }
+
+    // Store matched user in context
+    matchedUserContext.updateMatchedUser(authResponse.data as IUser);
+
+    // set match found 
+    setDuoFound(true);
+  }
+
+  async function clickedFindDuo() : Promise<void> {
+    
     setFindDuo(true);
+    socketContext.emit('find_matching', loggedUserContext?.loggedUser?._id);
+
+    // Request a match from api 
+    const matchingResponse : IMatchingResponse = await MatchingService.findMatch({userId:loggedUserContext?.loggedUser?._id, filters:filterContext?.filters});
+
+    if(matchingResponse.statusCode !== 200){
+      toast.error(matchingResponse.data as string)
+      setFindDuo(false);
+      socketContext.emit('stop_matching', loggedUserContext?.loggedUser?._id);
+      return;
+    }
+
+    // Store matched user in context
+    matchedUserContext.updateMatchedUser(matchingResponse.data as IUser);
+
+    // Notify other user of the match
+    socketContext.emit('match_found', loggedUserContext?.loggedUser?._id, matchedUserContext?.matchedUser?._id);
+
+    // set match found 
+    setDuoFound(true);
   }
 
   function clickedCancel() : void {
     setFindDuo(false);
+    socketContext.emit('stop_matching', loggedUserContext?.loggedUser?._id);
   }
 
   /* Helper Functions */
@@ -55,7 +110,7 @@ export default function Landing(props: any) {
     );
   }
 
-  return (
+  return (<>
     <LandingPage>
       <Nav>
         <Logo>
@@ -74,7 +129,7 @@ export default function Landing(props: any) {
         </Container>
       </LandingContent>
     </LandingPage>
-  );
+  </>);
 }
 
 const LandingPage = styled.div`
