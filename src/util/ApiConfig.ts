@@ -3,7 +3,7 @@ import { IRetrieveDTO } from '../models/FiltersModels';
 
 export class ApiConfig{
 
-    private static baseRoute : string = `http://${EnvConfig.API_HOST}:${EnvConfig.API_PORT}/`;
+    private static baseRoute : string = EnvConfig.API_URL;
 
     /* User */
     public static loginRoute = () => this.baseRoute + `users/login`;
