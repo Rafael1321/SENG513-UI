@@ -146,13 +146,14 @@ const Btn = styled.div<{ btnColor: string }>`
 `;
 const ChatInputContainer = styled.div`
   background-color: #182828;
-  width: 55vw;
-  padding-right: 10vh;
+  width: 100%;
   height: 6vh;
   margin-top: 30px;
   border-radius: 20px;
   color: #dedbdb;
   display: flex;
+  justify-content: center;
+  align-items: center;
   position: relative;
   
   @media all and (max-width: 1400px) {
@@ -164,7 +165,7 @@ const ChatInputContainer = styled.div`
 `;
 const ChatInput = styled.input`
   background-color: #282828;
-  position :relative;
+  position : relative;
   width: 100%;
   height: 100%;
 //   padding-left: 5vh;
@@ -178,8 +179,8 @@ const ChatInput = styled.input`
   outline: none;
   border: 0;
   position: absolute;
-  &:placeholder {
-    padding: 10px;
+  &::placeholder {
+    padding: 2%;
   }
   @media all and (max-width: 1400px) {
     width: 90vw;
@@ -195,13 +196,13 @@ const ChatBtn = styled.div`
   color: #ffffff;
   font-family: "Arimo", sans-serif;
   font-size: 20px;
-  flex-start: end;
 
-  right: 1px;
-  display: block;
+  right: 20px;
   border: 0;
   position: absolute;
+  
   cursor: pointer;
+
   @media all and (max-width: 1400px) {
     width: 90vw;
     height: 5vh;
