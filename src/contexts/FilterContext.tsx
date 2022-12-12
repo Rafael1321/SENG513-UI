@@ -1,5 +1,6 @@
 import React from "react";
 import { GameMode, IFilters } from "../models/FiltersModels";
+import { EnvConfig } from "../util/EnvConfig";
 
 export type FiltersContextType = {
     filters : IFilters,
@@ -21,6 +22,10 @@ export function FilterProvider({children} : Props) {
 
     const [filters, setFilters] = React.useState<IFilters | null>(null);
     
+    React.useEffect(() => {
+        if(EnvConfig.DEBUG) console.log(filters);
+    }, [filters]); 
+
     function updateServerPreference (serverPreference : number) : void{
         setFilters({...filters, serverPreference: serverPreference});
     }
