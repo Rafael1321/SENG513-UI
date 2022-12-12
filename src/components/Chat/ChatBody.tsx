@@ -272,6 +272,6 @@ const ChatBox = styled.div`
     padding: 1vh;
     order: 2;
     border-radius: 20px;
-    background-color: #282828;
+    background-color: #181818;
   }
 `;
