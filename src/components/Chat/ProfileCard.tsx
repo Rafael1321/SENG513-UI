@@ -50,23 +50,22 @@ const Wrapper = styled("div")`
   display: flex;
   flex-direction: column;
   overflow: scroll;
+  justify-content: center;
   @media all and (max-width: 1400px) {
-      margin-left: auto;
-      margin-right: auto;
+    margin-left: auto;
+    margin-right: auto;
     order: 1;
     flex-wrap: wrap;
     width: 90vw;
     max-width: 90vw;
     height: 13vh;
-    padding: 2vh;
+    padding: 2vw;
     filter: drop-shadow(0px 0px 5px #66c2a9);
     max-height: 200px;
     border-radius: 20px;
-    
   }
   @media all and (max-height: 1000px) {
     min-height: 10vw;
-    
   }
 `;
 
@@ -93,9 +92,12 @@ const Username = styled.p`
 `;
 const BasicInfo = styled.p`
   text-align: center;
-  font-size: min(15px, 2vw);
+  font-size: min(20px, 2vw);
   font-weight: 400;
   margin: 0;
+  @media all and (max-width: 1400px) {
+    display: none;
+  }
 `;
 const Ranks = styled.div`
   display: flex;

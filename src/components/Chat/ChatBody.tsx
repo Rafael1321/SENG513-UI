@@ -7,14 +7,14 @@ import { useState, useEffect } from "react";
 export default function ChatBody() {
   const [timer, setTimer] = useState(10);
 
-  const interval = setInterval(() => {
-    if (timer !== 0) {
-      setTimer(timer - 1);
-      console.log(timer);
-    } else {
-      console.log("you outta time bestie");
-    }
-  }, 60000);
+//   const interval = setInterval(() => {
+//     if (timer !== 0) {
+//       setTimer(timer - 1);
+//       console.log(timer);
+//     } else {
+//       console.log("you outta time bestie");
+//     }
+//   }, 60000);
 
   return (
     <Wrapper>
@@ -32,8 +32,10 @@ export default function ChatBody() {
             text="Bro what are you saying 😭"
           />
         </ChatBox>
-
-        <ChatInput placeholder="Message"></ChatInput>
+        <ChatInputContainer>
+          <ChatInput placeholder="Message"></ChatInput>
+          <ChatBtn>SEND</ChatBtn>
+        </ChatInputContainer>
       </LeftColContainer>
       <RightColContainer>
         <TopText>You're chatting with:</TopText>
@@ -47,6 +49,7 @@ export default function ChatBody() {
           aboutMe="I used to be Immortal but I got a bunch of dog water teammates and demoted to diamond. IF YOU’RE DOG WATER GO NEXT! DON’T WASTE MY TIME I’M GONNA BE PRO I DONT NEED LIL DOGGIES WITH THEIR TAILS BETWEEN THEIR LEGS DRAGGING ME DOWN!!!!grrr meow :3"
         />
         <BtnContainer>
+          <MobileTimer>🕐 You have {timer} minutes remaining!</MobileTimer>
           <Btn btnColor="#66c2a9">SHARE CONTACT</Btn>
           <Btn btnColor="#f94b4b">GO NEXT</Btn>
         </BtnContainer>
@@ -70,7 +73,6 @@ const RightColContainer = styled.div`
     width: 100vw;
     height: 30vh;
     padding: 0;
-
     border-radius: 20px;
     background-color: #181818;
   }
@@ -80,6 +82,8 @@ const LeftColContainer = styled.div`
   @media all and (max-width: 1400px) {
     order: 1;
     margin-right: 0;
+    padding: 0;
+    margin: 0;
   }
 `;
 
@@ -89,24 +93,41 @@ const TopText = styled.p`
   font-size: min(5vw, 20px);
   @media all and (max-width: 1400px) {
     font-size: min(2vw, 15px);
+    display: none;
+  }
+`;
+
+const MobileTimer = styled.p`
+  justify-content: center;
+  text-align: center;
+  font-size: min(5vw, 20px);
+  display: none;
+  @media all and (max-width: 1400px) {
+    font-size: min(1.5vh, 15px);
+    max-width: 50vw;
+    text-align: left;
+    display: block;
   }
 `;
 
 const BtnContainer = styled.div`
   display: flex;
+  justify-content: center;
+  @media all and (max-width: 1400px) {
+    margin: 20px;
+  }
 `;
 
 const Btn = styled.div<{ btnColor: string }>`
   background-color: ${(props) => props.btnColor};
   width: 8vw;
   min-width: 150px;
-  height: 6vh;
   font-weight: 600;
+  height: 6vh;
   font-size: min(3vw, 20px);
   border-radius: 20px;
   justify-content: center;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 20px;
   margin-top: 20px;
   cursor: pointer;
   transition: 0.3s;
@@ -115,15 +136,35 @@ const Btn = styled.div<{ btnColor: string }>`
     filter: drop-shadow(0px 0px 10px ${(props) => props.btnColor});
   }
   @media all and (max-width: 1400px) {
-    font-size: 12px;
-    min-width: 100px;
+    font-size: 60%;
+    min-width: 60px;
+    height: auto;
+    padding: 5px;
+    margin: 10px;
     border-radius: 10px;
   }
 `;
-
+const ChatInputContainer = styled.div`
+  background-color: #182828;
+  width: 60vw;
+  height: 6vh;
+  margin-top: 30px;
+  border-radius: 20px;
+  color: #dedbdb;
+  justify-content: center;
+  display: block;
+  position: relative;
+  display: flex;
+  @media all and (max-width: 1400px) {
+    width: 90vw;
+    height: 5vh;
+    margin-top: 0;
+    padding: 1vh;
+  }
+`;
 const ChatInput = styled.input`
   background-color: #282828;
-  width: 60vw;
+  width: 55vw;
   height: 6vh;
   padding-left: 5vh;
   padding-right: 5vh;
@@ -136,29 +177,61 @@ const ChatInput = styled.input`
   display: block;
   outline: none;
   border: 0;
+  position: absolute;
   @media all and (max-width: 1400px) {
     width: 90vw;
-    height: 1vh;
-    padding: 3vh;
+    height: 5vh;
+    margin-top: 0;
+    padding: 1vh;
+  }
+`;
+
+const ChatBtn = styled.div`
+  background-color: #282818;
+  text-align: right;
+  width: 55vw;
+  height: 6vh;
+  padding-left: 5vh;
+  padding-right: 5vh;
+  margin-top: 30px;
+  border-radius: 20px;
+  color: #ffffff;
+  font-family: "Arimo", sans-serif;
+  font-size: 20px;
+  justify-content: center;
+  display: block;
+  outline: none;
+  border: 0;
+  position: absolute;
+  top: 1;
+  cursor: pointer;
+  @media all and (max-width: 1400px) {
+    width: 90vw;
+    height: 5vh;
+    margin-top: 0;
+    padding: 1vh;
   }
 `;
 
 const ChatBox = styled.div`
   background-color: #282828;
   border-radius: 44px;
-  width: 60vw;
+  width: 55vw;
   height: 70vh;
   padding: 5vh;
   margin: 10px;
   margin-left: auto;
   margin-right: auto;
-
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  justify-content: start;
   @media all and (max-width: 1400px) {
     width: 90vw;
-    height: 50vh;
-    padding: 3vh;
+    height: 55vh;
+    padding: 1vh;
     order: 2;
     border-radius: 20px;
-    // background-color: #181818;
+    background-color: #282828;
   }
 `;

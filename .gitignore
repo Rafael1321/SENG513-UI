@@ -37,3 +37,7 @@ yarn-debug.log*
 yarn-error.log*
 
 src/assets
+public/assets 
+
+# pics
+
