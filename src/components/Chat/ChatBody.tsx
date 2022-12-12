@@ -7,19 +7,20 @@ import { useState, useEffect } from "react";
 export default function ChatBody() {
   const [timer, setTimer] = useState(10);
 
-//   const interval = setInterval(() => {
-//     if (timer !== 0) {
-//       setTimer(timer - 1);
-//       console.log(timer);
-//     } else {
-//       console.log("you outta time bestie");
-//     }
-//   }, 60000);
+  //   const interval = setInterval(() => {
+  //     if (timer !== 0) {
+  //       setTimer(timer - 1);
+  //       console.log(timer);
+  //     } else {
+  //       console.log("you outta time bestie");
+  //     }
+  //   }, 60000);
 
   return (
     <Wrapper>
+      <Exit />
       <LeftColContainer>
-        <TopText> 🕐 You have {timer} minutes remaining!</TopText>
+        <Timer> 🕐 You have {timer} minutes remaining!</Timer>
         <ChatBox>
           <MessageContainer
             msgType="received"
@@ -50,8 +51,14 @@ export default function ChatBody() {
         />
         <BtnContainer>
           <MobileTimer>🕐 You have {timer} minutes remaining!</MobileTimer>
-          <Btn btnColor="#66c2a9">SHARE CONTACT</Btn>
-          <Btn btnColor="#f94b4b">GO NEXT</Btn>
+          <Btn btnColor="#66c2a9">
+          <BtnIcon imgSrc="/Icons/share.png"/>
+
+            SHARE CONTACT</Btn>
+          <Btn btnColor="#f94b4b">
+            <BtnIcon imgSrc="/Icons/gonext.png"/>
+            GO NEXT
+          </Btn>
         </BtnContainer>
       </RightColContainer>
     </Wrapper>
@@ -65,6 +72,20 @@ const Wrapper = styled.div`
   flex-wrap: wrap;
   justify-content: center;
 `;
+
+const Exit = styled.img`
+  content: url("Icons/x.png");
+  width: 1vw;
+  height: 1vw;
+  min-width: 15px;
+  min-height: 15px;
+  position: absolute;
+  right: 1px;
+  padding: 1%;
+  cursor: pointer;
+  z-index: 1;
+`;
+
 const RightColContainer = styled.div`
   justify-content: center;
   text-align: center;
@@ -79,6 +100,7 @@ const RightColContainer = styled.div`
 `;
 const LeftColContainer = styled.div`
   margin-right: 30px;
+  align-items: center;
   @media all and (max-width: 1400px) {
     order: 1;
     margin-right: 0;
@@ -88,6 +110,14 @@ const LeftColContainer = styled.div`
 `;
 
 const TopText = styled.p`
+  justify-content: center;
+  text-align: center;
+  font-size: min(5vw, 20px);
+  @media all and (max-width: 1400px) {
+    font-size: min(5vw, 15px);
+  }
+`;
+const Timer = styled.p`
   justify-content: center;
   text-align: center;
   font-size: min(5vw, 20px);
@@ -118,26 +148,40 @@ const BtnContainer = styled.div`
   }
 `;
 
+const BtnIcon = styled.img<{ imgSrc: string }>`
+  content: url(${(props) => props.imgSrc});
+  width: 5vw;
+  max-width: 30px;
+  height: 5vw;
+  max-height: 30px;
+  justify-content: center;
+  margin-left: auto;
+  margin-right: auto;
+`;
+
 const Btn = styled.div<{ btnColor: string }>`
   background-color: ${(props) => props.btnColor};
   width: 8vw;
   min-width: 150px;
   font-weight: 600;
   height: 6vh;
-  font-size: min(3vw, 20px);
+  font-size: min(2vw, 15px);
   border-radius: 20px;
   justify-content: center;
   margin: 20px;
+  padding: 0.5%;
   margin-top: 20px;
   cursor: pointer;
   transition: 0.3s;
+  display: flex;
+  flex-direction: column;
   &:hover {
     transform: scale(1.1);
     filter: drop-shadow(0px 0px 10px ${(props) => props.btnColor});
   }
   @media all and (max-width: 1400px) {
-    font-size: 60%;
-    min-width: 60px;
+    font-size: 40%;
+    min-width: 70px;
     height: auto;
     padding: 5px;
     margin: 10px;
@@ -155,7 +199,7 @@ const ChatInputContainer = styled.div`
   justify-content: center;
   align-items: center;
   position: relative;
-  
+
   @media all and (max-width: 1400px) {
     width: 90vw;
     height: 5vh;
@@ -165,11 +209,11 @@ const ChatInputContainer = styled.div`
 `;
 const ChatInput = styled.input`
   background-color: #282828;
-  position : relative;
+  position: relative;
   width: 100%;
   height: 100%;
-//   padding-left: 5vh;
-//   padding-right: 5vh;
+  //   padding-left: 5vh;
+  //   padding-right: 5vh;
   border-radius: 20px;
   color: #dedbdb;
   font-family: "Arimo", sans-serif;
@@ -199,6 +243,10 @@ const ChatBtn = styled.div`
   border: 0;
   position: absolute;
   cursor: pointer;
+  transition: 0.3s;
+  &:hover {
+    filter: drop-shadow(0px 0px 5px #ffffff);
+  }
   @media all and (max-width: 1400px) {
     margin-top: 0;
     padding: 1vh;
