@@ -26,7 +26,7 @@ export function Agents(props : Props) : React.ReactElement<Props, any>{
             <div className='text-container' style={{height: (imgHeight === 0 || (window.matchMedia("(orientation: landscape)").matches && (width <= 900 || height <= 700)))?'10%':`calc(100% - ${imgHeight}px)`}}>
                 <p>Find teammates to play Valorant with! Climb up the ranks with like-minded players and make long lasting friendships.</p>
             </div>
-            {/* <img ref={imgRef} alt="Group of Agents"></img> */}
+            <img ref={imgRef} alt="Group of Agents"></img>
         </AgentContainer>
     );
 }
