@@ -145,19 +145,24 @@ export default function Profile() : React.ReactElement {
 
       <BioContainer>
         {/* <div> */}
-        <h2>ABOUT ME</h2>
-        <TextArea genE={generalEdit} autoComplete="off" placeholder={bio} disabled={!generalEdit} rows={6}></TextArea>
+        <AboutMeContainer>
 
-        <RankContainer>
-          <div>
-            <h2>REPUTATION</h2>
-            <img src="./images/general/ToxicWaste.png"></img>
-          </div>
-          <div>
-            <h2>RANK</h2>
-            <img src="./images/ranks/rank_7.png"></img>
-          </div>
-        </RankContainer>
+        <Label>ABOUT ME</Label>
+        <TextArea genE={generalEdit} autoComplete="off" placeholder={bio} disabled={!generalEdit} rows={6}></TextArea>
+        </AboutMeContainer>
+
+        {/* <RankContainer> */}
+          <Ranks>
+            <RankLabel>
+            <RankImg imgSrc = "/images/reputation_ranks/ToxicWaste.png"></RankImg>
+              REPUTATION
+              </RankLabel>
+            <RankLabel>
+            <RankImg imgSrc={(loggedUserContext.loggedUser == null) ? "images/ranks/rank_1_1.webp" : "images/ranks/rank_"+loggedUserContext.loggedUser.rank[0]+"_"+loggedUserContext.loggedUser.rank[1]+".webp"}></RankImg>
+              RANK
+            </RankLabel>
+          </Ranks>
+        {/* </RankContainer> */}
         {/* </div> */}
       </BioContainer>
     </GridContainer>
@@ -216,7 +221,7 @@ const Age = styled.input<{ genE: boolean }>`
   color: white;
   font-family: Arial;
   text-align: center;
-  width: 10%;
+  width: 15%;
   margin: 0% 2% 0% 2%;
   height: 70%;
   font-size: 100%;
@@ -245,13 +250,14 @@ const Input = styled.input<{ genE: boolean }>`
 const TextArea = styled.textarea<{ genE: boolean }>`
   background-color: ${(props) => (props.genE ? "#181818" : "#282828")};
   color: white;
-  width: 80%;
-  height: 50%;
+  // width: 80%;
+  // height: 50%;
   font-family: Arial, Helvetica, sans-serif;
   resize: none;
   overflow: hidden;
   border: 0px;
-  border-radius: 7px;
+  border-radius: 20px;
+  padding: 10px;
   font-size: 140%;
   /* ::placeholder {
     color: white;
@@ -280,3 +286,51 @@ const Pfp = styled.img<{ genE: boolean }>`
   background-color: #266152;
   margin-bottom: 8%;
 `;
+
+const Label = styled.p`
+padding-left: 15px;
+text-align: left;
+font-size: min(20px, 1.2vw);
+font-weight: 600;
+  @media all and (max-width: 1400px) {
+    // visibility: hidden;
+    margin: 0;
+  }
+`;
+
+const RankLabel = styled(Label)`
+padding-left:0px;
+text-align: center;
+font-size: 80%;
+display: flex;
+flex-direction: column;
+
+`
+
+const Ranks = styled.div`
+    display: flex;
+    width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+    justify-content: space-between;
+
+`;
+const RankImg = styled.img<{ imgSrc: string }>`
+  content: url(${(props) => props.imgSrc});
+  justify-content: center;
+  margin-left: auto;
+  margin-right: auto;
+  width: 5vw;
+  max-width: 50px;
+  height: 5vw;
+  max-height: 50px;
+  @media all and(max-height: 1000px) {
+    height: 10%;
+    max-height: 10%;
+  }
+`;
+
+const AboutMeContainer = styled.div`
+
+
+`
