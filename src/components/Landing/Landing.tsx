@@ -12,12 +12,14 @@ import { FilterContext } from "../../contexts/FilterContext";
 import { toast } from "react-toastify";
 import { IMatchFoundDTO, IFindMatchDTO } from '../../models/MatchingModels';
 import { Link } from "react-router-dom";
+import { FilterPopup } from "../Shared/FilterPopup";
 
 export default function Landing() {
   
   // State 
   const [duoFound, setDuoFound] = useState<boolean>(false);
   const [findDuo, setFindDuo] = useState<boolean>(false);
+  const [triggered, setTriggered] = React.useState(false);
 
   // Refs
   const pollingTimeout = React.useRef<NodeJS.Timeout>(null);
@@ -48,6 +50,10 @@ export default function Landing() {
   }, []);
   
   /* Handlers */
+
+  function handleCloseMe(){
+    setTriggered(false);
+  }
 
   function handleSuccessOrError(res : any) : void{
     if(EnvConfig.DEBUG) console.log(res);
@@ -98,6 +104,7 @@ export default function Landing() {
   return (<>
     <CustomToast></CustomToast>
     <LandingPage>
+      <FilterPopup closeMe={handleCloseMe} triggered={triggered}></FilterPopup>
       <Nav>
         <Logo>
           <h2 id="valorant">VALORANT</h2>
@@ -114,7 +121,7 @@ export default function Landing() {
           <ButtonContainer>
             <div>
               <ButtonImages src="./images/general/filter.png"></ButtonImages>
-              <Button>CHAT FILTERS</Button>
+              <Button onClick={() => setTriggered(true)}>CHAT FILTERS</Button>
             </div>
             <div>
               <ButtonImages src="./images/general/history.png"></ButtonImages>

@@ -1,8 +1,9 @@
 import React, {useState, useContext, useEffect} from "react";
 import styled from "styled-components";
 import { LoggedUserContext } from '../../contexts/LoggedUserContext';
-import { GameMode, Gender, ServerPreference } from "../../models/FiltersModels";
+import { Gender } from "../../models/FiltersModels";
 import { AuthService, IAuthResponse } from "../../services/AuthService";
+import { Micellaneous } from '../../util/Micellaneous';
 
 // Main User Homescreen
 export default function Profile() : React.ReactElement {
@@ -10,136 +11,103 @@ export default function Profile() : React.ReactElement {
   // Context
   const loggedUserContext = useContext(LoggedUserContext);
 
-  // Used to set agent icon
-  const [icon, setIcon] = useState("./images/icons/Astra_icon.webp");
-  let agents: Array<string> = [
-    "./images/icons/Astra_icon.webp",
-    "./images/icons/Breach_icon.webp",
-    "./images/icons/Brimstone_icon.webp",
-    "./images/icons/Chamber_icon.webp",
-    "./images/icons/Cypher_icon.webp",
-    "./images/icons/Fade_icon.webp",
-    "./images/icons/Harbor_icon.webp",
-    "./images/icons/Jett_icon.webp",
-    "./images/icons/KAYO_icon.webp",
-    "./images/icons/Killjoy_icon.webp",
-    "./images/icons/Neon_icon.webp",
-    "./images/icons/Omen_icon.webp",
-    "./images/icons/Phoenix_icon.webp",
-    "./images/icons/Raze_icon.webp",
-    "./images/icons/Reyna_icon.webp",
-    "./images/icons/Sage_icon.webp",
-    "./images/icons/Skye_icon.webp",
-    "./images/icons/Sova_icon.webp",
-    "./images/icons/Viper_icon.webp",
-    "./images/icons/Yoru_icon.webp",
-  ];
-
-  // Set init bio
-  const [userId, setUserId] = useState("");
-  const [displayName, setDisplayName] = useState("");
-  const [age, setAge] = useState(0);
-  const [gender, setGender] = useState(Gender.allGenders);
-  const [playerType, setPlayerType] = useState(GameMode.competitive);
-  const [aboutMe, setAboutMe] = useState("There's nothing here! Edit your profile to liven things up!");
-
-  const [bio, setBio] = useState("There's nothing here! Edit your profile to liven things up!");
-  // const [username, setUsername] = useState("Pee Man The OG");
-  
-  // To be used for editing user info, init false
+  // State
   const [generalEdit, setGeneralEdit] = useState(false);
 
-  // const handleEdit = async () => {
-  //   const authResponse: IAuthResponse = await AuthService.update({
-  //     userId: loggedUserContext?.loggedUser?._id,
-  //     displayName: loggedUserContext?.loggedUser?.displayName,
-  //     age: loggedUserContext?.loggedUser?.age,
-  //     gender: loggedUserContext?.loggedUser?.gender,
-  //     playerType: loggedUserContext?.loggedUser?.playerType,
-  //     aboutMe: loggedUserContext?.loggedUser?.aboutMe,
-  //   });
-  // };
+  const [displayName, setDisplayName] = useState(loggedUserContext?.loggedUser?.displayName);
+  const [age, setAge] = useState(loggedUserContext?.loggedUser?.age);
+  const [gender, setGender] = useState(loggedUserContext?.loggedUser?.gender);
+  const [playerType, setPlayerType] = useState(loggedUserContext?.loggedUser?.playerType);
+  const [aboutMe, setAboutMe] = useState(loggedUserContext?.loggedUser?.aboutMe);
+  const [profilePic , setProfilePic] = useState(loggedUserContext?.loggedUser?.avatarImage);
 
-  const handleDisplayNameChange = (newDisplayName: string) => {
-    setDisplayName(newDisplayName);
-    // handleEdit();
-  };
-
-  // Enable edits through flipping the state
+  // Handlers
   const edit = () => {
     setGeneralEdit(!generalEdit);
   };
 
   // Pick a new (random) profile pic, only if editing is enabled
   const changePfp = () => {
-    if (generalEdit) {
-      loggedUserContext.updateLoggedUser({...loggedUserContext.loggedUser, avatarImage: agents[Math.floor(Math.random() * agents.length)]})
-    }
+    if(generalEdit) setProfilePic(Micellaneous.getAgentIcon(0, true));
   };
 
-  // useEffect(() => {
-  //   async function updateBackend() {
-  //     const authResponse: IAuthResponse = await AuthService.update({
-  //       userId: loggedUserContext?.loggedUser?._id,
-  //       displayName: displayName,
-  //       age: age,
-  //       gender: gender,
-  //       playerType: playerType,
-  //       aboutMe: aboutMe,
-  //     });
-  //   }
-  //   // You can do some fancy checks here if you'd like, lots of work though
+  const handleDisplayNameChange = (e : any) => {
+    if(generalEdit) setDisplayName(e.target.value);
+  }
+
+  const handleGenderChange = (e : any) => {
+    if(generalEdit) setGender(e.target.value);
+  }
+
+  const handleAgeChange = (e : any) => {
+    if(generalEdit) setAge(e.target.value);
+  }
+
+  const handlePlayerTypeChange = (e : any) => {
+    if(generalEdit) setPlayerType(e.target.value);
+  }
+
+  const handleAboutMeChange = (e : any) => {
+    if(generalEdit) setAboutMe(e.target.value);
+  }
+
+  useEffect(() => {
+
+    const newValues = {
+     
+      displayName: displayName,
+      age: age,
+      gender: gender,
+      playerType: playerType,
+      aboutMe: aboutMe,
+    }
+
+    async function updateBackend() {
+      const authResponse: IAuthResponse = await AuthService.update({
+        userId: loggedUserContext?.loggedUser?._id,
+        ...newValues
+      });
+    }
+    // You can do some fancy checks here if you'd like, lots of work though
     
-  //   if (generalEdit === false){ // add some more conditions
-  //     updateBackend();
-  //   }
-  // }, [generalEdit]);    // Depedencies: if this is changed then this useEffect will run.
+    if (generalEdit === false){ // add some more conditions
+      updateBackend();
+      loggedUserContext.updateLoggedUser({...loggedUserContext?.loggedUser, ...newValues});
+    }
+  }, [generalEdit]);    // Depedencies: if this is changed then this useEffect will run.
 
   return (
     <GridContainer>
       <ProfileContainer>
       
-        <Pfp genE={generalEdit} src={loggedUserContext?.loggedUser?.avatarImage} onClick={() => changePfp()}></Pfp>
+        <Pfp genE={generalEdit} src={profilePic} onClick={() => changePfp()}></Pfp>
 
         <div>
           <Input
             genE={generalEdit}
-            placeholder={loggedUserContext?.loggedUser?.displayName ?? '<username>'}
+            placeholder={displayName ?? ''}
             autoComplete={"off"}
             maxLength={15}
-            disabled={!generalEdit}>
+            disabled={!generalEdit}
+            onChange={handleDisplayNameChange}>
           </Input>
-
           <Edit genE={generalEdit} src="./images/general/edit.png" onClick={() => edit()}></Edit>
         </div>
 
-        <div>
-          <Drops genE={generalEdit} disabled={!generalEdit}>
-            <option>Male</option>
-            <option>Female</option>
-            <option>NB</option>
-            {/*CHANGE TO THIS <option value="M">Man</option> */}
+        <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+          <Drops value={gender} genE={generalEdit} disabled={!generalEdit} onChange={handleGenderChange}>
+            <option value={Gender.unknown}>{'---'}</option>
+            <option value={Gender.woman}>{Micellaneous.genderToString(Gender.woman, generalEdit)}</option>
+            <option value={Gender.man}>{Micellaneous.genderToString(Gender.man, generalEdit)}</option>
+            <option value={Gender.nonBinary}>{Micellaneous.genderToString(Gender.nonBinary, generalEdit)}</option>
           </Drops>
 
-          <Age genE={generalEdit} disabled={!generalEdit} type="number" placeholder="18" min="18"></Age>
-          {/* max="99" */}
-          {/* <p>years old</p> */}
+          <Age genE={generalEdit} disabled={!generalEdit} type="number" placeholder="18" min="18" max="99" onChange={handleAgeChange}></Age>
 
-          <Drops genE={generalEdit} disabled={!generalEdit}>
-            <option value={ServerPreference.na}>N. America</option>
-            <option value={ServerPreference.eu}>Europe</option>
-            <option value={ServerPreference.ap}>Asia Pacific</option>
-            <option value={ServerPreference.kr}>Korea</option>
-          </Drops>
-
-          {/* <p>Competitive</p> */}
+          <span>{Micellaneous.serverPreferenceToString(loggedUserContext?.loggedUser?.region)}</span>
         </div>
 
-        {/* <Drops genE={generalEdit} disabled={!generalEdit}>
-          <option value={0}>Competitive</option>
-          <option value={1}>Casual</option>
-        </Drops> */}
-        <p>Competitive</p>
+        <p>{Micellaneous.playerTypeToString(playerType) ?? '<unknown>'}</p>
 
       </ProfileContainer>
 
@@ -196,7 +164,7 @@ const BioContainer = styled.div`
 const RankContainer = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: space-between;
   /* padding: 0% 0%; */
   /* margin-right: 10%; */
 `;
