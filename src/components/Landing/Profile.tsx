@@ -11,7 +11,6 @@ import { AuthService, IAuthResponse } from "../../services/AuthService";
 import { Gender, GameMode } from "../../models/FiltersModels";
 
 // To-do:
-// useState() in order to toggle b/w editing and being finished
 // grab current user's data from context
 // store values captured during edit as permanent somewhere (context)
 // send updated info to server
@@ -53,6 +52,9 @@ function Profile() {
   const [playerType, setPlayerType] = useState(GameMode.competitive);
   const [aboutMe, setAboutMe] = useState("There's nothing here! Edit your profile to liven things up!");
 
+  const [bio, setBio] = useState("There's nothing here! Edit your profile to liven things up!");
+  const [username, setUsername] = useState("Pee Man The OG");
+  
   // To be used for editing user info, init false
   const [generalEdit, setGeneralEdit] = useState(false);
 
@@ -126,104 +128,201 @@ function Profile() {
   }, [displayName]);
 
   return (
-    <Grid columns={2}>
-      <Pfp genE={generalEdit} src={icon} onClick={() => changePfp()}></Pfp>
+    
+    <GridContainer>
+      
+      <ProfileContainer>
+      
+        <Pfp genE={generalEdit} src={icon} onClick={() => changePfp()}></Pfp>
 
-      <Input
-        id="user"
-        genE={generalEdit}
-        placeholder={generalEdit ? displayName : displayName}
-        // maxLength={15};
-        // minLength={1};
-        onBlur={(e: React.FormEvent<HTMLInputElement>) => {
-          setDisplayName(e.currentTarget.value);
-        }}
-        disabled={!generalEdit}
-      ></Input>
+        <div>
+          <Input 
+            genE={generalEdit}
+            placeholder={username}
+            autoComplete={"off"}
+            maxLength={15}
+            // minLength={3}
+            disabled={!generalEdit}>
+          </Input>
 
-      <Edit genE={generalEdit} src="./images/general/edit.png" onClick={() => edit()}></Edit>
+          <Edit genE={generalEdit} src="./images/general/edit.png" onClick={() => edit()}></Edit>
+        </div>
+        
+        <div>
 
-      <h2>Bio</h2>
-      {generalEdit ? <TextArea onChange={(e: any) => setAboutMe(e.target.value)} /> : <Display>{aboutMe}</Display>}
+          <Drops genE={generalEdit} disabled={!generalEdit}>
+            <option>Male</option>
+            <option>Female</option>
+            <option>NB</option>
+            {/*CHANGE TO THIS <option value="M">Man</option> */}
+          </Drops>
 
-      <Drops genE={generalEdit} disabled={!generalEdit}>
-        <option>Woman</option>
-        <option>Man</option>
-        <option>Non-Binary</option>
-      </Drops>
+          <Age genE={generalEdit} disabled={!generalEdit} type="number" placeholder="18" min="18"></Age>
+          {/* max="99" */}
+          {/* <p>years old</p> */}
 
-      <Input genE={generalEdit} disabled={!generalEdit}></Input>
+          <Drops genE={generalEdit} disabled={!generalEdit}>
+            <option value={0}>N. America</option>
+            <option value={1}>Europe</option>
+            <option value={2}>Asia Pacific</option>
+            <option value={3}>Korea</option>
+          </Drops>
 
-      <Drops genE={generalEdit} disabled={!generalEdit}>
-        <option value={0}>North America</option>
-        <option value={1}>Europe</option>
-        <option value={2}>Asia Pacific</option>
-        <option value={3}>Korea</option>
-      </Drops>
+          {/* <p>Competitive</p> */}
+        </div>
 
-      <div>
-        <h2>Reputation</h2>
-        <img src="./images/ranks/rank_1.png"></img>
-      </div>
-      <div>
-        <h2>Rank</h2>
-        <img src="./images/ranks/rank_7.png"></img>
-      </div>
-    </Grid>
+        {/* <Drops genE={generalEdit} disabled={!generalEdit}>
+          <option value={0}>Competitive</option>
+          <option value={1}>Casual</option>
+        </Drops> */}
+        <p>Competitive</p>
+
+
+      </ProfileContainer>
+      
+
+      <BioContainer>
+        
+        {/* <div> */}
+        <h2>ABOUT ME</h2>
+        <TextArea genE={generalEdit} autoComplete="off" placeholder={bio} disabled={!generalEdit} rows={6}></TextArea>
+
+        <RankContainer>
+          <div>
+            <h2>REPUTATION</h2>
+            <img src="./images/general/ToxicWaste.png"></img>
+          </div>
+          <div>
+            <h2>RANK</h2>
+            <img src="./images/ranks/rank_7.png"></img>
+          </div>
+        </RankContainer>
+        {/* </div> */}
+      </BioContainer>
+    </GridContainer>
   );
 }
 
 export default Profile;
 
-// STYLING
+
+// STYLING 
+const GridContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  /* padding-bottom: 8%; */
+`;
+
+const ProfileContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 40%;
+  /* margin: 5%; */
+`;
+
+const BioContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 60%;
+`;
+
+const RankContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  /* padding: 0% 0%; */
+  /* margin-right: 10%; */
+`;
+
+
 const Drops = styled.select<{ genE: boolean }>`
-  background-color: ${(props) => (props.genE ? "#181818" : "#282828")};
-  -webkit-appearance: ${(props) => (props.genE ? "" : "none")};
-  -moz-appearance: ${(props) => (props.genE ? "" : "none")};
+  background-color: ${(props) => props.genE ? "#181818" : "#282828"};
+  /* -webkit-appearance: ${(props) => props.genE ? "" : "none"}; */
+  /* -moz-appearance: ${(props) => props.genE ? "" : "none"}; */
   border: 0px;
+  border-radius: 3px;
   color: white;
   text-align: center;
+  height: 80%;
+  /* width: 10%; */
+  margin-top: 2%;
 `;
-// const Age = styled.input<{ genE: boolean }>`
 
-// `
+const Age = styled.input<{ genE: boolean }>`
+  background-color: ${(props) => props.genE ? "#181818" : "#282828"};
+  border: 0px;
+  border-radius: 3px;
+  color: white;
+  font-family: Arial;
+  text-align: center;
+  width: 10%;
+  margin: 0% 2% 0% 2%;
+  height: 70%;
+  font-size: 100%;
+  ::placeholder {
+    color: white;
+  }
+`;
 
 const Input = styled.input<{ genE: boolean }>`
   background-color: ${(props) => (props.genE ? "#181818" : "#282828")};
   color: white;
   text-align: center;
   text-overflow: ellipsis;
-  height: 10%;
-  width: 30%;
+  font-family: Arial, Helvetica, sans-serif;
+  height: 100%;
+  width: 70%;
   font-size: 200%;
+  border: 0px;
+  border-radius: 7px;
+  /* margin-bottom: 5%; */
+  ::placeholder {
+    color: white;
+  }
 `;
 
-const TextArea = styled.textarea`
-  background-color: #181818;
+const TextArea = styled.textarea<{ genE: boolean }>`
+  background-color: ${(props) => props.genE ? "#181818" : "#282828"};
   color: white;
-  width: 40%;
+  width: 80%;
+  height: 50%;
+  font-family: Arial, Helvetica, sans-serif;
   resize: none;
-  overflow: auto;
+  overflow: hidden;
   border: 0px;
+  border-radius: 7px;
+  font-size: 140%;
+  /* ::placeholder {
+    color: white;
+  } */
 `;
 
 const Display = styled.p`
   background-color: #282828;
 `;
 
-const Edit = styled.img<{ genE: boolean }>`
-  filter: ${(props) => (props.genE ? "drop-shadow(2px 2px 10px red) invert()" : "invert()")};
-  width: 5%;
+const Edit = styled.img<{ genE: boolean}>`
+  filter: ${(props) => props.genE ? "drop-shadow(2px 2px 10px red) invert()" : "invert()"};
+  width: 6%;
+  margin-left: 5px;
+  :hover {
+    filter: drop-shadow(2px 2px 10px red) invert();
+    cursor: pointer;
+  }
 `;
 
-// border: ${(props) => props.generalEdit ? "2px solid red" : ""};
-
 const Pfp = styled.img<{ genE: boolean }>`
-  filter: ${(props) => (props.genE ? "drop-shadow(1px 1px 8px #66c2a9) brightness(150%)" : "")};
-  width: 20%;
-  border: 5px solid #66c2a9;
+  filter: ${(props) => props.genE ? "drop-shadow(1px 1px 8px #66c2a9) brightness(150%)" : ""};
+  width: 50%;
+  border: 7px solid #66c2a9;
   border-radius: 50%;
   background-color: #266152;
+  margin-bottom: 8%;
 `;
 
 // const Edit = styled.p<{ generalEdit: boolean}>`

@@ -70,12 +70,53 @@ export default function Landing(props: any) {
       <LandingContent>
         <Container>
           <LandingCard findDuo={findDuo} duoFound={duoFound} imgSrc={playerIconSrc}/>
+          <ButtonContainer>
+            <div>
+              <ButtonImages src="./images/general/filter.png"></ButtonImages>
+              <Button>CHAT FILTERS</Button>
+            </div>
+            <div>
+              <ButtonImages src="./images/general/history.png"></ButtonImages>
+              <Button>CHAT HISTORY</Button>
+            </div>
+          </ButtonContainer>
           {getButton()}
         </Container>
       </LandingContent>
     </LandingPage>
   );
 }
+
+
+const ButtonContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-top: 0%;
+  width: 100%;
+`;
+
+const ButtonImages = styled.img`
+  /* height: 100%; */
+  filter: invert();
+  width: 2%;
+`;
+
+const Button = styled.button`
+  font-weight: bold;
+  font-size: 16px;
+  /* height: 100%; */
+  /* margin: 5%; */
+  background: none;
+  padding: 0% 10% 5% 10%;
+  /* background: none; */
+  color: white;
+  border: 0px;
+  :hover {
+    cursor: pointer;
+  }
+`;
 
 const LandingPage = styled.div`
   background-color: #181818;
