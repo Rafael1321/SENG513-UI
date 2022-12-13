@@ -1,7 +1,8 @@
-import React, {useState, useContext} from "react";
+import React, {useState, useContext, useEffect} from "react";
 import styled from "styled-components";
 import { LoggedUserContext } from '../../contexts/LoggedUserContext';
-import { ServerPreference } from "../../models/FiltersModels";
+import { GameMode, Gender, ServerPreference } from "../../models/FiltersModels";
+import { AuthService, IAuthResponse } from "../../services/AuthService";
 
 // Main User Homescreen
 export default function Profile() : React.ReactElement {
@@ -35,34 +36,95 @@ export default function Profile() : React.ReactElement {
   ];
 
   // Set init bio
+  const [userId, setUserId] = useState("");
+  const [displayName, setDisplayName] = useState("");
+  const [age, setAge] = useState(0);
+  const [gender, setGender] = useState(Gender.allGenders);
+  const [playerType, setPlayerType] = useState(GameMode.competitive);
+  const [aboutMe, setAboutMe] = useState("There's nothing here! Edit your profile to liven things up!");
+
   const [bio, setBio] = useState("There's nothing here! Edit your profile to liven things up!");
   // const [username, setUsername] = useState("Pee Man The OG");
   
   // To be used for editing user info, init false
   const [generalEdit, setGeneralEdit] = useState(false);
 
+  const handleEdit = async () => {
+    console.log("Edit Request");
+
+    console.log(loggedUserContext);
+
+    const authResponse: IAuthResponse = await AuthService.update({
+      userId: loggedUserContext.loggedUser._id,
+      displayName: displayName,
+      age: age,
+      gender: gender,
+      playerType: playerType,
+      aboutMe: aboutMe,
+    });
+
+    console.log(authResponse);
+  };
+
+  const handleDisplayNameChange = (newDisplayName: string) => {
+    setDisplayName(newDisplayName);
+    handleEdit();
+  };
+
   // Enable edits through flipping the state
   const edit = () => {
     setGeneralEdit(!generalEdit);
-  }
+  };
 
   // Pick a new (random) profile pic, only if editing is enabled
   const changePfp = () => {
     if (generalEdit) {
       loggedUserContext.updateLoggedUser({...loggedUserContext.loggedUser, avatarImage: agents[Math.floor(Math.random() * agents.length)]})
     }
-  }
+  };
+
+  useEffect(() => {
+    setUserId(loggedUserContext.loggedUser._id);
+    setDisplayName(loggedUserContext.loggedUser.displayName);
+    setAge(loggedUserContext.loggedUser.age);
+    setGender(loggedUserContext.loggedUser.gender);
+    setPlayerType(loggedUserContext.loggedUser.playerType);
+    setAboutMe(loggedUserContext.loggedUser.aboutMe);
+  }, [
+    loggedUserContext.loggedUser._id,
+    loggedUserContext.loggedUser.displayName,
+    loggedUserContext.loggedUser.age,
+    loggedUserContext.loggedUser.gender,
+    loggedUserContext.loggedUser.playerType,
+    loggedUserContext.loggedUser.aboutMe,
+  ]);
+
+  useEffect(() => {
+    async function updateBackend() {
+      const authResponse: IAuthResponse = await AuthService.update({
+        userId: loggedUserContext.loggedUser._id,
+        displayName: displayName,
+        age: age,
+        gender: gender,
+        playerType: playerType,
+        aboutMe: aboutMe,
+      });
+    }
+    // You can do some fancy checks here if you'd like, lots of work though
+    
+    if (generalEdit === false){ // add some more conditions
+      updateBackend();
+    }
+  }, [generalEdit]);    // Depedencies: if this is changed then this useEffect will run.
 
   return (
-    
     <GridContainer>
-      
       <ProfileContainer>
       
         <Pfp genE={generalEdit} src={loggedUserContext?.loggedUser?.avatarImage} onClick={() => changePfp()}></Pfp>
 
         <div>
-          <Input 
+          <Input
             genE={generalEdit}
             placeholder={loggedUserContext?.loggedUser?.displayName ?? '<username>'}
             autoComplete={"off"}
@@ -72,9 +134,8 @@ export default function Profile() : React.ReactElement {
 
           <Edit genE={generalEdit} src="./images/general/edit.png" onClick={() => edit()}></Edit>
         </div>
-        
-        <div>
 
+        <div>
           <Drops genE={generalEdit} disabled={!generalEdit}>
             <option>Male</option>
             <option>Female</option>
@@ -103,10 +164,8 @@ export default function Profile() : React.ReactElement {
         <p>Competitive</p>
 
       </ProfileContainer>
-      
 
       <BioContainer>
-        
         {/* <div> */}
         <h2>ABOUT ME</h2>
         <TextArea genE={generalEdit} autoComplete="off" placeholder={bio} disabled={!generalEdit} rows={6}></TextArea>
@@ -127,7 +186,6 @@ export default function Profile() : React.ReactElement {
   );
 }
 
-// STYLING 
 const GridContainer = styled.div`
   display: flex;
   flex-direction: row;
@@ -160,11 +218,10 @@ const RankContainer = styled.div`
   /* margin-right: 10%; */
 `;
 
-
 const Drops = styled.select<{ genE: boolean }>`
-  background-color: ${(props) => props.genE ? "#181818" : "#282828"};
-  /* -webkit-appearance: ${(props) => props.genE ? "" : "none"}; */
-  /* -moz-appearance: ${(props) => props.genE ? "" : "none"}; */
+  background-color: ${(props) => (props.genE ? "#181818" : "#282828")};
+  /* -webkit-appearance: ${(props) => (props.genE ? "" : "none")}; */
+  /* -moz-appearance: ${(props) => (props.genE ? "" : "none")}; */
   border: 0px;
   border-radius: 3px;
   color: white;
@@ -175,7 +232,7 @@ const Drops = styled.select<{ genE: boolean }>`
 `;
 
 const Age = styled.input<{ genE: boolean }>`
-  background-color: ${(props) => props.genE ? "#181818" : "#282828"};
+  background-color: ${(props) => (props.genE ? "#181818" : "#282828")};
   border: 0px;
   border-radius: 3px;
   color: white;
@@ -191,7 +248,7 @@ const Age = styled.input<{ genE: boolean }>`
 `;
 
 const Input = styled.input<{ genE: boolean }>`
-  background-color: ${(props) => props.genE ? "#181818" : "#282828"};
+  background-color: ${(props) => (props.genE ? "#181818" : "#282828")};
   color: white;
   text-align: center;
   text-overflow: ellipsis;
@@ -208,7 +265,7 @@ const Input = styled.input<{ genE: boolean }>`
 `;
 
 const TextArea = styled.textarea<{ genE: boolean }>`
-  background-color: ${(props) => props.genE ? "#181818" : "#282828"};
+  background-color: ${(props) => (props.genE ? "#181818" : "#282828")};
   color: white;
   width: 80%;
   height: 50%;
@@ -227,8 +284,8 @@ const Display = styled.p`
   background-color: #282828;
 `;
 
-const Edit = styled.img<{ genE: boolean}>`
-  filter: ${(props) => props.genE ? "drop-shadow(2px 2px 10px red) invert()" : "invert()"};
+const Edit = styled.img<{ genE: boolean }>`
+  filter: ${(props) => (props.genE ? "drop-shadow(2px 2px 10px red) invert()" : "invert()")};
   width: 6%;
   margin-left: 5px;
   :hover {
@@ -238,18 +295,10 @@ const Edit = styled.img<{ genE: boolean}>`
 `;
 
 const Pfp = styled.img<{ genE: boolean }>`
-  filter: ${(props) => props.genE ? "drop-shadow(1px 1px 8px #66c2a9) brightness(150%)" : ""};
+  filter: ${(props) => (props.genE ? "drop-shadow(1px 1px 8px #66c2a9) brightness(150%)" : "")};
   width: 50%;
   border: 7px solid #66c2a9;
   border-radius: 50%;
   background-color: #266152;
   margin-bottom: 8%;
 `;
-
-// const Edit = styled.p<{ generalEdit: boolean}>`
-//   value: ${(props) => props.generalEdit ? "Save" : "Edit"};
-// `
-
-// const Reminder = styled.p<{ generalEdit: boolean }>`
-//   display: ${(props) => props.generalEdit ? "none" : "none"};
-// `
