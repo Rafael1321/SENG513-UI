@@ -3,6 +3,8 @@ import Button from "../Shared/Button";
 import styled from "styled-components/macro";
 import { EmblaCarousel } from "./EmblaCarousel";
 import ProfileCardUpdated from "./ProfileCardUpdated";
+import { Slider } from "@mui/material";
+import { getValue } from "@mui/system";
 
 type Props = {};
 
@@ -50,6 +52,60 @@ function ChatHistory(props: Props): React.ReactElement {
   const [width, setWidth] = useState(window.innerWidth);
   const breakpoint = 1000;
 
+  const [rateState, setRateState] = useState(0);
+  const [rating, setRating] = useState(5);
+
+  function newRating() {
+    setRateState(0);
+  }
+
+  function startRating() {
+    setRateState(1);
+  }
+
+  function doneRating() {
+    setRateState(2);
+  }
+
+  function handleRating(event: Event) {
+    let newRating = (event.target as HTMLInputElement).value;
+    setRating(+newRating);
+    console.log(rating);
+  }
+
+  function commend() {
+    console.log("Last new rating:" + rating);
+    doneRating();
+  }
+
+  function displayRating() {
+    if (rateState == 0) {
+      return <RateButton onClick={startRating}>RATE PLAYER</RateButton>;
+    } else if (rateState == 1) {
+      return (
+        <RatingSlider>
+          <label htmlFor="rating">RATE PLAYER</label>
+          <Slider
+            size="small"
+            defaultValue={5}
+            min={0}
+            max={10}
+            step={1}
+            valueLabelDisplay="auto"
+            onChange={(e: Event) => {
+              handleRating(e);
+            }}
+          />
+          <Commend type="button" onClick={commend}>
+            COMMEND
+          </Commend>
+        </RatingSlider>
+      );
+    } else if (rateState == 2) {
+      return <h4>Rating Recorded!</h4>;
+    }
+  }
+
   useEffect(() => {
     const handleResizeWindow = () => setWidth(window.innerWidth);
 
@@ -67,7 +123,14 @@ function ChatHistory(props: Props): React.ReactElement {
           <MainContainer>
             <HistorySection>
               <Menu>
-                {width > breakpoint && <Button img_url={"images/general/back.png"} text={"BACK"} width={"160px"} height={"70px"} />}
+                {width > breakpoint && (
+                  <Button
+                    img_url={"images/general/back.png"}
+                    text={"BACK"}
+                    width={"160px"}
+                    height={"70px"}
+                  />
+                )}
                 {width > breakpoint && (
                   <SearchContainer>
                     <SearchIconWrapper>
@@ -79,10 +142,19 @@ function ChatHistory(props: Props): React.ReactElement {
               </Menu>
 
               <PlayerCardsWrapper>
-                <EmblaCarousel slides={[...slides]} history={history} />
+                <EmblaCarousel
+                  slides={[...slides]}
+                  history={history}
+                  ClickHandler={newRating}
+                />
                 {width < breakpoint && (
                   <RatePlayerWrapper>
-                    <Button fontSize="2em" text={"RATE"} width={"100%"} height={"100%"} />
+                    <Button
+                      fontSize="2em"
+                      text={"RATE"}
+                      width={"100%"}
+                      height={"100%"}
+                    />
                   </RatePlayerWrapper>
                 )}
               </PlayerCardsWrapper>
@@ -92,10 +164,7 @@ function ChatHistory(props: Props): React.ReactElement {
 
             {width > breakpoint && (
               <InfoCardSection>
-                <RatePlayerWrapper>
-                  <Button text={"RATE PLAYER"} width={"40%"} height={"100%"} />
-                </RatePlayerWrapper>
-
+                <RatePlayerWrapper>{displayRating()}</RatePlayerWrapper>
                 <ProfileCardWrapper>
                   <ProfileCardUpdated
                     imgSrc="images/icons/Neon_icon.webp"
@@ -115,6 +184,39 @@ function ChatHistory(props: Props): React.ReactElement {
     </>
   );
 }
+
+const RateButton = styled.button`
+  color: white;
+  background-color: #68c9ac;
+  border: none;
+  border-radius: 10px;
+  width: 160px;
+  height: 70px;
+  font-size: 16px;
+  transition: 0.5s all;
+  cursor: pointer;
+
+  &:hover {
+    box-shadow: 0 0 10px #68c9ac;
+    cursor: pointer;
+  }
+`;
+
+const Commend = styled.button`
+  color: white;
+  background-color: #68c9ac;
+  border: none;
+  border-radius: 2px;
+
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
+const RatingSlider = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
 
 const MainWrapper = styled.div`
   // applies it to all the children
@@ -169,15 +271,13 @@ const InfoCardSection = styled.aside`
 
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-
-  padding: 2%;
 `;
 
 const ProfileCardWrapper = styled.div`
   position: inherit;
-  height: 80%;
+  height: 85%;
 `;
 
 const Menu = styled.nav`
