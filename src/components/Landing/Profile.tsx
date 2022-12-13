@@ -49,26 +49,20 @@ export default function Profile() : React.ReactElement {
   // To be used for editing user info, init false
   const [generalEdit, setGeneralEdit] = useState(false);
 
-  const handleEdit = async () => {
-    console.log("Edit Request");
-
-    console.log(loggedUserContext);
-
-    const authResponse: IAuthResponse = await AuthService.update({
-      userId: loggedUserContext.loggedUser._id,
-      displayName: displayName,
-      age: age,
-      gender: gender,
-      playerType: playerType,
-      aboutMe: aboutMe,
-    });
-
-    console.log(authResponse);
-  };
+  // const handleEdit = async () => {
+  //   const authResponse: IAuthResponse = await AuthService.update({
+  //     userId: loggedUserContext?.loggedUser?._id,
+  //     displayName: loggedUserContext?.loggedUser?.displayName,
+  //     age: loggedUserContext?.loggedUser?.age,
+  //     gender: loggedUserContext?.loggedUser?.gender,
+  //     playerType: loggedUserContext?.loggedUser?.playerType,
+  //     aboutMe: loggedUserContext?.loggedUser?.aboutMe,
+  //   });
+  // };
 
   const handleDisplayNameChange = (newDisplayName: string) => {
     setDisplayName(newDisplayName);
-    handleEdit();
+    // handleEdit();
   };
 
   // Enable edits through flipping the state
@@ -83,39 +77,23 @@ export default function Profile() : React.ReactElement {
     }
   };
 
-  useEffect(() => {
-    setUserId(loggedUserContext.loggedUser._id);
-    setDisplayName(loggedUserContext.loggedUser.displayName);
-    setAge(loggedUserContext.loggedUser.age);
-    setGender(loggedUserContext.loggedUser.gender);
-    setPlayerType(loggedUserContext.loggedUser.playerType);
-    setAboutMe(loggedUserContext.loggedUser.aboutMe);
-  }, [
-    loggedUserContext.loggedUser._id,
-    loggedUserContext.loggedUser.displayName,
-    loggedUserContext.loggedUser.age,
-    loggedUserContext.loggedUser.gender,
-    loggedUserContext.loggedUser.playerType,
-    loggedUserContext.loggedUser.aboutMe,
-  ]);
-
-  useEffect(() => {
-    async function updateBackend() {
-      const authResponse: IAuthResponse = await AuthService.update({
-        userId: loggedUserContext.loggedUser._id,
-        displayName: displayName,
-        age: age,
-        gender: gender,
-        playerType: playerType,
-        aboutMe: aboutMe,
-      });
-    }
-    // You can do some fancy checks here if you'd like, lots of work though
+  // useEffect(() => {
+  //   async function updateBackend() {
+  //     const authResponse: IAuthResponse = await AuthService.update({
+  //       userId: loggedUserContext?.loggedUser?._id,
+  //       displayName: displayName,
+  //       age: age,
+  //       gender: gender,
+  //       playerType: playerType,
+  //       aboutMe: aboutMe,
+  //     });
+  //   }
+  //   // You can do some fancy checks here if you'd like, lots of work though
     
-    if (generalEdit === false){ // add some more conditions
-      updateBackend();
-    }
-  }, [generalEdit]);    // Depedencies: if this is changed then this useEffect will run.
+  //   if (generalEdit === false){ // add some more conditions
+  //     updateBackend();
+  //   }
+  // }, [generalEdit]);    // Depedencies: if this is changed then this useEffect will run.
 
   return (
     <GridContainer>
@@ -148,7 +126,7 @@ export default function Profile() : React.ReactElement {
           {/* <p>years old</p> */}
 
           <Drops genE={generalEdit} disabled={!generalEdit}>
-            <option value={ServerPreference.ne}>N. America</option>
+            <option value={ServerPreference.na}>N. America</option>
             <option value={ServerPreference.eu}>Europe</option>
             <option value={ServerPreference.ap}>Asia Pacific</option>
             <option value={ServerPreference.kr}>Korea</option>

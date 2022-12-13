@@ -1,10 +1,16 @@
 import * as React from "react";
 import styled from "styled-components";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { LoggedUserContext } from '../../contexts/LoggedUserContext';
+import { MatchedUserContext } from '../../contexts/MatchedUserContext';
 
-export default function MatchFound(props: any) {
+export default function MatchFound() {
   
+  // Contexts 
+  const loggedUserContext = useContext(LoggedUserContext);
+  const matchedUserContext = useContext(MatchedUserContext);
+
   // State
   const [countdown, setCountdown] = useState(3);
 
@@ -33,12 +39,12 @@ export default function MatchFound(props: any) {
   return (<>
       <MatchFoundText>Match Found</MatchFoundText>
       <FindDuoContainer>
-        <Teammate icon={props.imgSrc}>
-          <p>{props.name}</p>
+        <Teammate icon={loggedUserContext?.loggedUser?.avatarImage}>
+          <p>{loggedUserContext?.loggedUser?.displayName ?? '<username 1>'}</p>
         </Teammate>
         <CountDownText>{countdown}</CountDownText>
-        <Teammate icon={"Images/Icons/Astra_icon.webp"}>
-          <p>Astra</p>
+        <Teammate icon={matchedUserContext?.matchedUser?.avatarImage}>
+          <p>{matchedUserContext?.matchedUser?.displayName ?? '<username 2>'}</p>
         </Teammate>
       </FindDuoContainer>
     </>);

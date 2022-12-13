@@ -81,15 +81,15 @@ export function RankSlider() : React.ReactElement{
             <CustomSlider value={value} onChange={handleChange} valueLabelDisplay="off"
                           disableSwap min={0.6} max={9.2} step={0.1} marks={marks}/>
             <RankIcons>
-                <img style={{marginLeft:'2.7%'}} src={'images/ranks/rank_1.png'} alt="rank 1"></img>
-                <img style={{marginLeft:'6.6%'}} src={'/images/ranks/rank_2.png'} alt="rank 2"></img>
-                <img style={{marginLeft:'6.5%'}} src={'/images/ranks/rank_3.png'} alt="rank 3"></img>
-                <img style={{marginLeft:'5.8%'}} src={'/images/ranks/rank_4.png'} alt="rank 4"></img>
-                <img style={{marginLeft:'5.6%'}} src={'/images/ranks/rank_5.png'} alt="rank 5"></img>
-                <img style={{marginLeft:'5.8%'}} src={'/images/ranks/rank_6.png'} alt="rank 6"></img>
-                <img style={{marginLeft:'5.4%'}} src={'images/ranks/rank_7.png'} alt="rank 7"></img>
-                <img style={{marginLeft:'5.4%'}} src={'images/ranks/rank_8.png'} alt="rank 8"></img>
-                <img style={{marginLeft:'6.0%'}} src={'/images/ranks/rank_9.png'} alt="rank 9"></img>
+                <img style={{marginLeft:'2.7%'}} src={'images/ranks/rank_1_1.webp'} alt="rank 1"></img>
+                <img style={{marginLeft:'6.6%'}} src={'/images/ranks/rank_2_1.webp'} alt="rank 2"></img>
+                <img style={{marginLeft:'6.5%'}} src={'/images/ranks/rank_3_1.webp'} alt="rank 3"></img>
+                <img style={{marginLeft:'5.8%'}} src={'/images/ranks/rank_4_1.webp'} alt="rank 4"></img>
+                <img style={{marginLeft:'5.6%'}} src={'/images/ranks/rank_5_1.webp'} alt="rank 5"></img>
+                <img style={{marginLeft:'5.8%'}} src={'/images/ranks/rank_6_1.webp'} alt="rank 6"></img>
+                <img style={{marginLeft:'5.4%'}} src={'images/ranks/rank_7_1.webp'} alt="rank 7"></img>
+                <img style={{marginLeft:'5.4%'}} src={'images/ranks/rank_8_1.webp'} alt="rank 8"></img>
+                <img style={{marginLeft:'6.0%'}} src={'/images/ranks/rank_9_1.webp'} alt="rank 9"></img>
             </RankIcons>
         </OuterContainer>
     );

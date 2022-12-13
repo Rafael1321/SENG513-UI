@@ -10,26 +10,27 @@ import { IUser } from '../../models/AuthModels';
 import { FiltersService, IFiltersResponse } from '../../services/FiltersService';
 import { FilterContext } from '../../contexts/FilterContext';
 import { IFilters } from '../../models/FiltersModels';
+import { Micellaneous } from '../../util/Micellaneous';
 
 export enum FormType {
-    Login = 0,
-    Registration = 1,
+  Login = 0,
+  Registration = 1,
 }
 
 type Props = {
-    formType : FormType
-}
+  formType: FormType;
+};
 
-export function Form(props : Props) : React.ReactElement<Props, any>{
+export function Form(props: Props): React.ReactElement<Props, any> {
+
 
     /* Logged User Context */
     const loggedUserContext = React.useContext(LoggedUserContext);
     const filterContex = React.useContext(FilterContext);
 
-    /* Navigation */
-    const navigate = useNavigate();
+  /* Form State */
 
-    /* Form State */
+
 
     const [displayName, setDisplayName] = React.useState('');
     const [gameName, setGameName] = React.useState('');
@@ -39,6 +40,9 @@ export function Form(props : Props) : React.ReactElement<Props, any>{
     const [confirmPassword, setConfirmPassword] = React.useState('');
 
     const [loading, setLoading] = React.useState<boolean>(false);
+
+      /* Navigation */
+    const navigate = useNavigate();
 
     /* Handlers */
 
@@ -89,7 +93,7 @@ export function Form(props : Props) : React.ReactElement<Props, any>{
 
             // Call API to attempt registration
             let newUser = { displayName: displayName, gameName : gameName, tagLine : tag,
-                email : email, password : password, avatarImage : 'test.png'};
+                email : email, password : password, avatarImage : Micellaneous.getAgentIcon(0, true)};
             const authResponse : IAuthResponse = await AuthService.register(newUser);
 
             if(authResponse.statusCode !== 201){ // Username already in use or Email already in use
@@ -163,20 +167,20 @@ export function Form(props : Props) : React.ReactElement<Props, any>{
 }
 
 const OuterForm = styled.div`
-    width: 33vw;
-    background-color: #181818;
+  width: 33vw;
+  background-color: #181818;
 
-    @media screen and (max-width: 950px) {
-        border-radius: 10px;
-        padding: 5vw 2vw;
-        transform: scale(1.5);
-        background-color: rgb(24, 24, 24, 0.8);
-        box-shadow: 0 0 1.0rem 0.1rem rgb(74, 183, 190); 
-    }
+  @media screen and (max-width: 950px) {
+    border-radius: 10px;
+    padding: 5vw 2vw;
+    transform: scale(1.5);
+    background-color: rgb(24, 24, 24, 0.8);
+    box-shadow: 0 0 1rem 0.1rem rgb(74, 183, 190);
+  }
 
-    @media screen and (max-width: 700px) {
-        transform: scale(1.7);
-    }
+  @media screen and (max-width: 700px) {
+    transform: scale(1.7);
+  }
 
     @media screen and (max-width: 500px) {
         transform: scale(1.5);
@@ -188,38 +192,38 @@ const OuterForm = styled.div`
 `;
 
 const InnerForm = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
 
-    & button { 
-        padding: 10px;
-        background-color: #F94B4B;
-        border: none;
-        border-radius: 0.5vw;
-        font-size: 1.3vw;
-        color: white;
-        width: auto;
-        padding: 3%;
-        transition: 0.2s ease-in-out;
+  & button {
+    padding: 10px;
+    background-color: #f94b4b;
+    border: none;
+    border-radius: 0.5vw;
+    font-size: 1.3vw;
+    color: white;
+    width: auto;
+    padding: 3%;
+    transition: 0.2s ease-in-out;
 
-        &:hover{
-            cursor: pointer;
-            background-color: #cb1e1e;
-        }
+    &:hover {
+      cursor: pointer;
+      background-color: #cb1e1e;
     }
+  }
 `;
 
 const Title = styled.div`
-    text-align: center;
+  text-align: center;
 
-    & p{
-        margin: 0;
-        display: block;
-        font-family: 'valorant';
-    }
+  & p {
+    margin: 0;
+    display: block;
+    font-family: "valorant";
+  }
 
     & #title1{
         font-size: 3.5vw;
@@ -232,30 +236,50 @@ const Title = styled.div`
 `;
 
 const Fields = styled.div`
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: auto;
-    margin: 15% 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: auto;
+  margin: 15% 0;
 
-    & #subtitle {
-        font-size: 1.2vw;
+  & #subtitle {
+    font-size: 1.2vw;
+  }
+
+  & .question {
+    font-size: 1vw;
+
+    & a {
+      color: #f94b4b;
+      text-decoration: none;
+      transition: 0.2s ease-in-out;
+
+      &:hover {
+        cursor: pointer;
+        color: #cb1e1e;
+      }
+    }
+  }
+
+  & input {
+    padding: 1vw;
+    border: none;
+    background-color: #e6e3e3;
+    border-radius: 0.5vw;
+    width: 15vw;
+    height: 10px;
+    margin: 5px;
+    transition: 0.2s ease-in-out;
+
+    &::placeholder {
+      color: black;
+      font-size: 0.8vw;
     }
 
-    & .question {
-        font-size: 1.0vw;
-
-        & a {
-            color: #F94B4B;
-            text-decoration: none;
-            transition: 0.2s ease-in-out;
-
-            &:hover{
-                cursor: pointer;
-                color: #cb1e1e;
-            }
-        }
+    &:hover {
+      cursor: default;
+      background-color: #bcbaba;
     }
 
     & input{

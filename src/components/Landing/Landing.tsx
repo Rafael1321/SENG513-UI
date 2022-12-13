@@ -1,45 +1,84 @@
 import * as React from "react";
 import styled from "styled-components";
 import { useState, useEffect, useContext } from "react";
-
 import LandingCard from "./LandingCard";
 import { LoggedUserContext } from '../../contexts/LoggedUserContext';
 import { SocketContext } from '../../contexts/SocketContext';
 import { EnvConfig } from '../../util/EnvConfig';
+import { MatchedUserContext } from "../../contexts/MatchedUserContext";
+import { Micellaneous } from "../../util/Micellaneous";
+import { CustomToast } from "../Shared/CustomToast";
+import { FilterContext } from "../../contexts/FilterContext";
+import { toast } from "react-toastify";
+import { IMatchFoundDTO, IFindMatchDTO } from '../../models/MatchingModels';
 
-export default function Landing(props: any) {
+export default function Landing() {
   
-  // Constants
-  const playerIconSrc = "/Images/Icons/Astra_icon.webp";
-
   // State 
   const [duoFound, setDuoFound] = useState<boolean>(false);
   const [findDuo, setFindDuo] = useState<boolean>(false);
 
+  // Refs
+  const pollingTimeout = React.useRef<NodeJS.Timeout>(null);
+
   // Contexts
   const loggedUserContext = useContext(LoggedUserContext);
+  const matchedUserContext = useContext(MatchedUserContext);
+  const filterContext = useContext(FilterContext);
   const socketContext = useContext(SocketContext);
+
+  // Use Effects 
 
   useEffect(() => {
     socketContext.emit('user_connected', loggedUserContext?.loggedUser?._id);
 
-    socketContext.on('error_user_connected', (msg : string) => {
-      if(EnvConfig.DEBUG) console.log(msg);
-    });
+    // Messages from server
+    socketContext.on('error_user_connected', handleSuccessOrError);
+    socketContext.on('success_user_connected', handleSuccessOrError);
+    socketContext.on('error_find_matching', handleSuccessOrError);
+    socketContext.on('success_find_matching', handleSuccessOrError);
+    socketContext.on('error_stop_matching', handleSuccessOrError);
+    socketContext.on('success_stop_matching', handleSuccessOrError);
+    socketContext.on('match_found', handleMatchFound);
 
-    socketContext.on('success_user_connected', (msg : string) => {
-      if(EnvConfig.DEBUG) console.log(msg);
-    });
-  }, [])
-
+    return () => {
+      if(pollingTimeout) clearTimeout(pollingTimeout.current);
+    }
+  }, []);
+  
   /* Handlers */
 
-  function clickedFindDuo() : void {
+  function handleSuccessOrError(res : any) : void{
+    if(EnvConfig.DEBUG) console.log(res);
+  }
+
+  async function handleMatchFound(res : IMatchFoundDTO) : Promise<void>{
+
+    // Store matched user in context
+    matchedUserContext.updateMatchedUser(res.user);
+
+    // Stop timeout
+    if(pollingTimeout) clearTimeout(pollingTimeout.current);
+
+     setDuoFound(true);
+  }
+
+  async function clickedFindDuo() : Promise<void> {
     setFindDuo(true);
+    
+    socketContext.emit('find_matching', {userId:loggedUserContext?.loggedUser?._id, filters:filterContext.filters} as IFindMatchDTO);
+
+    pollingTimeout.current = setTimeout(() => {            
+      toast.error("Could not find a match. Please try again later!");
+      setFindDuo(false);
+      socketContext.emit('stop_matching', loggedUserContext?.loggedUser?._id);
+    }, 300000); // 5 mins
   }
 
   function clickedCancel() : void {
     setFindDuo(false);
+    if(pollingTimeout) clearTimeout(pollingTimeout.current);
+    socketContext.emit('stop_matching', loggedUserContext?.loggedUser?._id);
   }
 
   /* Helper Functions */
@@ -55,7 +94,8 @@ export default function Landing(props: any) {
     );
   }
 
-  return (
+  return (<>
+    <CustomToast></CustomToast>
     <LandingPage>
       <Nav>
         <Logo>
@@ -63,13 +103,13 @@ export default function Landing(props: any) {
           <h1 id="duofinder">DUOFINDER</h1>
         </Logo>
         <User>
-          <p id="username">{props.username}</p>
-          <img id="profilePic" src={playerIconSrc} alt="Player Icon"></img>
+          <p id="username">{Micellaneous.toTitleCase(loggedUserContext?.loggedUser?.displayName) ?? "<username>"}</p>
+          <img id="profilePic" src={loggedUserContext?.loggedUser?.avatarImage} alt="Player Icon"></img>
         </User>
       </Nav>
       <LandingContent>
         <Container>
-          <LandingCard findDuo={findDuo} duoFound={duoFound} imgSrc={playerIconSrc}/>
+          <LandingCard findDuo={findDuo} duoFound={duoFound} imgSrc={loggedUserContext?.loggedUser?.avatarImage}/>
           <ButtonContainer>
             <div>
               <ButtonImages src="./images/general/filter.png"></ButtonImages>
@@ -84,7 +124,7 @@ export default function Landing(props: any) {
         </Container>
       </LandingContent>
     </LandingPage>
-  );
+  </>);
 }
 
 
