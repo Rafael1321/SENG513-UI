@@ -31,6 +31,8 @@ export interface IUser{
     _id : string;
     riotId : string;
     displayName : string;
+    gameName : string;
+    tagLine : string;
     email : string;
     avatarImage : string;
     rank : number[];

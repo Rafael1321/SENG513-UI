@@ -6,13 +6,23 @@ import { useState, useEffect, useContext } from "react";
 import { SocketContext } from "../../contexts/SocketContext";
 import { LoggedUserContext } from "../../contexts/LoggedUserContext";
 import { Link } from "react-router-dom";
-import { LocalSee } from "@mui/icons-material";
+import { IUser } from '../../models/AuthModels';
+
 
 interface Message {
-  type: string;
-  text: string;
-  userIcon: string;
+  type: string,
+  text: string,
+  userIcon: string
 }
+
+// interface User {
+//   _id: string,
+//   riotId: string,
+//   displayName: string,
+//   gameName: string,
+//   tagLine: string,
+//   avatarImage: string
+// }
 
 export default function ChatBody() {
   //contexts
@@ -73,7 +83,10 @@ export default function ChatBody() {
     sendMsg(userIcon, text);
   }
 
-  function sendContactInfo(riotid: string) {}
+  function sendContactInfo(user : IUser) {
+    const contactMsg = "You wanna play? Let's play! Add me on Valorant! "+user.gameName+"#"+user.tagLine
+    sendMsg(user.avatarImage,contactMsg)
+  }
 
   return (
     <Wrapper>
@@ -87,7 +100,6 @@ export default function ChatBody() {
             <MessageContainer
               msgType={msg.type}
               senderImg={"/images/icons/" + msg.userIcon}
-              // {msg.user.avatarImage}
               text={msg.text}
             />
           ))}
@@ -123,7 +135,7 @@ export default function ChatBody() {
         />
         <BtnContainer>
           <MobileTimer>🕐 You have {timer} minutes remaining!</MobileTimer>
-          <Btn btnColor="#66c2a9">
+          <Btn onClick={ () => sendContactInfo(loggedUserContext.loggedUser)} btnColor="#66c2a9">
             <BtnIcon imgSrc="/Icons/share.png" />
             SHARE CONTACT
           </Btn>
