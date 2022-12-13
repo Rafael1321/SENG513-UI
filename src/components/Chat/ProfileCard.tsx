@@ -17,7 +17,7 @@ export default function ProfileCard(
   props: Props
 ): React.ReactElement<Props, any> {
   return (
-    <Wrapper isMain={props.isMain}>
+    <Wrapper>
       <Icon imgSrc={props.imgSrc} />
       <Username>{props.userName}</Username>
       <BasicInfo>{props.basicInfo}</BasicInfo>
@@ -39,7 +39,7 @@ export default function ProfileCard(
   );
 }
 
-const Wrapper = styled("div")<{ isMain?: boolean }>`
+const Wrapper = styled("div")`
   background-color: #282828;
   margin: 10px;
   width: 20vw;
@@ -52,11 +52,6 @@ const Wrapper = styled("div")<{ isMain?: boolean }>`
   flex-direction: column;
   overflow: scroll;
   justify-content: center;
-  -ms-overflow-style: none; /* Internet Explorer 10+ */
-  scrollbar-width: none; /* Firefox */
-  ::-webkit-scrollbar {
-    display: none;
-  }
   @media all and (max-width: 1400px) {
     margin-left: auto;
     margin-right: auto;
@@ -66,8 +61,7 @@ const Wrapper = styled("div")<{ isMain?: boolean }>`
     max-width: 90vw;
     height: 13vh;
     padding: 2vw;
-    filter: ${(props) =>
-      props.isMain ? "drop-shadow(0px 0px 5px #66c2a9)" : "none"};
+    filter: drop-shadow(0px 0px 5px #66c2a9);
     max-height: 200px;
     border-radius: 20px;
   }
