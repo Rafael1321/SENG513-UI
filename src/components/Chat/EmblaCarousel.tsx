@@ -1,12 +1,10 @@
 import React, { useState, useEffect, useCallback, useContext } from "react";
 import useEmblaCarousel from "embla-carousel-react";
-import { mediaByIndex } from "../../media";
 import "./embla.css";
 import styled from "styled-components/macro";
 import HistoryCard from "./HistoryCard";
 import { Chat } from "./ChatHistory";
 import { WidthContext } from "./ChatHistory";
-import Button from "../Shared/Button";
 
 import ProfileCardUpdated from "./ProfileCardUpdated";
 
@@ -19,7 +17,6 @@ export const EmblaCarousel = (props: Props) => {
     const [viewportRef, embla] = useEmblaCarousel({
         align: "center",
         skipSnaps: false,
-        draggable: true,
     });
     const [prevBtnEnabled, setPrevBtnEnabled] = useState(false);
     const [nextBtnEnabled, setNextBtnEnabled] = useState(false);
@@ -123,6 +120,7 @@ const Container = styled.div`
     height: 100%;
     display: flex;
     align-items: center;
+    justify-content: center;
 
     @media all and (max-width: 500px) {
         height: 90%;
@@ -159,13 +157,6 @@ const ProfileCardWrapper = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: purple;
-`;
-
-const RatePlayerWrapper = styled.div`
-    position: absolute;
-
-    top: 0;
 `;
 
 // It's parent has no actual width

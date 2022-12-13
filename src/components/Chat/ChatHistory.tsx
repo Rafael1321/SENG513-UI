@@ -69,19 +69,21 @@ function ChatHistory(props: Props): React.ReactElement {
                         <HistorySection>
                             <Menu>
                                 {width > breakpoint && <Button url={"Images/back.png"} text={"BACK"} width={"160px"} height={"70px"} />}
-                                <SearchContainer>
-                                    <SearchIconWrapper>
-                                        <SearchIcon url={"Icons/search.png"} />
-                                    </SearchIconWrapper>
-                                    <SearchInput placeholder="Search Message History" />
-                                </SearchContainer>
+                                {width > breakpoint && (
+                                    <SearchContainer>
+                                        <SearchIconWrapper>
+                                            <SearchIcon url={"Icons/search.png"} />
+                                        </SearchIconWrapper>
+                                        <SearchInput placeholder="Search Message History" />
+                                    </SearchContainer>
+                                )}
                             </Menu>
 
                             <PlayerCardsWrapper>
                                 <EmblaCarousel slides={[...slides]} history={history} />
                                 {width < breakpoint && (
                                     <RatePlayerWrapper>
-                                        <Button text={"RATE PLAYER"} width={"100%"} height={"100%"} />
+                                        <Button text={"RATE"} width={"100%"} height={"100%"} />
                                     </RatePlayerWrapper>
                                 )}
                             </PlayerCardsWrapper>
@@ -196,10 +198,10 @@ const RatePlayerWrapper = styled.div`
     width: 100%;
     margin-bottom: 4%;
 
-    @media all and (max-width: 1000px) {
+    @media all and (max-width: 500px) {
         position: relative;
         width: 20%;
-        height: 10%;
+        height: 20%;
     }
 `;
 
