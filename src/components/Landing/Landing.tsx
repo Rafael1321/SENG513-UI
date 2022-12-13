@@ -21,7 +21,7 @@ export default function Landing(props: any) {
   const socketContext = useContext(SocketContext);
 
   useEffect(() => {
-    socketContext.emit('user_connected', loggedUserContext.loggedUser._id);
+    socketContext.emit('user_connected', loggedUserContext?.loggedUser?._id);
 
     socketContext.on('error_user_connected', (msg : string) => {
       if(EnvConfig.DEBUG) console.log(msg);
