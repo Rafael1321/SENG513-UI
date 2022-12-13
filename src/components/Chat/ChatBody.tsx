@@ -4,18 +4,15 @@ import ProfileCard from "./ProfileCard";
 import MessageContainer from "./MessageContainer";
 import { useState, useEffect, useContext } from "react";
 import { SocketContext } from "../../contexts/SocketContext";
-import { LoggedUserContext } from '../../contexts/LoggedUserContext';
+import { LoggedUserContext } from "../../contexts/LoggedUserContext";
 import { Link } from "react-router-dom";
 import { LocalSee } from "@mui/icons-material";
 
- 
-
-interface Message{
-  type: string,
-  text: string,
-  user: object
+interface Message {
+  type: string;
+  text: string;
+  userIcon: string;
 }
-
 
 export default function ChatBody() {
   //contexts
@@ -25,41 +22,40 @@ export default function ChatBody() {
   // localStorage.setItem("loggedUser",loggedUserContext);
   // console.log(loggedUserContext)
 
-  const [outgoingMsgText, setOutText] = useState("")
-  const [incomingMsgText, setInMsg] = useState("")
-  const [messages, setMessages] = useState ([])
+  const [outgoingMsgText, setOutText] = useState("");
+  const [incomingMsgText, setInMsg] = useState("");
+  const [messages, setMessages] = useState([]);
 
-  function updateMessages(msg : Message, type : string){
-    const newMsgs = [...messages, { type: type ,text: msg.text, user: msg.user}]
-        setMessages(newMsgs)
+  function updateMessages(msg: Message, type: string) {
+    const newMsgs = [
+      ...messages,
+      { type: type, text: msg.text, userIcon: msg.userIcon },
+    ];
+    setMessages(newMsgs);
   }
 
-  const sendMsg = (userObject : object , text : string) => {
+  const sendMsg = (userIcon: string, text: string) => {
     const msg = {
       type: "sent",
       text: text,
-      user: userObject
-    }
-    updateMessages(msg, "sent")
-    socket.emit("send_msg", msg)
+      userIcon: userIcon,
+    };
+    updateMessages(msg, "sent");
+    socket.emit("send_msg", msg);
+    // console.log(msg)
+  };
 
-  }
-
- 
-
-  useEffect( () => {
+  useEffect(() => {
     socket.on("receive_msg", (msgData) => {
-        setInMsg(msgData);
-        console.log(msgData)
-        updateMessages(msgData, "received")
-        
-      })
-    }, [socket,messages]);
+      setInMsg(msgData);
+      updateMessages(msgData, "received");
+    });
+  }, [socket, messages]);
 
-    // useEffect(() => {
-    //   console.log(messages);
-    // }, [messages])
-    
+  // useEffect(() => {
+  //   console.log(messages);
+  // }, [messages])
+
   const [timer, setTimer] = useState(10);
 
   //   const interval = setInterval(() => {
@@ -71,47 +67,48 @@ export default function ChatBody() {
   //     }
   //   }, 60000);
 
-  function handleClick(userObject : object , text : string){
-    console.log("msg was sent")
-    sendMsg(userObject,text)
-
+  function handleClick(userIcon: string, text: string) {
+    console.log("msg was sent");
+    console.log(userIcon);
+    sendMsg(userIcon, text);
   }
+
+  function sendContactInfo(riotid: string) {}
 
   return (
     <Wrapper>
       <Link to={"/landing"}>
-      <Exit />
+        <Exit />
       </Link>
       <LeftColContainer>
         <Timer> 🕐 You have {timer} minutes remaining!</Timer>
         <ChatBox>
-
-          {messages.map((msg : Message)=> (
+          {messages.map((msg: Message) => (
             <MessageContainer
-            msgType={msg.type}
-            senderImg="/assets/jettFurry.png"
-            // {msg.user.avatarImage}
-            text = {msg.text}
+              msgType={msg.type}
+              senderImg={"/images/icons/" + msg.userIcon}
+              // {msg.user.avatarImage}
+              text={msg.text}
             />
           ))}
-          {/* <MessageContainer
-            msgType="received"
-            senderImg="/assets/jettFurry.png"
-            text="Yo 👋, yo 👋, yo 👋! 1-4-8-3 to the 3 ⭕ℹ🕘 to the 6 🕕 to the 9 💯. representin' the ABQ. What up ⬆, playa 😦🐶? Leave 🍃 at the tone 🍺."
-          />
-          <MessageContainer
-            msgType="recieved"
-            senderImg="/assets/cypher.png"
-            text={loggedUserContext.loggedUser.displayName} //pp 
-          /> */}
-
         </ChatBox>
-        
+
         <ChatInputContainer>
-          <ChatInput placeholder="Message" onChange={(e)=> setOutText((e.target as HTMLInputElement).value)}></ChatInput>
-          <ChatBtn onClick={() => handleClick(loggedUserContext,outgoingMsgText)}>SEND</ChatBtn>
+          <ChatInput
+            placeholder="Message"
+            onChange={(e) => setOutText((e.target as HTMLInputElement).value)}
+          ></ChatInput>
+          <ChatBtn
+            onClick={() =>
+              handleClick(
+                loggedUserContext.loggedUser.avatarImage,
+                outgoingMsgText
+              )
+            }
+          >
+            SEND
+          </ChatBtn>
         </ChatInputContainer>
-      
       </LeftColContainer>
       <RightColContainer>
         <TopText>You're chatting with:</TopText>
@@ -127,11 +124,11 @@ export default function ChatBody() {
         <BtnContainer>
           <MobileTimer>🕐 You have {timer} minutes remaining!</MobileTimer>
           <Btn btnColor="#66c2a9">
-          <BtnIcon imgSrc="/Icons/share.png"/>
-
-            SHARE CONTACT</Btn>
+            <BtnIcon imgSrc="/Icons/share.png" />
+            SHARE CONTACT
+          </Btn>
           <Btn btnColor="#f94b4b">
-            <BtnIcon imgSrc="/Icons/gonext.png"/>
+            <BtnIcon imgSrc="/Icons/gonext.png" />
             GO NEXT
           </Btn>
         </BtnContainer>
@@ -141,9 +138,10 @@ export default function ChatBody() {
 }
 
 const Wrapper = styled.div`
-  height: 100vh;
+  // height: 100vh;
   width: 100vw;
   display: flex;
+  paddint: 5px;
   flex-wrap: wrap;
   justify-content: center;
 `;
@@ -225,10 +223,10 @@ const BtnContainer = styled.div`
 
 const BtnIcon = styled.img<{ imgSrc: string }>`
   content: url(${(props) => props.imgSrc});
-  width: 5vw;
-  max-width: 30px;
-  height: 5vw;
-  max-height: 30px;
+  width: 4vw;
+  max-width: 20px;
+  height: 4vw;
+  max-height: 20px;
   justify-content: center;
   margin-left: auto;
   margin-right: auto;
@@ -245,7 +243,7 @@ const Btn = styled.div<{ btnColor: string }>`
   justify-content: center;
   margin: 20px;
   padding: 0.5%;
-  margin-top: 20px;
+
   cursor: pointer;
   transition: 0.3s;
   display: flex;
@@ -267,7 +265,7 @@ const ChatInputContainer = styled.div`
   background-color: #182828;
   width: 100%;
   height: 6vh;
-  margin-top: 30px;
+  margin-top: 20px;
   border-radius: 20px;
   color: #dedbdb;
   display: flex;
@@ -310,7 +308,7 @@ const ChatInput = styled.input`
 `;
 
 const ChatBtn = styled.button.attrs({
-  type: 'submit'
+  type: "submit",
 })`
   text-align: center;
   color: #ffffff;
@@ -328,6 +326,7 @@ const ChatBtn = styled.button.attrs({
   @media all and (max-width: 1400px) {
     margin-top: 0;
     padding: 1vh;
+    font-size: 80%;
   }
 `;
 
@@ -347,10 +346,11 @@ const ChatBox = styled.div`
   justify-content: start;
   @media all and (max-width: 1400px) {
     width: 90vw;
-    height: 55vh;
+    height: 50vh;
     padding: 1vh;
     order: 2;
+    padding: 0;
     border-radius: 20px;
-    background-color: #181818;
+    background: none;
   }
 `;
