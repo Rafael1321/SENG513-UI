@@ -54,7 +54,7 @@ function Profile() {
 
   const [bio, setBio] = useState("There's nothing here! Edit your profile to liven things up!");
   const [username, setUsername] = useState("Pee Man The OG");
-  
+
   // To be used for editing user info, init false
   const [generalEdit, setGeneralEdit] = useState(false);
 
@@ -124,32 +124,27 @@ function Profile() {
     // You can do some fancy checks here if you'd like, lots of work though
 
     updateBackend();
-
   }, [displayName]);
 
   return (
-    
     <GridContainer>
-      
       <ProfileContainer>
-      
         <Pfp genE={generalEdit} src={icon} onClick={() => changePfp()}></Pfp>
 
         <div>
-          <Input 
+          <Input
             genE={generalEdit}
             placeholder={username}
             autoComplete={"off"}
             maxLength={15}
             // minLength={3}
-            disabled={!generalEdit}>
-          </Input>
+            disabled={!generalEdit}
+          ></Input>
 
           <Edit genE={generalEdit} src="./images/general/edit.png" onClick={() => edit()}></Edit>
         </div>
-        
-        <div>
 
+        <div>
           <Drops genE={generalEdit} disabled={!generalEdit}>
             <option>Male</option>
             <option>Female</option>
@@ -176,13 +171,9 @@ function Profile() {
           <option value={1}>Casual</option>
         </Drops> */}
         <p>Competitive</p>
-
-
       </ProfileContainer>
-      
 
       <BioContainer>
-        
         {/* <div> */}
         <h2>ABOUT ME</h2>
         <TextArea genE={generalEdit} autoComplete="off" placeholder={bio} disabled={!generalEdit} rows={6}></TextArea>
@@ -205,8 +196,7 @@ function Profile() {
 
 export default Profile;
 
-
-// STYLING 
+// STYLING
 const GridContainer = styled.div`
   display: flex;
   flex-direction: row;
@@ -239,11 +229,10 @@ const RankContainer = styled.div`
   /* margin-right: 10%; */
 `;
 
-
 const Drops = styled.select<{ genE: boolean }>`
-  background-color: ${(props) => props.genE ? "#181818" : "#282828"};
-  /* -webkit-appearance: ${(props) => props.genE ? "" : "none"}; */
-  /* -moz-appearance: ${(props) => props.genE ? "" : "none"}; */
+  background-color: ${(props) => (props.genE ? "#181818" : "#282828")};
+  /* -webkit-appearance: ${(props) => (props.genE ? "" : "none")}; */
+  /* -moz-appearance: ${(props) => (props.genE ? "" : "none")}; */
   border: 0px;
   border-radius: 3px;
   color: white;
@@ -254,7 +243,7 @@ const Drops = styled.select<{ genE: boolean }>`
 `;
 
 const Age = styled.input<{ genE: boolean }>`
-  background-color: ${(props) => props.genE ? "#181818" : "#282828"};
+  background-color: ${(props) => (props.genE ? "#181818" : "#282828")};
   border: 0px;
   border-radius: 3px;
   color: white;
@@ -287,7 +276,7 @@ const Input = styled.input<{ genE: boolean }>`
 `;
 
 const TextArea = styled.textarea<{ genE: boolean }>`
-  background-color: ${(props) => props.genE ? "#181818" : "#282828"};
+  background-color: ${(props) => (props.genE ? "#181818" : "#282828")};
   color: white;
   width: 80%;
   height: 50%;
@@ -306,8 +295,8 @@ const Display = styled.p`
   background-color: #282828;
 `;
 
-const Edit = styled.img<{ genE: boolean}>`
-  filter: ${(props) => props.genE ? "drop-shadow(2px 2px 10px red) invert()" : "invert()"};
+const Edit = styled.img<{ genE: boolean }>`
+  filter: ${(props) => (props.genE ? "drop-shadow(2px 2px 10px red) invert()" : "invert()")};
   width: 6%;
   margin-left: 5px;
   :hover {
@@ -317,7 +306,7 @@ const Edit = styled.img<{ genE: boolean}>`
 `;
 
 const Pfp = styled.img<{ genE: boolean }>`
-  filter: ${(props) => props.genE ? "drop-shadow(1px 1px 8px #66c2a9) brightness(150%)" : ""};
+  filter: ${(props) => (props.genE ? "drop-shadow(1px 1px 8px #66c2a9) brightness(150%)" : "")};
   width: 50%;
   border: 7px solid #66c2a9;
   border-radius: 50%;
