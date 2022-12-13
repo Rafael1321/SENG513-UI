@@ -14,7 +14,4 @@ export class ApiConfig{
     /* Filters */
     public static upsertFiltersRoute = () => this.baseRoute + `/filters`;
     public static retrieveFiltersRoute = (retrieveDTO : IRetrieveDTO) => this.baseRoute + `/filters/${retrieveDTO.userId}`;
-
-    /* Matching */ 
-    public static findMatchRoute = () => this.baseRoute + `/matchings`
 }

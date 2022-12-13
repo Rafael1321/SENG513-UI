@@ -1,7 +1,6 @@
 import * as React from "react";
 import styled from "styled-components";
 import { useState, useEffect, useContext } from "react";
-
 import LandingCard from "./LandingCard";
 import { LoggedUserContext } from '../../contexts/LoggedUserContext';
 import { SocketContext } from '../../contexts/SocketContext';
@@ -10,12 +9,11 @@ import { Link } from "react-router-dom";
 import { MatchedUserContext } from "../../contexts/MatchedUserContext";
 import { Micellaneous } from "../../util/Micellaneous";
 import { CustomToast } from "../Shared/CustomToast";
-import { AuthService, IAuthResponse } from "../../services/AuthService";
-import { IUser } from "../../models/AuthModels";
-import { IMatchingResponse, MatchingService } from "../../services/MatchingService";
 import { FilterContext } from "../../contexts/FilterContext";
+import { toast } from "react-toastify";
+import { IMatchFoundDTO, IFindMatchDTO } from '../../models/MatchingModels';
 
-export default function Landing(props: any) {
+export default function Landing() {
   
   // Constants
   const playerIconSrc = "/Images/Icons/Astra_icon.webp";
@@ -25,7 +23,6 @@ export default function Landing(props: any) {
   const [findDuo, setFindDuo] = useState<boolean>(false);
 
   // Refs
-  const pollingInterval = React.useRef<NodeJS.Timer>(null);
   const pollingTimeout = React.useRef<NodeJS.Timeout>(null);
 
   // Contexts
@@ -33,14 +30,6 @@ export default function Landing(props: any) {
   const matchedUserContext = useContext(MatchedUserContext);
   const filterContext = useContext(FilterContext);
   const socketContext = useContext(SocketContext);
-
-  // Callback to poll api for a match
-  const pollFindMatch = React.useCallback(async () => {
-    const matchingResponse : IMatchingResponse = await MatchingService.findMatch({userId:loggedUserContext?.loggedUser?._id, filters:filterContext?.filters});
-    if(matchingResponse && matchingResponse.statusCode === 200){
-      matchedUserContext.updateMatchedUser(matchingResponse.data as IUser);
-    }
-  }, []);
 
   // Use Effects 
 
@@ -58,74 +47,41 @@ export default function Landing(props: any) {
 
     return () => {
       if(pollingTimeout) clearTimeout(pollingTimeout.current);
-      if(pollingInterval) clearInterval(pollingInterval.current);
     }
   }, []);
   
-  React.useEffect(() => {
-    if(matchedUserContext.matchedUser){
-      // Notify other user of the match
-      socketContext.emit('match_found', loggedUserContext?.loggedUser?._id, matchedUserContext?.matchedUser?._id);
-
-      // set match found 
-      setDuoFound(true);
-    }
-  }, [matchedUserContext]);
-
   /* Handlers */
 
   function handleSuccessOrError(res : any) : void{
     if(EnvConfig.DEBUG) console.log(res);
   }
 
-  async function handleMatchFound(res : any) : Promise<void>{
-
-    if(matchedUserContext) return;
-
-    const matchedWithId : string = res.matchedWithId;
-
-    // Request a info of specified user from api 
-    const authResponse : IAuthResponse = await AuthService.find(matchedWithId);
-    
-    if(authResponse.statusCode !== 200){
-      toast.error(authResponse.data as string)
-      setFindDuo(false);
-      socketContext.emit('stop_matching', loggedUserContext?.loggedUser?._id);
-      return;
-    }
+  async function handleMatchFound(res : IMatchFoundDTO) : Promise<void>{
 
     // Store matched user in context
-    matchedUserContext.updateMatchedUser(authResponse.data as IUser);
+    matchedUserContext.updateMatchedUser(res.user);
 
-    // Stop polling and timeout
+    // Stop timeout
     if(pollingTimeout) clearTimeout(pollingTimeout.current);
-    if(pollingInterval) clearInterval(pollingInterval.current);
-    
-    setDuoFound(true);
+
+     setDuoFound(true);
   }
 
   async function clickedFindDuo() : Promise<void> {
     setFindDuo(true);
     
-    // Sets user online 
-    socketContext.emit('find_matching', loggedUserContext?.loggedUser?._id);
+    socketContext.emit('find_matching', {userId:loggedUserContext?.loggedUser?._id, filters:filterContext.filters} as IFindMatchDTO);
 
-    // Attemp to find a match every second
-    pollingInterval.current = setInterval(pollFindMatch, 1000);
-
-    // Set a timeout of five minutes 
     pollingTimeout.current = setTimeout(() => {            
       toast.error("Could not find a match. Please try again later!");
       setFindDuo(false);
       socketContext.emit('stop_matching', loggedUserContext?.loggedUser?._id);
-      clearInterval(pollingInterval.current);
     }, 300000); // 5 mins
   }
 
   function clickedCancel() : void {
     setFindDuo(false);
     if(pollingTimeout) clearTimeout(pollingTimeout.current);
-    if(pollingInterval) clearInterval(pollingInterval.current);
     socketContext.emit('stop_matching', loggedUserContext?.loggedUser?._id);
   }
 
