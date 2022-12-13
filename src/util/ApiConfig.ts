@@ -16,5 +16,5 @@ export class ApiConfig{
     public static retrieveFiltersRoute = (retrieveDTO : IRetrieveDTO) => this.baseRoute + `/filters/${retrieveDTO.userId}`;
 
     /* Matching */ 
-    public static findMatchRoute = (userId : string) => this.baseRoute + `/matchings/${userId}`
+    public static findMatchRoute = () => this.baseRoute + `/matchings`
 }

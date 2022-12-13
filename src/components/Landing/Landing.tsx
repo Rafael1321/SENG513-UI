@@ -12,8 +12,10 @@ import { MatchedUserContext } from '../../contexts/MatchedUserContext';
 import { toast } from "react-toastify";
 import { IUser } from "../../models/AuthModels";
 import { AuthService, IAuthResponse } from '../../services/AuthService';
+import { CustomToast } from "../Shared/CustomToast";
+import { Micellaneous } from "../../util/Micellaneous";
 
-export default function Landing(props: any) {
+export default function Landing() {
   
   // Constants
   const playerIconSrc = "/Images/Icons/Astra_icon.webp";
@@ -22,11 +24,25 @@ export default function Landing(props: any) {
   const [duoFound, setDuoFound] = useState<boolean>(false);
   const [findDuo, setFindDuo] = useState<boolean>(false);
 
+  // Refs
+  const pollingInterval = React.useRef<NodeJS.Timer>(null);
+  const pollingTimeout = React.useRef<NodeJS.Timeout>(null);
+
   // Contexts
   const loggedUserContext = useContext(LoggedUserContext);
   const matchedUserContext = useContext(MatchedUserContext);
   const filterContext = useContext(FilterContext);
   const socketContext = useContext(SocketContext);
+
+  // Callback to poll api for a match
+  const pollFindMatch = React.useCallback(async () => {
+    const matchingResponse : IMatchingResponse = await MatchingService.findMatch({userId:loggedUserContext?.loggedUser?._id, filters:filterContext?.filters});
+    if(matchingResponse && matchingResponse.statusCode === 200){
+      matchedUserContext.updateMatchedUser(matchingResponse.data as IUser);
+    }
+  }, []);
+
+  // Use Effects 
 
   useEffect(() => {
     socketContext.emit('user_connected', loggedUserContext?.loggedUser?._id);
@@ -39,14 +55,32 @@ export default function Landing(props: any) {
     socketContext.on('error_stop_matching', handleSuccessOrError);
     socketContext.on('success_stop_matching', handleSuccessOrError);
     socketContext.on('match_found', handleMatchFound);
+
+    return () => {
+      if(pollingTimeout) clearTimeout(pollingTimeout.current);
+      if(pollingInterval) clearInterval(pollingInterval.current);
+    }
   }, []);
+  
+  React.useEffect(() => {
+    if(matchedUserContext.matchedUser){
+      // Notify other user of the match
+      socketContext.emit('match_found', loggedUserContext?.loggedUser?._id, matchedUserContext?.matchedUser?._id);
+
+      // set match found 
+      setDuoFound(true);
+    }
+  }, [matchedUserContext]);
 
   /* Handlers */
+
   function handleSuccessOrError(res : any) : void{
     if(EnvConfig.DEBUG) console.log(res);
   }
 
   async function handleMatchFound(res : any) : Promise<void>{
+
+    if(matchedUserContext) return;
 
     const matchedWithId : string = res.matchedWithId;
 
@@ -63,37 +97,35 @@ export default function Landing(props: any) {
     // Store matched user in context
     matchedUserContext.updateMatchedUser(authResponse.data as IUser);
 
-    // set match found 
+    // Stop polling and timeout
+    if(pollingTimeout) clearTimeout(pollingTimeout.current);
+    if(pollingInterval) clearInterval(pollingInterval.current);
+    
     setDuoFound(true);
   }
 
   async function clickedFindDuo() : Promise<void> {
-    
     setFindDuo(true);
+    
+    // Sets user online 
     socketContext.emit('find_matching', loggedUserContext?.loggedUser?._id);
 
-    // Request a match from api 
-    const matchingResponse : IMatchingResponse = await MatchingService.findMatch({userId:loggedUserContext?.loggedUser?._id, filters:filterContext?.filters});
+    // Attemp to find a match every second
+    pollingInterval.current = setInterval(pollFindMatch, 1000);
 
-    if(matchingResponse.statusCode !== 200){
-      toast.error(matchingResponse.data as string)
+    // Set a timeout of five minutes 
+    pollingTimeout.current = setTimeout(() => {            
+      toast.error("Could not find a match. Please try again later!");
       setFindDuo(false);
       socketContext.emit('stop_matching', loggedUserContext?.loggedUser?._id);
-      return;
-    }
-
-    // Store matched user in context
-    matchedUserContext.updateMatchedUser(matchingResponse.data as IUser);
-
-    // Notify other user of the match
-    socketContext.emit('match_found', loggedUserContext?.loggedUser?._id, matchedUserContext?.matchedUser?._id);
-
-    // set match found 
-    setDuoFound(true);
+      clearInterval(pollingInterval.current);
+    }, 300000); // 5 mins
   }
 
   function clickedCancel() : void {
     setFindDuo(false);
+    if(pollingTimeout) clearTimeout(pollingTimeout.current);
+    if(pollingInterval) clearInterval(pollingInterval.current);
     socketContext.emit('stop_matching', loggedUserContext?.loggedUser?._id);
   }
 
@@ -111,6 +143,7 @@ export default function Landing(props: any) {
   }
 
   return (<>
+    <CustomToast></CustomToast>
     <LandingPage>
       <Nav>
         <Logo>
@@ -118,7 +151,7 @@ export default function Landing(props: any) {
           <h1 id="duofinder">DUOFINDER</h1>
         </Logo>
         <User>
-          <p id="username">{props.username}</p>
+          <p id="username">{Micellaneous.toTitleCase(loggedUserContext?.loggedUser?.displayName) ?? "<username>"}</p>
           <img id="profilePic" src={playerIconSrc} alt="Player Icon"></img>
         </User>
       </Nav>

@@ -19,7 +19,7 @@ function App() {
               <Route path="/" element={<Start formType={FormType.Registration}></Start>} />
               <Route path="/register" element={<Start formType={FormType.Registration}></Start>} />
               <Route path="/login" element={<Start formType={FormType.Login}></Start>} />
-              <Route path="/landing" element={<Landing username="VividEradicator"></Landing>}/>
+              <Route path="/landing" element={<Landing></Landing>}/>
             </Routes>
           </SocketContext.Provider>
           </MatchedUserProvider>

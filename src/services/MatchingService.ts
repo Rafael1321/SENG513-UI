@@ -11,7 +11,7 @@ export class MatchingService{
 
     public static findMatch = async (findMatchDTO : IFindMatchDTO) : Promise<IMatchingResponse> => {
         try{
-            let response = await axios({method: 'post', url: ApiConfig.findMatchRoute(findMatchDTO.userId), data: {filters:findMatchDTO.filters}});
+            let response = await axios({method: 'post', url: ApiConfig.findMatchRoute(), data: findMatchDTO});
             return {data:response?.data, statusCode:response?.status};
         }catch(err){
             return {data:err?.response?.data, statusCode:err?.response?.status};

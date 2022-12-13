@@ -39,19 +39,6 @@ export default function FindDuo(props: any) {
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
-    socketContext.emit('find_matching', loggedUserContext.loggedUser._id);
-
-    socketContext.on('error_find_matching',(msg : string) => {
-      if(EnvConfig.DEBUG) console.log(msg);
-    });
-
-    socketContext.on('success_find_matching', (msg : string) => {
-      if(EnvConfig.DEBUG) console.log(msg);
-    });
-
-  }, []);
-
-  useEffect(() => {
     setTimeout(changeAgent, 750);
   });
 
