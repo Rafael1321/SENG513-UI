@@ -18,6 +18,7 @@ export const EmblaCarousel = (props: Props) => {
   const [viewportRef, embla] = useEmblaCarousel({
     align: "center",
     skipSnaps: false,
+    draggable: false,
   });
   const [prevBtnEnabled, setPrevBtnEnabled] = useState(false);
   const [nextBtnEnabled, setNextBtnEnabled] = useState(false);
