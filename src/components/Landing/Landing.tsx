@@ -11,6 +11,7 @@ import { CustomToast } from "../Shared/CustomToast";
 import { FilterContext } from "../../contexts/FilterContext";
 import { toast } from "react-toastify";
 import { IMatchFoundDTO, IFindMatchDTO } from '../../models/MatchingModels';
+import { Link } from "react-router-dom";
 import { FilterPopup } from "../Shared/FilterPopup";
 
 export default function Landing() {
@@ -124,7 +125,7 @@ export default function Landing() {
             </div>
             <div>
               <ButtonImages src="./images/general/history.png"></ButtonImages>
-              <Button>CHAT HISTORY</Button>
+              <Link style={{color: "#ffffff", textDecoration: "none", fontWeight: "600"}} to={"/history"}>CHAT HISTORY</Link>
             </div>
           </ButtonContainer>
           {getButton()}
