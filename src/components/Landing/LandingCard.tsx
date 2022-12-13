@@ -5,13 +5,12 @@ import FindDuo from "./FindDuo";
 import MatchFound from "./MatchFound";
 
 type Props = {
-  findDuo : boolean,
-  duoFound : boolean,
-  imgSrc : string
-}
+  findDuo: boolean;
+  duoFound: boolean;
+  imgSrc: string;
+};
 
 export default function LandingCard(props: Props) {
-  
   /* Helper Functions */
 
   const displayCard = () => {
