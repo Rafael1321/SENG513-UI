@@ -105,7 +105,7 @@ export default function ChatBody() {
           {messages.map((msg: Message) => (
             <MessageContainer
               msgType={msg.type}
-              senderImg={"/images/icons/" + msg.userIcon}
+              senderImg={msg.userIcon}
               text={msg.text}
             />
           ))}
@@ -131,7 +131,7 @@ export default function ChatBody() {
       <RightColContainer>
         <TopText>You're chatting with:</TopText>
         <ProfileCard
-          imgSrc={(matchedUser.matchedUser == null) ? "/images/icons/Jett_icon.webp" : "/images/icons/"+matchedUser.matchedUser.avatarImage}
+          imgSrc={(matchedUser.matchedUser == null) ? "/images/icons/Jett_icon.webp" : matchedUser.matchedUser.avatarImage}
           userName={(matchedUser.matchedUser == null) ? "HectorSalamanca" : matchedUser.matchedUser.displayName}
           basicInfo={(matchedUser.matchedUser == null) ? "22F, US West" : matchedUser.matchedUser.age+" "+matchedUser.matchedUser.gender}
           userType={(matchedUser.matchedUser == null) ? 0 : matchedUser.matchedUser.playerType}
