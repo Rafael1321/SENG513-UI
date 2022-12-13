@@ -3,7 +3,6 @@ import styled, { keyframes } from "styled-components";
 import { useState, useEffect } from "react";
 import { SocketContext } from "../../contexts/SocketContext";
 import { LoggedUserContext } from '../../contexts/LoggedUserContext';
-import { EnvConfig } from '../../util/EnvConfig';
 
 export default function FindDuo(props: any) {
   

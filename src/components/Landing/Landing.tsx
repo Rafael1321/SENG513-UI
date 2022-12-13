@@ -6,16 +6,16 @@ import LandingCard from "./LandingCard";
 import { LoggedUserContext } from '../../contexts/LoggedUserContext';
 import { SocketContext } from '../../contexts/SocketContext';
 import { EnvConfig } from '../../util/EnvConfig';
-import { IMatchingResponse, MatchingService } from "../../services/MatchingService";
-import { FilterContext } from '../../contexts/FilterContext';
-import { MatchedUserContext } from '../../contexts/MatchedUserContext';
-import { toast } from "react-toastify";
-import { IUser } from "../../models/AuthModels";
-import { AuthService, IAuthResponse } from '../../services/AuthService';
-import { CustomToast } from "../Shared/CustomToast";
+import { Link } from "react-router-dom";
+import { MatchedUserContext } from "../../contexts/MatchedUserContext";
 import { Micellaneous } from "../../util/Micellaneous";
+import { CustomToast } from "../Shared/CustomToast";
+import { AuthService, IAuthResponse } from "../../services/AuthService";
+import { IUser } from "../../models/AuthModels";
+import { IMatchingResponse, MatchingService } from "../../services/MatchingService";
+import { FilterContext } from "../../contexts/FilterContext";
 
-export default function Landing() {
+export default function Landing(props: any) {
   
   // Constants
   const playerIconSrc = "/Images/Icons/Astra_icon.webp";
@@ -150,6 +150,7 @@ export default function Landing() {
           <h2 id="valorant">VALORANT</h2>
           <h1 id="duofinder">DUOFINDER</h1>
         </Logo>
+        <Link to={"/chat"}>GO TO CHAT </Link>
         <User>
           <p id="username">{Micellaneous.toTitleCase(loggedUserContext?.loggedUser?.displayName) ?? "<username>"}</p>
           <img id="profilePic" src={playerIconSrc} alt="Player Icon"></img>
