@@ -10,13 +10,14 @@ interface Props {
   basicInfo?: string;
   userType: string;
   aboutMe?: string;
+  isMain?: boolean;
 }
 
 export default function ProfileCard(
   props: Props
 ): React.ReactElement<Props, any> {
   return (
-    <Wrapper>
+    <Wrapper isMain={props.isMain}>
       <Icon imgSrc={props.imgSrc} />
       <Username>{props.userName}</Username>
       <BasicInfo>{props.basicInfo}</BasicInfo>
@@ -38,7 +39,7 @@ export default function ProfileCard(
   );
 }
 
-const Wrapper = styled("div")`
+const Wrapper = styled("div")<{ isMain?: boolean }>`
   background-color: #282828;
   margin: 10px;
   width: 20vw;
@@ -49,7 +50,13 @@ const Wrapper = styled("div")`
   filter: drop-shadow(0px 0px 10px #66c2a9);
   display: flex;
   flex-direction: column;
+  overflow: scroll;
   justify-content: center;
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none; /* Firefox */
+  ::-webkit-scrollbar {
+    display: none;
+  }
   @media all and (max-width: 1400px) {
     margin-left: auto;
     margin-right: auto;
@@ -59,7 +66,8 @@ const Wrapper = styled("div")`
     max-width: 90vw;
     height: 13vh;
     padding: 2vw;
-    filter: drop-shadow(0px 0px 5px #66c2a9);
+    filter: ${(props) =>
+      props.isMain ? "drop-shadow(0px 0px 5px #66c2a9)" : "none"};
     max-height: 200px;
     border-radius: 20px;
   }
@@ -132,6 +140,11 @@ const AboutContainer = styled.div`
   overflow: scroll;
   margin-left: auto;
   margin-right: auto;
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none; /* Firefox */
+  ::-webkit-scrollbar {
+    display: none;
+  }
   @media all and (max-width: 1400px) {
     width: 40%;
     height: 90%;

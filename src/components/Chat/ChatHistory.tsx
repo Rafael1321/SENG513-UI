@@ -1,16 +1,11 @@
-import React, { useEffect } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import Button from "../Shared/Button";
 import HistoryCard from "./HistoryCard";
 import styled from "styled-components";
 import { EmblaCarousel } from "./EmblaCarousel";
+import ProfileCardUpdated from "./ProfileCardUpdated";
 
 type Props = {};
-
-enum HistoryCardSize {
-    One = "30%",
-    Two = "20%",
-    Three = "30%",
-}
 
 const SLIDE_COUNT = 5;
 const slides = Array.from(Array(SLIDE_COUNT).keys());
@@ -21,93 +16,142 @@ export type Chat = {
     username: string;
     profile_url: string;
     last_message: string;
-}
+};
+
+export const WidthContext = createContext<number>(1500);
 
 const history = [
     {
         key: 0,
         username: "VividEradicator",
         profile_url: "Images/astra.webp",
-        last_message: "Suggondeez"
+        last_message: "Suggondeez",
     },
     {
         key: 1,
         username: "IAMNOTAFURRY",
         profile_url: "Images/chamber.webp",
-        last_message: "Bro what are you even saying man?"   //Overflow
+        last_message: "Bro what are you even saying man?", //Overflow
     },
     {
         key: 2,
         username: "ArcticFox",
         profile_url: "Images/chamber.webp",
-        last_message: "I love chamber so much!"
+        last_message: "I love chamber so much!",
     },
     {
         key: 3,
         username: "Malder",
         profile_url: "Images/chamber.webp",
-        last_message: "Wtf is this carousel"
-    }
-]
+        last_message: "Wtf is this carousel",
+    },
+];
 
 function ChatHistory(props: Props): React.ReactElement {
+    const [width, setWidth] = useState(window.innerWidth);
+    const breakpoint = 1400;
+
+    useEffect(() => {
+        const handleResizeWindow = () => setWidth(window.innerWidth);
+
+        window.addEventListener("resize", handleResizeWindow);
+
+        return () => {
+            window.removeEventListener("resize", handleResizeWindow);
+        };
+    });
+
     return (
-        <Wrapper>
-            <HistorySection>
-                <Menu>
-                    <Button url={"Images/back.png"} text={"BACK"} width={"160px"} height={"70px"} />
-                    <SearchContainer>
-                        <SearchIconWrapper>
+        <>
+            <WidthContext.Provider value={width}>
+                <Wrapper>
+                    <HistorySection>
+                        <Menu>
+                            {width > breakpoint && <Button url={"Images/back.png"} text={"BACK"} width={"160px"} height={"70px"} />}
+                            {/* <SearchContainer>
+                            <SearchIconWrapper>
                             <SearchIcon url={"Icons/search.png"} />
-                        </SearchIconWrapper>
-                        <SearchInput placeholder="Search Message History" />
-                    </SearchContainer>
-                </Menu>
+                            </SearchIconWrapper>
+                            <SearchInput placeholder="Search Message History" />
+                        </SearchContainer> */}
+                        </Menu>
 
-                <HistoryContainer>
-                    <EmblaCarousel slides={[...slides]} history={history} />
-                    {/* <HistoryCard size={HistoryCardSize.Three} /> */}
-                    
+                        <HistoryContainer>
+                            <EmblaCarousel slides={[...slides]} history={history} />
+                            {/* {width < breakpoint && (
+                                <RatePlayerWrapper>
+                                    <Button text={"RATE PLAYER"} width={"100%"} height={"100%"} />
+                                </RatePlayerWrapper>
+                            )} */}
+                        </HistoryContainer>
 
+                        <ChatContainer>.</ChatContainer>
+                    </HistorySection>
 
-                    {/* <HistoryCard size={HistoryCardSize.Three} /> */}
-                </HistoryContainer>
+                    {width > breakpoint && (
+                        <InfoCardSection>
+                            <RatePlayerWrapper>
+                                <Button text={"RATE PLAYER"} width={"160px"} height={"70px"} />
+                            </RatePlayerWrapper>
 
-                <ChatContainer>.</ChatContainer>
-            </HistorySection>
-
-            <InfoCardSection></InfoCardSection>
-            {/* 
-
-                <div>hi</div>
-                <Button maxWidth={"210px"} height={"67px"} text={"RATE PLAYER"} /> */}
-        </Wrapper>
+                            <ProfileCardWrapper>
+                                <ProfileCardUpdated
+                                    imgSrc="Images/astra.webp"
+                                    userName="IAMNOTAFURRY"
+                                    chatRank="Images/chamber.webp"
+                                    userType="gamer"
+                                    valRank="Images/chamber.webp"
+                                    basicInfo="I am basic info"
+                                    aboutMe="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+                                ></ProfileCardUpdated>
+                            </ProfileCardWrapper>
+                        </InfoCardSection>
+                    )}
+                </Wrapper>
+            </WidthContext.Provider>
+        </>
     );
 }
 
-
 const Menu = styled.nav`
     position: relative;
-    height: 10%;
     width: 100%;
+    display: flex;
+    align-items: center;
+`;
+
+const RatePlayerWrapper = styled.div`
+    position: absolute;
+
+    top: 0;
+
+    @media all and (max-width: 1400px) {
+        position: relative;
+        width: 20%;
+        height: 10%;
+    }
+`;
+
+const ProfileCardWrapper = styled.div`
+    max-width: 500px;
 `;
 
 const HistorySection = styled.section`
     position: relative;
     display: flex;
     flex-direction: column;
-    justify-content: space-evenly;
+    justify-content: space-between;
     align-items: center;
-    max-width: 70%;
+    width: 70%;
     height: 100%;
     flex: 1;
 
-    // Padding grows inward.
-    * {
-        box-sizing: border-box;
-    }
+    width: 100%;
 
-    /* border: solid 1px white; */
+    @media all and (max-width: 1400px) {
+        height: 50%;
+        width: 100%;
+    }
 `;
 
 const InfoCardSection = styled.aside`
@@ -115,7 +159,12 @@ const InfoCardSection = styled.aside`
     width: 25%;
     height: 100%;
 
-    /* border: solid 1px white; */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    padding: 2%;
 `;
 
 const HistoryContainer = styled.div`
@@ -126,13 +175,24 @@ const HistoryContainer = styled.div`
     width: 100%;
     height: 30%;
 
+    @media all and (max-width: 1400px) {
+        height: 40%;
+        flex-direction: column;
+    }
+
+
+    @media all and (max-width: 500px) {
+        height: 20%;
+        flex-direction: column;
+    }
+
     /* border: red solid 1px; */
 `;
 
 const ChatContainer = styled.div`
     position: relative;
     width: 100%;
-    height: 50%;
+    height: 70%;
 
     padding: 5%;
     outline: 1px red;
@@ -143,6 +203,11 @@ const ChatContainer = styled.div`
     display: flex;
     justify-content: center;
     /* border: red solid 1px; */
+
+    @media all and (max-width: 500px) {
+        height: 80%;
+        flex-direction: column;
+    }
 `;
 
 const SearchContainer = styled.div`
@@ -199,26 +264,8 @@ const SearchIconWrapper = styled.div`
 const SearchIcon = styled.img<{ url: string }>`
     position: relative;
     height: 50%;
-    aspect-ratio: 1;
-
-    content: url(${(props) => props.url});
-`;
-
-const Wrapper = styled.main`
-    position: relative;
-    width: 100vw;
-    height: 100vh;
-    background: #1e1e1e;
-    padding: 2%;
-    box-sizing: border-box;
-
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
+    font-style: normal;
     & * {
-        font-family: "Arimo";
-        font-style: normal;
         font-weight: 700;
         font-size: 26px;
         line-height: 30px;
@@ -226,6 +273,31 @@ const Wrapper = styled.main`
 
         color: #ffffff;
     }
+    aspect-ratio: 1;
+
+    content: url(${(props) => props.url});
+`;
+
+const Wrapper = styled.main`
+    * {
+        box-sizing: border-box;
+    }
+
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    padding: 2%;
+    box-sizing: border-box;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    @media all and (max-width: 1400px) {
+        flex-direction: column-reverse;
+        padding: 5%;
+    }
+
+    font-family: "Arimo";
 `;
 
 export default ChatHistory;
