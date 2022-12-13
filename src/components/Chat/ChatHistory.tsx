@@ -3,7 +3,7 @@ import Button from "../Shared/Button";
 import HistoryCard from "./HistoryCard";
 import styled from "styled-components";
 import { EmblaCarousel } from "./EmblaCarousel";
-import ProfileCard from "./ProfileCard";
+import ProfileCardUpdated from "./ProfileCardUpdated";
 
 type Props = {};
 
@@ -78,6 +78,11 @@ function ChatHistory(props: Props): React.ReactElement {
 
                         <HistoryContainer>
                             <EmblaCarousel slides={[...slides]} history={history} />
+                            {/* {width < breakpoint && (
+                                <RatePlayerWrapper>
+                                    <Button text={"RATE PLAYER"} width={"100%"} height={"100%"} />
+                                </RatePlayerWrapper>
+                            )} */}
                         </HistoryContainer>
 
                         <ChatContainer>.</ChatContainer>
@@ -85,17 +90,21 @@ function ChatHistory(props: Props): React.ReactElement {
 
                     {width > breakpoint && (
                         <InfoCardSection>
-                            <Button text={"RATE PLAYER"} width={"160px"} height={"70px"} />
+                            <RatePlayerWrapper>
+                                <Button text={"RATE PLAYER"} width={"160px"} height={"70px"} />
+                            </RatePlayerWrapper>
 
-                            <ProfileCard
-                                imgSrc="Images/astra.webp"
-                                userName="IAMNOTAFURRY"
-                                chatRank="Images/chamber.webp"
-                                userType="gamer"
-                                valRank="Images/chamber.webp"
-                                basicInfo="I am basic info"
-                                aboutMe="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
-                            ></ProfileCard>
+                            <ProfileCardWrapper>
+                                <ProfileCardUpdated
+                                    imgSrc="Images/astra.webp"
+                                    userName="IAMNOTAFURRY"
+                                    chatRank="Images/chamber.webp"
+                                    userType="gamer"
+                                    valRank="Images/chamber.webp"
+                                    basicInfo="I am basic info"
+                                    aboutMe="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+                                ></ProfileCardUpdated>
+                            </ProfileCardWrapper>
                         </InfoCardSection>
                     )}
                 </Wrapper>
@@ -109,6 +118,22 @@ const Menu = styled.nav`
     width: 100%;
     display: flex;
     align-items: center;
+`;
+
+const RatePlayerWrapper = styled.div`
+    position: absolute;
+
+    top: 0;
+
+    @media all and (max-width: 1400px) {
+        position: relative;
+        width: 20%;
+        height: 10%;
+    }
+`;
+
+const ProfileCardWrapper = styled.div`
+    max-width: 500px;
 `;
 
 const HistorySection = styled.section`
@@ -136,8 +161,10 @@ const InfoCardSection = styled.aside`
 
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
+
+    padding: 2%;
 `;
 
 const HistoryContainer = styled.div`
@@ -147,6 +174,17 @@ const HistoryContainer = styled.div`
     position: relative;
     width: 100%;
     height: 30%;
+
+    @media all and (max-width: 1400px) {
+        height: 40%;
+        flex-direction: column;
+    }
+
+
+    @media all and (max-width: 500px) {
+        height: 20%;
+        flex-direction: column;
+    }
 
     /* border: red solid 1px; */
 `;
@@ -165,6 +203,11 @@ const ChatContainer = styled.div`
     display: flex;
     justify-content: center;
     /* border: red solid 1px; */
+
+    @media all and (max-width: 500px) {
+        height: 80%;
+        flex-direction: column;
+    }
 `;
 
 const SearchContainer = styled.div`

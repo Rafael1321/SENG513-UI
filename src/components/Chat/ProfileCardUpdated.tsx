@@ -13,7 +13,7 @@ interface Props {
     isMain?: boolean;
 }
 
-export default function ProfileCard(props: Props): React.ReactElement<Props, any> {
+export default function ProfileCardUpdated(props: Props): React.ReactElement<Props, any> {
     return (
         <Wrapper isMain={props.isMain}>
             <Icon imgSrc={props.imgSrc} />
@@ -38,16 +38,20 @@ export default function ProfileCard(props: Props): React.ReactElement<Props, any
 }
 
 const Wrapper = styled("div")<{ isMain?: boolean }>`
+    position: relative;
     background-color: #282828;
-    margin: 10px;
-    width: 20vw;
-    max-width: 400px;
-    height: 70vh;
-    padding: 5vh;
     border-radius: 44px;
     filter: drop-shadow(0px 0px 10px #66c2a9);
+    
+    aspect-ratio: 44/79;
+
+    padding: 5%;
+    
+    width: 100%;
+    
     display: flex;
     flex-direction: column;
+    
     overflow: scroll;
     justify-content: center;
     -ms-overflow-style: none; /* Internet Explorer 10+ */
@@ -55,22 +59,23 @@ const Wrapper = styled("div")<{ isMain?: boolean }>`
     ::-webkit-scrollbar {
         display: none;
     }
+    
     @media all and (max-width: 1400px) {
+        height: 100%;
+        width: 100%;
+
+        border-radius: 20px;
+        
         margin-left: auto;
         margin-right: auto;
+        padding: 2%;
+
         order: 1;
         flex-wrap: wrap;
-        width: 90vw;
-        max-width: 90vw;
-        height: 13vh;
-        padding: 2vw;
+
         filter: ${(props) => (props.isMain ? "drop-shadow(0px 0px 5px #66c2a9)" : "none")};
-        max-height: 200px;
-        border-radius: 20px;
     }
-    @media all and (max-height: 1000px) {
-        min-height: 10vw;
-    }
+
 `;
 
 const Icon = styled.img<{ imgSrc: string }>`
@@ -104,17 +109,19 @@ const BasicInfo = styled.p`
     }
 `;
 const Ranks = styled.div`
+    position: relative;
+    
     display: flex;
-    width: 60%;
+    justify-content: center;
+    gap: 10%;
+
+    width: 100%;
+
     margin-left: auto;
     margin-right: auto;
-    justify-content: space-between;
+    
     @media all and (max-width: 1400px) {
-        flex-direction: column;
         width: 10%;
-        justify-content: center;
-        margin-top: auto;
-        margin-bottom: auto;
     }
 `;
 const RankImg = styled.img<{ imgSrc: string }>`

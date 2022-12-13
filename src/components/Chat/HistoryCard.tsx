@@ -18,48 +18,19 @@ export default function HistoryCard(props: Props): React.ReactElement {
     // }, [props.width]);
 
     return (
-        <WrapperOuter>
-            <WrapperInner>
-                <Container isMain={props.isMain} zIndex={props.zIndex}>
-                    <UserInfoContainer>
-                        <ProfilePicture size={"100%"} url={props.url} showBorder={false} />
-                        <UsernameWrapper>
-                            <Username>{props.username}</Username>
-                        </UsernameWrapper>
-                    </UserInfoContainer>
-                    <MessagesWrapper>
-                        <Messages>{props.message}</Messages>
-                    </MessagesWrapper>
-                </Container>
-            </WrapperInner>
-        </WrapperOuter>
+        <Container isMain={props.isMain} zIndex={props.zIndex}>
+            <UserInfoContainer>
+                <ProfilePicture size={"100%"} url={props.url} showBorder={false} />
+                <UsernameWrapper>
+                    <Username>{props.username}</Username>
+                </UsernameWrapper>
+            </UserInfoContainer>
+            <MessagesWrapper>
+                <Messages>{props.message}</Messages>
+            </MessagesWrapper>
+        </Container>
     );
 }
-const WrapperOuter = styled.div`
-    position: relative;
-    min-width: 20%;
-    
-    /* This needs to be the same as the margin in .embla_container*/
-    padding-left: 1px;
-    height: 100%;
-
-    @media all and (max-width: 1400px) {
-        min-width: 70%;
-    }
-
-    @media all and (max-width: 500px) {
-        min-width: 100%;
-    }
-`;
-
-const WrapperInner = styled.div`
-    position: relative;
-    overflow: hidden;
-    height: 190px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-`;
 
 const Container = styled.div<{ isMain: boolean; zIndex: string }>`
     position: relative;

@@ -3,8 +3,8 @@ import styled from "styled-components";
 
 type Props = {
     text: string;
-    width: string;
-    height: string;
+    width?: string;
+    height?: string;
     url?: string;
 };
 
@@ -17,7 +17,7 @@ function Button(props: Props): React.ReactElement {
     );
 }
 
-const Wrapper = styled.div<{ width: string; height: string }>`
+const Wrapper = styled.div<{ width?: string; height?: string }>`
     display: flex;
     justify-content: space-evenly;
 
@@ -29,8 +29,10 @@ const Wrapper = styled.div<{ width: string; height: string }>`
     box-shadow: 0px 3px 3px -2px rgba(255, 255, 255, 0.35);
     border-radius: 10px;
 
+    aspect-ratio: 16/7;
     height: ${(props) => props.height};
     width: ${(props) => props.width};
+
 
     :hover {
         cursor: pointer;
@@ -57,13 +59,21 @@ const Text = styled.div`
     font-family: "Arimo";
     font-style: normal;
     font-weight: 700;
-    font-size: 26px;
-    line-height: 30px;
+    font-size: 1.5em;
+
     text-align: center;
 
     color: #ffffff;
 
     mix-blend-mode: normal;
+
+    @media all and (max-width: 1400px) {
+        font-size: 1rem;
+    }
+
+    @media all and (max-width: 500px) {
+        font-size: 0.25em;
+    }
 `;
 
 export default Button;
