@@ -2,9 +2,51 @@ import * as React from "react";
 import styled from "styled-components";
 import ProfileCard from "./ProfileCard";
 import MessageContainer from "./MessageContainer";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import { SocketContext } from "../../contexts/SocketContext";
+import { LoggedUserContext } from '../../contexts/LoggedUserContext';
+import { Link } from "react-router-dom";
+import { LocalSee } from "@mui/icons-material";
+
+ 
+
 
 export default function ChatBody() {
+  //contexts
+  const loggedUserContext = useContext(LoggedUserContext);
+  const socket = useContext(SocketContext);
+
+  // localStorage.setItem("loggedUser",loggedUserContext);
+  // console.log(loggedUserContext)
+
+  const [outgoingMsgText, setOutText] = useState("")
+  const [incomingMsgText, setInMsg] = useState("")
+  const [messages, setMessages] = useState([])
+
+  const sendMsg = (userObject : object , text : string) => {
+    socket.emit("send_msg", {
+      text: text,
+      user: userObject
+    })
+  }
+
+  interface msg{
+    text: string,
+    user: object
+  }
+
+  useEffect( () => {
+    socket.on("receive_msg", (msgData) => {
+        setInMsg(msgData);
+        // const newMsgs : msg = messages.push(msgData)
+        // setMessages(newMsgs)
+      })
+    }, [socket]);
+
+    useEffect(() => {
+      console.log(messages);
+    }, [messages])
+    
   const [timer, setTimer] = useState(10);
 
   //   const interval = setInterval(() => {
@@ -16,9 +58,17 @@ export default function ChatBody() {
   //     }
   //   }, 60000);
 
+  function handleClick(userObject : object , text : string){
+    console.log("msg was sent")
+    sendMsg(userObject,text)
+
+  }
+
   return (
     <Wrapper>
+      <Link to={"/landing"}>
       <Exit />
+      </Link>
       <LeftColContainer>
         <Timer> 🕐 You have {timer} minutes remaining!</Timer>
         <ChatBox>
@@ -28,15 +78,18 @@ export default function ChatBody() {
             text="Yo 👋, yo 👋, yo 👋! 1-4-8-3 to the 3 ⭕ℹ🕘 to the 6 🕕 to the 9 💯. representin' the ABQ. What up ⬆, playa 😦🐶? Leave 🍃 at the tone 🍺."
           />
           <MessageContainer
-            msgType="sent"
+            msgType="recieved"
             senderImg="/assets/cypher.png"
-            text="Bro what are you saying 😭"
+            text={loggedUserContext.loggedUser.displayName} //pp 
           />
+
         </ChatBox>
+        
         <ChatInputContainer>
-          <ChatInput placeholder="Message"></ChatInput>
-          <ChatBtn>SEND</ChatBtn>
+          <ChatInput placeholder="Message" onChange={(e)=> setOutText((e.target as HTMLInputElement).value)}></ChatInput>
+          <ChatBtn onClick={() => handleClick(loggedUserContext,outgoingMsgText)}>SEND</ChatBtn>
         </ChatInputContainer>
+      
       </LeftColContainer>
       <RightColContainer>
         <TopText>You're chatting with:</TopText>
@@ -234,9 +287,12 @@ const ChatInput = styled.input`
   }
 `;
 
-const ChatBtn = styled.div`
+const ChatBtn = styled.button.attrs({
+  type: 'submit'
+})`
   text-align: center;
   color: #ffffff;
+  background: none;
   font-family: "Arimo", sans-serif;
   font-size: 20px;
   right: 20px;
