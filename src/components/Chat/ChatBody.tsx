@@ -6,13 +6,13 @@ import { useState, useEffect, useContext } from "react";
 import { SocketContext } from "../../contexts/SocketContext";
 import { LoggedUserContext } from "../../contexts/LoggedUserContext";
 import { Link } from "react-router-dom";
-import { IUser } from '../../models/AuthModels';
-
+import { IUser } from "../../models/AuthModels";
+import { MatchedUserContext } from "../../contexts/MatchedUserContext";
 
 interface Message {
-  type: string,
-  text: string,
-  userIcon: string
+  type: string;
+  text: string;
+  userIcon: string;
 }
 
 // interface User {
@@ -25,6 +25,7 @@ interface Message {
 // }
 
 export default function ChatBody() {
+  console.log(MatchedUserContext);
   //contexts
   const loggedUserContext = useContext(LoggedUserContext);
   const socket = useContext(SocketContext);
@@ -83,9 +84,13 @@ export default function ChatBody() {
     sendMsg(userIcon, text);
   }
 
-  function sendContactInfo(user : IUser) {
-    const contactMsg = "You wanna play? Let's play! Add me on Valorant! "+user.gameName+"#"+user.tagLine
-    sendMsg(user.avatarImage,contactMsg)
+  function sendContactInfo(user: IUser) {
+    const contactMsg =
+      "You wanna play? Let's play! Add me on Valorant! " +
+      user.gameName +
+      "#" +
+      user.tagLine;
+    sendMsg(user.avatarImage, contactMsg);
   }
 
   return (
@@ -125,22 +130,25 @@ export default function ChatBody() {
       <RightColContainer>
         <TopText>You're chatting with:</TopText>
         <ProfileCard
-          imgSrc="/assets/jettFurry.png"
+          imgSrc="/images/icons/Jett_icon.webp"
           userName="IMNOTAFURRY"
           basicInfo="22F, US West"
           userType="Competitive"
           valRank="assets/d2.png"
-          chatRank="/assets/ToxicWaste.png"
+          chatRank="/images/reputation_ranks/ToxicWaste.png"
           aboutMe="I used to be Immortal but I got a bunch of dog water teammates and demoted to diamond. IF YOU’RE DOG WATER GO NEXT! DON’T WASTE MY TIME I’M GONNA BE PRO I DONT NEED LIL DOGGIES WITH THEIR TAILS BETWEEN THEIR LEGS DRAGGING ME DOWN!!!!grrr meow :3"
         />
         <BtnContainer>
           <MobileTimer>🕐 You have {timer} minutes remaining!</MobileTimer>
-          <Btn onClick={ () => sendContactInfo(loggedUserContext.loggedUser)} btnColor="#66c2a9">
-            <BtnIcon imgSrc="/Icons/share.png" />
+          <Btn
+            onClick={() => sendContactInfo(loggedUserContext.loggedUser)}
+            btnColor="#66c2a9"
+          >
+            <BtnIcon imgSrc="/images/chat/share.png" />
             SHARE CONTACT
           </Btn>
           <Btn btnColor="#f94b4b">
-            <BtnIcon imgSrc="/Icons/gonext.png" />
+            <BtnIcon imgSrc="/images/chat/gonext.png" />
             GO NEXT
           </Btn>
         </BtnContainer>
@@ -159,7 +167,7 @@ const Wrapper = styled.div`
 `;
 
 const Exit = styled.img`
-  content: url("Icons/x.png");
+  content: url("images/chat/x.png");
   width: 1vw;
   height: 1vw;
   min-width: 15px;
@@ -345,7 +353,7 @@ const ChatBtn = styled.button.attrs({
 const ChatBox = styled.div`
   background-color: #282828;
   border-radius: 44px;
-  overflow: scroll;
+  overflow-y: scroll;
   width: 55vw;
   height: 70vh;
   padding: 5vh;
