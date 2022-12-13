@@ -122,9 +122,11 @@ function Profile() {
       });
     }
     // You can do some fancy checks here if you'd like, lots of work though
-
-    updateBackend();
-  }, [displayName]);
+    
+    if (generalEdit === false){ // add some more conditions
+      updateBackend();
+    }
+  }, [generalEdit]);    // Depedencies: if this is changed then this useEffect will run.
 
   return (
     <GridContainer>
@@ -134,10 +136,11 @@ function Profile() {
         <div>
           <Input
             genE={generalEdit}
-            placeholder={username}
+            placeholder={"username"}
             autoComplete={"off"}
             maxLength={15}
-            // minLength={3}
+            defaultValue={displayName}
+            onBlur={(e : React.ChangeEvent<HTMLInputElement>) => {setDisplayName(e.currentTarget.value)}}
             disabled={!generalEdit}
           ></Input>
 
