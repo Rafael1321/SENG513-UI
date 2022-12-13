@@ -10,6 +10,12 @@ import { LocalSee } from "@mui/icons-material";
 
  
 
+interface Message{
+  type: string,
+  text: string,
+  user: object
+}
+
 
 export default function ChatBody() {
   //contexts
@@ -21,31 +27,38 @@ export default function ChatBody() {
 
   const [outgoingMsgText, setOutText] = useState("")
   const [incomingMsgText, setInMsg] = useState("")
-  const [messages, setMessages] = useState([])
+  const [messages, setMessages] = useState ([])
+
+  function updateMessages(msg : Message, type : string){
+    const newMsgs = [...messages, { type: type ,text: msg.text, user: msg.user}]
+        setMessages(newMsgs)
+  }
 
   const sendMsg = (userObject : object , text : string) => {
-    socket.emit("send_msg", {
+    const msg = {
+      type: "sent",
       text: text,
       user: userObject
-    })
+    }
+    updateMessages(msg, "sent")
+    socket.emit("send_msg", msg)
+
   }
 
-  interface msg{
-    text: string,
-    user: object
-  }
+ 
 
   useEffect( () => {
     socket.on("receive_msg", (msgData) => {
         setInMsg(msgData);
-        // const newMsgs : msg = messages.push(msgData)
-        // setMessages(newMsgs)
+        console.log(msgData)
+        updateMessages(msgData, "received")
+        
       })
-    }, [socket]);
+    }, [socket,messages]);
 
-    useEffect(() => {
-      console.log(messages);
-    }, [messages])
+    // useEffect(() => {
+    //   console.log(messages);
+    // }, [messages])
     
   const [timer, setTimer] = useState(10);
 
@@ -72,7 +85,16 @@ export default function ChatBody() {
       <LeftColContainer>
         <Timer> 🕐 You have {timer} minutes remaining!</Timer>
         <ChatBox>
-          <MessageContainer
+
+          {messages.map((msg : Message)=> (
+            <MessageContainer
+            msgType={msg.type}
+            senderImg="/assets/jettFurry.png"
+            // {msg.user.avatarImage}
+            text = {msg.text}
+            />
+          ))}
+          {/* <MessageContainer
             msgType="received"
             senderImg="/assets/jettFurry.png"
             text="Yo 👋, yo 👋, yo 👋! 1-4-8-3 to the 3 ⭕ℹ🕘 to the 6 🕕 to the 9 💯. representin' the ABQ. What up ⬆, playa 😦🐶? Leave 🍃 at the tone 🍺."
@@ -81,7 +103,7 @@ export default function ChatBody() {
             msgType="recieved"
             senderImg="/assets/cypher.png"
             text={loggedUserContext.loggedUser.displayName} //pp 
-          />
+          /> */}
 
         </ChatBox>
         
@@ -312,6 +334,7 @@ const ChatBtn = styled.button.attrs({
 const ChatBox = styled.div`
   background-color: #282828;
   border-radius: 44px;
+  overflow: scroll;
   width: 55vw;
   height: 70vh;
   padding: 5vh;
