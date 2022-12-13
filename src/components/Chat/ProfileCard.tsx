@@ -1,13 +1,15 @@
 import * as React from "react";
 import styled from "styled-components";
+import { GameMode,RankType } from "../../models/FiltersModels";
 
 interface Props {
     imgSrc: string;
     userName: string;
-    valRank?: string;
+    valRank?: number;
+    valRankLvl?: number;
     chatRank: string;
     basicInfo?: string;
-    userType: string;
+    userType: number;
     aboutMe?: string;
 }
 
@@ -15,11 +17,12 @@ export default function ProfileCard(props: Props): React.ReactElement<Props, any
     return (
         <Wrapper>
             <Icon imgSrc={props.imgSrc} />
+            {/* {GameMode[1]} */}
             <Username>{props.userName}</Username>
             <BasicInfo>{props.basicInfo}</BasicInfo>
             <Ranks>
                 <RankLabel>
-                    <RankImg imgSrc={props.valRank} />
+                    <RankImg imgSrc={"/images/ranks/rank_"+props.valRank+"_"+props.valRankLvl+".webp"} />
                     RANK
                 </RankLabel>
                 <RankLabel style={{ textAlign: "center" }}>

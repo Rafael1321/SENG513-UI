@@ -8,7 +8,7 @@ import { LoggedUserContext } from "../../contexts/LoggedUserContext";
 import { Link } from "react-router-dom";
 import { IUser } from "../../models/AuthModels";
 import { MatchedUserContext } from "../../contexts/MatchedUserContext";
-
+import { RankType, GameMode } from "../../models/FiltersModels";
 interface Message {
   type: string;
   text: string;
@@ -28,6 +28,7 @@ export default function ChatBody() {
   console.log(MatchedUserContext);
   //contexts
   const loggedUserContext = useContext(LoggedUserContext);
+  const matchedUser = useContext(MatchedUserContext)
   const socket = useContext(SocketContext);
 
   // localStorage.setItem("loggedUser",loggedUserContext);
@@ -131,12 +132,15 @@ export default function ChatBody() {
         <TopText>You're chatting with:</TopText>
         <ProfileCard
           imgSrc="/images/icons/Jett_icon.webp"
-          userName="IMNOTAFURRY"
-          basicInfo="22F, US West"
-          userType="Competitive"
-          valRank="assets/d2.png"
+          userName={(matchedUser.matchedUser == null) ? "HectorSalamanca" : matchedUser.matchedUser.displayName}
+          basicInfo={(matchedUser.matchedUser == null) ? "22F, US West" : matchedUser.matchedUser.age+" "+matchedUser.matchedUser.gender}
+          userType={(matchedUser.matchedUser == null) ? 0 : matchedUser.matchedUser.playerType}
+
+          valRank={(matchedUser.matchedUser == null) ? 3 : matchedUser.matchedUser.rank[0]}
+          valRankLvl={(matchedUser.matchedUser == null) ? 1 : matchedUser.matchedUser.rank[1]}
           chatRank="/images/reputation_ranks/ToxicWaste.png"
-          aboutMe="I used to be Immortal but I got a bunch of dog water teammates and demoted to diamond. IF YOU’RE DOG WATER GO NEXT! DON’T WASTE MY TIME I’M GONNA BE PRO I DONT NEED LIL DOGGIES WITH THEIR TAILS BETWEEN THEIR LEGS DRAGGING ME DOWN!!!!grrr meow :3"
+          aboutMe= {(matchedUser.matchedUser == null) ? "This is the about me section." : matchedUser.matchedUser.aboutMe}
+
         />
         <BtnContainer>
           <MobileTimer>🕐 You have {timer} minutes remaining!</MobileTimer>
