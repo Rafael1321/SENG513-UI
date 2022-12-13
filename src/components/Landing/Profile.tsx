@@ -8,7 +8,6 @@ import Grid from "@mui/material/Grid";
 import {LoggedUserContext} from '../../contexts/LoggedUserContext';
 
 // To-do:
-// useState() in order to toggle b/w editing and being finished
 // grab current user's data from context
 // store values captured during edit as permanent somewhere (context)
 // send updated info to server
@@ -246,6 +245,10 @@ const Edit = styled.img<{ genE: boolean}>`
   filter: ${(props) => props.genE ? "drop-shadow(2px 2px 10px red) invert()" : "invert()"};
   width: 6%;
   margin-left: 5px;
+  :hover {
+    filter: drop-shadow(2px 2px 10px red) invert();
+    cursor: pointer;
+  }
 `;
 
 const Pfp = styled.img<{ genE: boolean }>`
