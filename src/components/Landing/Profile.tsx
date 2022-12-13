@@ -1,11 +1,14 @@
 // Imports
-import React, {useState} from "react";
+import React, { useState, useContext, useEffect } from "react";
 // import * as React from "react";
 import styled from "styled-components";
 // import "./styles.css";
 import Grid from "@mui/material/Grid";
 // import TextField from "@mui/material/TextField";
-import {LoggedUserContext} from '../../contexts/LoggedUserContext';
+import { LoggedUserContext } from "../../contexts/LoggedUserContext";
+
+import { AuthService, IAuthResponse } from "../../services/AuthService";
+import { Gender, GameMode } from "../../models/FiltersModels";
 
 // To-do:
 // useState() in order to toggle b/w editing and being finished
@@ -17,7 +20,6 @@ import {LoggedUserContext} from '../../contexts/LoggedUserContext';
 
 // Main User Homescreen
 function Profile() {
-
   // Used to set agent icon
   const [icon, setIcon] = useState("./images/icons/Astra_icon.webp");
   let agents: Array<string> = [
@@ -44,48 +46,106 @@ function Profile() {
   ];
 
   // Set init bio
-  const [bio, setBio] = useState("There's nothing here! Edit your profile to liven things up!");
-  
+  const [displayName, setDisplayName] = useState("");
+  const [age, setAge] = useState(0);
+  const [gender, setGender] = useState(Gender.allGenders);
+  const [playerType, setPlayerType] = useState(GameMode.competitive);
+  const [aboutMe, setAboutMe] = useState("There's nothing here! Edit your profile to liven things up!");
+
+  const [authResponse, setAuthResponse] = useState({});
+
   // To be used for editing user info, init false
   const [generalEdit, setGeneralEdit] = useState(false);
+
+  const loggedUserContext = useContext(LoggedUserContext);
+
+  const handleEdit = async () => {
+    console.log("Edit Request");
+
+    console.log(loggedUserContext);
+
+    const authResponse: IAuthResponse = await AuthService.update({
+      userId: loggedUserContext.loggedUser._id,
+      displayName: displayName,
+      age: age,
+      gender: gender,
+      playerType: playerType,
+      aboutMe: aboutMe,
+    });
+
+    console.log(authResponse);
+  };
+
+  const handleDisplayNameChange = (newDisplayName: string) => {
+    setDisplayName(newDisplayName);
+    handleEdit();
+  };
 
   // Enable edits through flipping the state
   const edit = () => {
     setGeneralEdit(!generalEdit);
-  }
+  };
 
   // Pick a new (random) profile pic, only if editing is enabled
   const changePfp = () => {
     if (generalEdit) {
       setIcon(agents[Math.floor(Math.random() * agents.length)]);
     }
-  }
+  };
 
+  useEffect(() => {
+    setDisplayName(loggedUserContext.loggedUser.displayName);
+    setAge(loggedUserContext.loggedUser.age);
+    setGender(loggedUserContext.loggedUser.gender);
+    setPlayerType(loggedUserContext.loggedUser.playerType);
+    setAboutMe(loggedUserContext.loggedUser.aboutMe);
+  }, [
+    loggedUserContext.loggedUser.displayName,
+    loggedUserContext.loggedUser.age,
+    loggedUserContext.loggedUser.gender,
+    loggedUserContext.loggedUser.playerType,
+    loggedUserContext.loggedUser.aboutMe,
+  ]);
+
+  useEffect(() => {
+    console.log("Edit Request");
+
+    async function updateBackend() {
+      const authResponse: IAuthResponse = await AuthService.update({
+        userId: loggedUserContext.loggedUser._id,
+        displayName: displayName,
+        age: age,
+        gender: gender,
+        playerType: playerType,
+        aboutMe: aboutMe,
+      });
+      setAuthResponse(authResponse);
+    }
+    updateBackend()
+
+    console.log(authResponse);
+  }, [displayName, age, gender, playerType, aboutMe, authResponse, loggedUserContext]);
 
   return (
     <Grid columns={2}>
-      
       <Pfp genE={generalEdit} src={icon} onClick={() => changePfp()}></Pfp>
-      
-      <Input 
+
+      <Input
         id="user"
         genE={generalEdit}
-        placeholder={generalEdit 
-          ? "" 
-          : "Pee Man 4"
-        }
+        placeholder={generalEdit ? displayName : displayName}
         // maxLength={15};
         // minLength={1};
-        disabled={!generalEdit}>
-      </Input>
-      
+        onBlur={(e: React.FormEvent<HTMLInputElement>) => {
+          handleDisplayNameChange(e.currentTarget.value);
+        }}
+        disabled={!generalEdit}
+      ></Input>
+
       <Edit genE={generalEdit} src="./images/general/edit.png" onClick={() => edit()}></Edit>
-      
+
       <h2>Bio</h2>
-      {generalEdit
-        ? <TextArea onChange={(e:any) => setBio(e.target.value)}/> 
-        : <Display>{bio}</Display>
-      }
+      {generalEdit ? <TextArea onChange={(e: any) => setAboutMe(e.target.value)} /> : <Display>{aboutMe}</Display>}
 
       <Drops genE={generalEdit} disabled={!generalEdit}>
         <option>Woman</option>
@@ -101,7 +161,7 @@ function Profile() {
         <option value={2}>Asia Pacific</option>
         <option value={3}>Korea</option>
       </Drops>
-      
+
       <div>
         <h2>Reputation</h2>
         <img src="./images/ranks/rank_1.png"></img>
@@ -114,31 +174,30 @@ function Profile() {
   );
 }
 
-export default Profile; 
+export default Profile;
 
-
-// STYLING 
+// STYLING
 const Drops = styled.select<{ genE: boolean }>`
-  background-color: ${(props) => props.genE ? "#181818" : "#282828"};
-  -webkit-appearance: ${(props) => props.genE ? "" : "none"};
-  -moz-appearance: ${(props) => props.genE ? "" : "none"};
+  background-color: ${(props) => (props.genE ? "#181818" : "#282828")};
+  -webkit-appearance: ${(props) => (props.genE ? "" : "none")};
+  -moz-appearance: ${(props) => (props.genE ? "" : "none")};
   border: 0px;
   color: white;
   text-align: center;
-`
+`;
 // const Age = styled.input<{ genE: boolean }>`
 
 // `
 
 const Input = styled.input<{ genE: boolean }>`
-  background-color: ${(props) => props.genE ? "#181818" : "#282828"};
+  background-color: ${(props) => (props.genE ? "#181818" : "#282828")};
   color: white;
   text-align: center;
   text-overflow: ellipsis;
   height: 10%;
   width: 30%;
   font-size: 200%;
-`
+`;
 
 const TextArea = styled.textarea`
   background-color: #181818;
@@ -147,26 +206,26 @@ const TextArea = styled.textarea`
   resize: none;
   overflow: auto;
   border: 0px;
-`
+`;
 
 const Display = styled.p`
   background-color: #282828;
-`
+`;
 
-const Edit = styled.img<{ genE: boolean}>`
-  filter: ${(props) => props.genE ? "drop-shadow(2px 2px 10px red) invert()" : "invert()"};
+const Edit = styled.img<{ genE: boolean }>`
+  filter: ${(props) => (props.genE ? "drop-shadow(2px 2px 10px red) invert()" : "invert()")};
   width: 5%;
-`
+`;
 
 // border: ${(props) => props.generalEdit ? "2px solid red" : ""};
 
 const Pfp = styled.img<{ genE: boolean }>`
-  filter: ${(props) => props.genE ? "drop-shadow(1px 1px 8px #66c2a9) brightness(150%)" : ""};
+  filter: ${(props) => (props.genE ? "drop-shadow(1px 1px 8px #66c2a9) brightness(150%)" : "")};
   width: 20%;
   border: 5px solid #66c2a9;
   border-radius: 50%;
   background-color: #266152;
-`
+`;
 
 // const Edit = styled.p<{ generalEdit: boolean}>`
 //   value: ${(props) => props.generalEdit ? "Save" : "Edit"};
