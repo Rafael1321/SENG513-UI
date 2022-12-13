@@ -11,12 +11,15 @@ import { CustomToast } from "../Shared/CustomToast";
 import { FilterContext } from "../../contexts/FilterContext";
 import { toast } from "react-toastify";
 import { IMatchFoundDTO, IFindMatchDTO } from '../../models/MatchingModels';
+import { Link } from "react-router-dom";
+import { FilterPopup } from "../Shared/FilterPopup";
 
 export default function Landing() {
   
   // State 
   const [duoFound, setDuoFound] = useState<boolean>(false);
   const [findDuo, setFindDuo] = useState<boolean>(false);
+  const [triggered, setTriggered] = React.useState(false);
 
   // Refs
   const pollingTimeout = React.useRef<NodeJS.Timeout>(null);
@@ -47,6 +50,10 @@ export default function Landing() {
   }, []);
   
   /* Handlers */
+
+  function handleCloseMe(){
+    setTriggered(false);
+  }
 
   function handleSuccessOrError(res : any) : void{
     if(EnvConfig.DEBUG) console.log(res);
@@ -97,6 +104,7 @@ export default function Landing() {
   return (<>
     <CustomToast></CustomToast>
     <LandingPage>
+      <FilterPopup closeMe={handleCloseMe} triggered={triggered}></FilterPopup>
       <Nav>
         <Logo>
           <h2 id="valorant">VALORANT</h2>
@@ -110,12 +118,53 @@ export default function Landing() {
       <LandingContent>
         <Container>
           <LandingCard findDuo={findDuo} duoFound={duoFound} imgSrc={loggedUserContext?.loggedUser?.avatarImage}/>
+          <ButtonContainer>
+            <div>
+              <ButtonImages src="./images/general/filter.png"></ButtonImages>
+              <Button onClick={() => setTriggered(true)}>CHAT FILTERS</Button>
+            </div>
+            <div>
+              <ButtonImages src="./images/general/history.png"></ButtonImages>
+              <Link style={{color: "#ffffff", textDecoration: "none", fontWeight: "600"}} to={"/history"}>CHAT HISTORY</Link>
+            </div>
+          </ButtonContainer>
           {getButton()}
         </Container>
       </LandingContent>
     </LandingPage>
   </>);
 }
+
+
+const ButtonContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-top: 0%;
+  width: 100%;
+`;
+
+const ButtonImages = styled.img`
+  /* height: 100%; */
+  filter: invert();
+  width: 2%;
+`;
+
+const Button = styled.button`
+  font-weight: bold;
+  font-size: 16px;
+  /* height: 100%; */
+  /* margin: 5%; */
+  background: none;
+  padding: 0% 10% 5% 10%;
+  /* background: none; */
+  color: white;
+  border: 0px;
+  :hover {
+    cursor: pointer;
+  }
+`;
 
 const LandingPage = styled.div`
   background-color: #181818;
