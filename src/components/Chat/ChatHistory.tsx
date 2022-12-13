@@ -53,11 +53,19 @@ function ChatHistory(props: Props): React.ReactElement {
   const [width, setWidth] = useState(window.innerWidth);
   const breakpoint = 1000;
 
-  const [rateClicked, setRateClicked] = useState(false);
+  const [rateState, setRateState] = useState(0);
   const [rating, setRating] = useState(5);
 
-  function handleRateClicked() {
-    setRateClicked(true);
+  function newRating() {
+    setRateState(0);
+  }
+
+  function startRating() {
+    setRateState(1);
+  }
+
+  function doneRating() {
+    setRateState(2);
   }
 
   function handleRating(event: Event) {
@@ -68,6 +76,35 @@ function ChatHistory(props: Props): React.ReactElement {
 
   function commend() {
     console.log("Last new rating:" + rating);
+    doneRating();
+  }
+
+  function displayRating() {
+    if (rateState == 0) {
+      return <RateButton onClick={startRating}>RATE PLAYER</RateButton>;
+    } else if (rateState == 1) {
+      return (
+        <RatingSlider>
+          <label htmlFor="rating">RATE PLAYER</label>
+          <Slider
+            size="small"
+            defaultValue={5}
+            min={0}
+            max={10}
+            step={1}
+            valueLabelDisplay="auto"
+            onChange={(e: Event) => {
+              handleRating(e);
+            }}
+          />
+          <Commend type="button" onClick={commend}>
+            COMMEND
+          </Commend>
+        </RatingSlider>
+      );
+    } else if (rateState == 2) {
+      return <h4>Rating Recorded!</h4>;
+    }
   }
 
   useEffect(() => {
@@ -106,7 +143,11 @@ function ChatHistory(props: Props): React.ReactElement {
               </Menu>
 
               <PlayerCardsWrapper>
-                <EmblaCarousel slides={[...slides]} history={history} />
+                <EmblaCarousel
+                  slides={[...slides]}
+                  history={history}
+                  ClickHandler={newRating}
+                />
                 {width < breakpoint && (
                   <RatePlayerWrapper>
                     <Button
@@ -124,32 +165,7 @@ function ChatHistory(props: Props): React.ReactElement {
 
             {width > breakpoint && (
               <InfoCardSection>
-                <RatePlayerWrapper>
-                  {rateClicked ? (
-                    <RatingSlider>
-                      <label htmlFor="rating">RATE PLAYER</label>
-                      <Slider
-                        size="small"
-                        defaultValue={5}
-                        min={0}
-                        max={10}
-                        step={1}
-                        valueLabelDisplay="auto"
-                        onChange={(e: Event) => {
-                          handleRating(e);
-                        }}
-                      />
-                      <Submit type="button" onClick={commend}>
-                        COMMEND
-                      </Submit>
-                    </RatingSlider>
-                  ) : (
-                    <RateButton onClick={handleRateClicked}>
-                      RATE PLAYER
-                    </RateButton>
-                  )}
-                </RatePlayerWrapper>
-
+                <RatePlayerWrapper>{displayRating()}</RatePlayerWrapper>
                 <ProfileCardWrapper>
                   <ProfileCardUpdated
                     imgSrc="images/icons/Neon_icon.webp"
@@ -173,9 +189,30 @@ function ChatHistory(props: Props): React.ReactElement {
 const RateButton = styled.button`
   color: white;
   background-color: #68c9ac;
+  border: none;
+  border-radius: 10px;
+  width: 160px;
+  height: 70px;
+  font-size: 16px;
+  transition: 0.5s all;
+  cursor: pointer;
+
+  &:hover {
+    box-shadow: 0 0 10px #68c9ac;
+    cursor: pointer;
+  }
 `;
 
-const Submit = styled.button``;
+const Commend = styled.button`
+  color: white;
+  background-color: #68c9ac;
+  border: none;
+  border-radius: 2px;
+
+  &:hover {
+    cursor: pointer;
+  }
+`;
 
 const RatingSlider = styled.div`
   display: flex;
@@ -235,15 +272,13 @@ const InfoCardSection = styled.aside`
 
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-
-  padding: 2%;
 `;
 
 const ProfileCardWrapper = styled.div`
   position: inherit;
-  height: 80%;
+  height: 85%;
 `;
 
 const Menu = styled.nav`
