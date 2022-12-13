@@ -68,7 +68,7 @@ function ChatHistory(props: Props): React.ReactElement {
                     <MainContainer>
                         <HistorySection>
                             <Menu>
-                                {width > breakpoint && <Button url={"Images/back.png"} text={"BACK"} width={"160px"} height={"70px"} />}
+                                {width > breakpoint && <Button img_url={"Images/back.png"} text={"BACK"} width={"160px"} height={"70px"} />}
                                 {width > breakpoint && (
                                     <SearchContainer>
                                         <SearchIconWrapper>

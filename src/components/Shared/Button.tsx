@@ -1,18 +1,26 @@
 import React from "react";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
     text: string;
     width?: string;
     height?: string;
+    img_url?: string;
+    fontSize?: string;
     url?: string;
 };
 
 function Button(props: Props): React.ReactElement {
+    let navigate = useNavigate();
+    const onClickHandler = () => {
+        navigate(`${props.url}`)
+    }
+    
     return (
-        <Wrapper height={props.height} width={props.width}>
-            {props.url && <Image url={props.url} size={"40px"} />}
-            <Text>{props.text}</Text>
+        <Wrapper onClick={onClickHandler} height={props.height} width={props.width}>
+            {props.img_url && <Image url={props.img_url} size={"40px"} />}
+            <Text fontSize={props.fontSize}>{props.text}</Text>
         </Wrapper>
     );
 }
@@ -33,10 +41,10 @@ const Wrapper = styled.div<{ width?: string; height?: string }>`
     height: ${(props) => props.height};
     width: ${(props) => props.width};
 
-
     :hover {
+        box-shadow: 0 0 7.5px #66c2a9;;
+        
         cursor: pointer;
-
         // For no text selection
         -webkit-touch-callout: none; /* iOS Safari */
         -webkit-user-select: none; /* Safari */
@@ -55,11 +63,11 @@ const Image = styled.img<{ url: string; size: string }>`
     content: url(${(props) => props.url});
 `;
 
-const Text = styled.div`
+const Text = styled.div<{ fontSize: string }>`
     font-family: "Arimo";
     font-style: normal;
     font-weight: 700;
-    font-size: 1.5em;
+    font-size: ${(props) => (props.fontSize ? props.fontSize : "1.5em")};
 
     text-align: center;
 
