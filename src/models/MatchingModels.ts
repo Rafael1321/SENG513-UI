@@ -1,3 +1,4 @@
+import { IUser } from "./AuthModels";
 import { IFilters } from "./FiltersModels";
 
 /* DTOS */
@@ -5,4 +6,8 @@ import { IFilters } from "./FiltersModels";
 export interface IFindMatchDTO{
     userId : string,
     filters : IFilters
+}
+
+export interface IMatchFoundDTO{
+    user : IUser
 }

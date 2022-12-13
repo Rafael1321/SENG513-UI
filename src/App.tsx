@@ -21,9 +21,9 @@ function App() {
               <Route path="/" element={<Start formType={FormType.Registration}></Start>} />
               <Route path="/register" element={<Start formType={FormType.Registration}></Start>} />
               <Route path="/login" element={<Start formType={FormType.Login}></Start>} />
+              <Route path="/landing" element={<Landing></Landing>}/>
               <Route path="/history" element={<ChatHistory />} />
               <Route path="/chat" element={<ChatBody />} />
-              <Route path="/landing" element={<Landing username="VividEradicator"></Landing>}/>
             </Routes>
           </SocketContext.Provider>
           </MatchedUserProvider>
