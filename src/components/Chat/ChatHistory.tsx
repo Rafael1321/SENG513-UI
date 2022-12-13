@@ -49,7 +49,7 @@ const history = [
 
 function ChatHistory(props: Props): React.ReactElement {
     const [width, setWidth] = useState(window.innerWidth);
-    const breakpoint = 1400;
+    const breakpoint = 1000;
 
     useEffect(() => {
         const handleResizeWindow = () => setWidth(window.innerWidth);
@@ -64,76 +64,87 @@ function ChatHistory(props: Props): React.ReactElement {
     return (
         <>
             <WidthContext.Provider value={width}>
-                <Wrapper>
-                    <HistorySection>
-                        <Menu>
+                <MainWrapper>
+                    <MainContainer>
+                        <HistorySection>
+                            {/* <Menu>
                             {width > breakpoint && <Button url={"Images/back.png"} text={"BACK"} width={"160px"} height={"70px"} />}
-                            {/* <SearchContainer>
+                            <SearchContainer>
                             <SearchIconWrapper>
                             <SearchIcon url={"Icons/search.png"} />
                             </SearchIconWrapper>
                             <SearchInput placeholder="Search Message History" />
-                        </SearchContainer> */}
-                        </Menu>
+                        </SearchContainer>
+                        </Menu> */}
 
-                        <HistoryContainer>
-                            <EmblaCarousel slides={[...slides]} history={history} />
-                            {/* {width < breakpoint && (
+                            {/* <HistoryContainer> */}
+                            {/* <EmblaCarousel slides={[...slides]} history={history} />
+                            {width < breakpoint && (
                                 <RatePlayerWrapper>
                                     <Button text={"RATE PLAYER"} width={"100%"} height={"100%"} />
                                 </RatePlayerWrapper>
                             )} */}
-                        </HistoryContainer>
+                            {/* </HistoryContainer> */}
 
-                        <ChatContainer>.</ChatContainer>
-                    </HistorySection>
+                            {/* <ChatContainer>.</ChatContainer> */}
+                        </HistorySection>
 
-                    {width > breakpoint && (
-                        <InfoCardSection>
-                            <RatePlayerWrapper>
-                                <Button text={"RATE PLAYER"} width={"160px"} height={"70px"} />
-                            </RatePlayerWrapper>
+                        {width > breakpoint && (
+                            <InfoCardSection>
+                                <RatePlayerWrapper>
+                                    <Button text={"RATE PLAYER"} width={"40%"} height={"100%"} />
+                                </RatePlayerWrapper>
 
-                            <ProfileCardWrapper>
-                                <ProfileCardUpdated
-                                    imgSrc="Images/astra.webp"
-                                    userName="IAMNOTAFURRY"
-                                    chatRank="Images/chamber.webp"
-                                    userType="gamer"
-                                    valRank="Images/chamber.webp"
-                                    basicInfo="I am basic info"
-                                    aboutMe="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
-                                ></ProfileCardUpdated>
-                            </ProfileCardWrapper>
-                        </InfoCardSection>
-                    )}
-                </Wrapper>
+                                <ProfileCardWrapper>
+                                    <ProfileCardUpdated
+                                        imgSrc="Images/astra.webp"
+                                        userName="IAMNOTAFURRY"
+                                        chatRank="Images/chamber.webp"
+                                        userType="gamer"
+                                        valRank="Images/chamber.webp"
+                                        basicInfo="I am basic info"
+                                        aboutMe="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+                                    ></ProfileCardUpdated>
+                                </ProfileCardWrapper>
+                            </InfoCardSection>
+                        )}
+                    </MainContainer>
+                </MainWrapper>
             </WidthContext.Provider>
         </>
     );
 }
 
-const Menu = styled.nav`
-    position: relative;
-    width: 100%;
-    display: flex;
-    align-items: center;
-`;
-
-const RatePlayerWrapper = styled.div`
-    position: absolute;
-
-    top: 0;
-
-    @media all and (max-width: 1400px) {
+const MainWrapper = styled.div`
+    // applies it to all the children
+    * {
+        box-sizing: border-box;
         position: relative;
-        width: 20%;
-        height: 10%;
+        font-family: "Arimo";
     }
+    font-weight: 200;
+    font-size: 15px;
+    display: flex;
+    justify-content: center;
+
+    height: 100vh;
+    width: 100vw;
 `;
 
-const ProfileCardWrapper = styled.div`
-    max-width: 500px;
+const MainContainer = styled.main`
+    position: inherit;
+    max-width: 1500px;
+    width: 100%;
+
+    padding: 2%;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    @media all and (max-width: 1000px) {
+        flex-direction: column-reverse;
+        padding: 5%;
+    }
 `;
 
 const HistorySection = styled.section`
@@ -142,13 +153,10 @@ const HistorySection = styled.section`
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    width: 70%;
+    width: 60%;
     height: 100%;
-    flex: 1;
 
-    width: 100%;
-
-    @media all and (max-width: 1400px) {
+    @media all and (max-width: 1000px) {
         height: 50%;
         width: 100%;
     }
@@ -156,7 +164,7 @@ const HistorySection = styled.section`
 
 const InfoCardSection = styled.aside`
     position: relative;
-    width: 25%;
+    width: 37%;
     height: 100%;
 
     display: flex;
@@ -167,6 +175,34 @@ const InfoCardSection = styled.aside`
     padding: 2%;
 `;
 
+const ProfileCardWrapper = styled.div`
+    position: inherit;
+    height: 80%;
+`;
+
+const Menu = styled.nav`
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+`;
+
+const RatePlayerWrapper = styled.div`
+    position: relative;
+
+    display: flex;
+    justify-content: center;
+    align-items: start;
+
+    width: 100%;
+
+    @media all and (max-width: 1000px) {
+        position: relative;
+        width: 20%;
+        height: 10%;
+    }
+`;
+
 const HistoryContainer = styled.div`
     display: flex;
     justify-content: center;
@@ -175,18 +211,17 @@ const HistoryContainer = styled.div`
     width: 100%;
     height: 30%;
 
-    @media all and (max-width: 1400px) {
+    // Split screen
+    @media all and (max-width: 1000px) {
         height: 40%;
         flex-direction: column;
     }
 
-
+    // Mobile
     @media all and (max-width: 500px) {
         height: 20%;
         flex-direction: column;
     }
-
-    /* border: red solid 1px; */
 `;
 
 const ChatContainer = styled.div`
@@ -276,28 +311,6 @@ const SearchIcon = styled.img<{ url: string }>`
     aspect-ratio: 1;
 
     content: url(${(props) => props.url});
-`;
-
-const Wrapper = styled.main`
-    * {
-        box-sizing: border-box;
-    }
-
-    position: relative;
-    width: 100vw;
-    height: 100vh;
-    padding: 2%;
-    box-sizing: border-box;
-
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    @media all and (max-width: 1400px) {
-        flex-direction: column-reverse;
-        padding: 5%;
-    }
-
-    font-family: "Arimo";
 `;
 
 export default ChatHistory;
