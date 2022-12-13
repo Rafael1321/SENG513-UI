@@ -167,182 +167,187 @@ const Button = styled.button`
 `;
 
 const LandingPage = styled.div`
-  background-color: #181818;
-  margin: 0px;
-  padding: 0px;
-  min-height: 100vh;
-  min-width: 100vw;
-  box-sizing: border-box;
+    background-color: #181818;
+    margin: 0px;
+    padding: 0px;
+    min-height: 100vh;
+    min-width: 100vw;
+    box-sizing: border-box;
 
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
 `;
 
 const Nav = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  position: relative;
-  padding-top: 1rem;
-  transition: all 0.25s ease-in-out;
-
-  @media (max-width: 769px) {
-    position: static;
-    flex-direction: column;
+    display: flex;
+    flex-direction: row;
     justify-content: center;
-    padding-top: 1.5rem;
-  }
+    position: relative;
+    padding-top: 1rem;
+    transition: all 0.25s ease-in-out;
+
+    @media (max-width: 769px) {
+        position: static;
+        flex-direction: column;
+        justify-content: center;
+        padding-top: 1.5rem;
+    }
 `;
 
 const Logo = styled.div`
-  display: flex;
-  flex-direction: column;
-  text-align: center;
-  position: absolute;
-  font-family: "valorant";
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    position: absolute;
+    font-family: "valorant";
 
-  left: 50%;
-  transform: translateX(-50%);
+    left: 50%;
+    transform: translateX(-50%);
 
-  & #valorant {
-    color: #f94b4b;
-    font-size: 2rem;
-    margin: 0px;
-    padding-bottom: 5px;
-    font-weight: 200;
-    transition: all 0.5s ease-in-out;
+    & #valorant {
+        color: #f94b4b;
+        font-size: 2rem;
+        margin: 0px;
+        padding-bottom: 5px;
+        font-weight: 200;
+        transition: all 0.5s ease-in-out;
 
+        @media (max-width: 769px) {
+            font-size: 1.35rem;
+        }
+
+        @media (max-width: 480px) {
+            font-size: 1rem;
+        }
+    }
+
+    & #duofinder {
+        color: white;
+        font-size: 3rem;
+        margin: 0px;
+        padding: 0px;
+        font-weight: 200;
+        transition: all 0.5s ease-in-out;
+
+        @media (max-width: 769px) {
+            font-size: 2rem;
+        }
+        @media (max-width: 480px) {
+            font-size: 1.5rem;
+        }
+    }
     @media (max-width: 769px) {
-      font-size: 1.35rem;
+        position: static;
+        transform: translateX(0);
     }
-
-    @media (max-width: 480px) {
-      font-size: 1rem;
-    }
-  }
-
-  & #duofinder {
-    color: white;
-    font-size: 3rem;
-    margin: 0px;
-    padding: 0px;
-    font-weight: 200;
-    transition: all 0.5s ease-in-out;
-
-    @media (max-width: 769px) {
-      font-size: 2rem;
-    }
-    @media (max-width: 480px) {
-      font-size: 1.5rem;
-    }
-  }
-  @media (max-width: 769px) {
-    position: static;
-    transform: translateX(0);
-  }
 `;
 
 const User = styled.div`
-  display: flex;
-  flex-direction: row;
-  margin-left: auto;
-  padding-right: 1rem;
-  font-family: "Poppins", sans-serif;
-  font-size: 1rem;
-  font-weight: 300;
-  transition: all 0.25s ease-in-out;
+    display: flex;
+    flex-direction: row;
+    margin-left: auto;
+    padding-right: 1rem;
+    font-family: "Poppins", sans-serif;
+    font-size: 1rem;
+    font-weight: 300;
+    transition: all 0.25s ease-in-out;
 
-  & #username {
-    color: white;
-    padding-right: 0.5rem;
-  }
+    & #username {
+        color: white;
+        padding-right: 0.5rem;
+    }
 
-  & #profilePic {
-    background-color: white;
-    border: none;
-    border-radius: 50%;
-    height: 50px;
-    width: 50px;
-    background-color: #425852;
+    & #profilePic {
+        background-color: white;
+        border: none;
+        border-radius: 50%;
+        height: 50px;
+        width: 50px;
+        background-color: #425852;
+
+        @media (max-width: 769px) {
+            height: 40px;
+            width: 40px;
+        }
+    }
 
     @media (max-width: 769px) {
-      height: 40px;
-      width: 40px;
+        font-size: 0.75rem;
+        padding-right: 0;
+        margin: 2.5% auto;
     }
-  }
-
-  @media (max-width: 769px) {
-    font-size: 0.75rem;
-    padding-right: 0;
-    margin: 2.5% auto;
-  }
 `;
 
 const LandingContent = styled.div`
-  display: flex;
-  flex: row;
-  justify-content: center;
-  height: 80vh;
+    display: flex;
+    flex: row;
+    justify-content: center;
+    height: 80vh;
 `;
 
 const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
 `;
 
 const FindDuo = styled.button`
-  background-color: #66c2a9;
-  border: none;
-  border-radius: 8px;
-  color: white;
-  font-family: "Poppins", sans-serif;
-  font-weight: 700;
-  font-size: 1em;
-  padding: 10px 20px;
-  transition: 0.5s;
+    background-color: #66c2a9;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-family: "Poppins", sans-serif;
+    font-weight: 700;
+    font-size: 1em;
+    padding: 10px 20px;
+    transition: 0.5s;
 
-  display: flex;
-  flex-direction: row;
-  width: 150px;
+    display: flex;
+    flex-direction: row;
+    width: 150px;
 
-  &:hover {
-    box-shadow: 0 0 7.5px #66c2a9;
-    cursor: pointer;
-  }
+    &:hover {
+        box-shadow: 0 0 7.5px #66c2a9;
+        cursor: pointer;
+    }
 
-  & #magnifyingGlass {
-    fill: white;
-    width: 16px;
-    height: 16px;
-    padding: 3px 10px 5px 0px;
-  }
+    & #magnifyingGlass {
+        fill: white;
+        width: 16px;
+        height: 16px;
+        padding: 3px 10px 5px 0px;
+    }
 
-  @media (max-width: 769px) {
-    margin: 5%;
-  }
+    @media (max-width: 769px) {
+        margin: 5%;
+    }
 `;
 
 const Cancel = styled.button`
-  background-color: #66c2a9;
-  border: none;
-  border-radius: 8px;
-  color: white;
-  font-family: "Poppins", sans-serif;
-  font-weight: 700;
-  font-size: 1em;
-  padding: 10px 20px;
-  transition: 0.5s;
+    background-color: #66c2a9;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-family: "Poppins", sans-serif;
+    font-weight: 700;
+    font-size: 1em;
+    padding: 10px 20px;
+    transition: 0.5s;
 
-  width: 150px;
+    width: 150px;
 
-  &:hover {
-    box-shadow: 0 0 7.5px #66c2a9;
-    cursor: pointer;
-  }
-  @media (max-width: 769px) {
-    margin: 5%;
-  }
+    &:hover {
+        box-shadow: 0 0 7.5px #66c2a9;
+        cursor: pointer;
+    }
+    @media (max-width: 769px) {
+        margin: 5%;
+    }
+`;
+
+const HistoryButtonWrapper = styled.div`
+  margin-left: 15px;
+
 `;
