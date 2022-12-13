@@ -1,40 +1,41 @@
 import * as React from "react";
 import styled from "styled-components";
+import { GameMode,RankType } from "../../models/FiltersModels";
 
 interface Props {
-  imgSrc: string;
-  userName: string;
-  valRank?: string;
-  chatRank: string;
-  basicInfo?: string;
-  userType: string;
-  aboutMe?: string;
+    imgSrc: string;
+    userName: string;
+    valRank?: number;
+    valRankLvl?: number;
+    chatRank: string;
+    basicInfo?: string;
+    userType: number;
+    aboutMe?: string;
 }
 
-export default function ProfileCard(
-  props: Props
-): React.ReactElement<Props, any> {
-  return (
-    <Wrapper>
-      <Icon imgSrc={props.imgSrc} />
-      <Username>{props.userName}</Username>
-      <BasicInfo>{props.basicInfo}</BasicInfo>
-      <Ranks>
-        <RankLabel>
-          <RankImg imgSrc={props.valRank} />
-          RANK
-        </RankLabel>
-        <RankLabel style={{ textAlign: "center" }}>
-          <RankImg imgSrc={props.chatRank} />
-          REPUTATION
-        </RankLabel>
-      </Ranks>
-      <AboutContainer>
-        <Label>ABOUT ME:</Label>
-        <AboutMe>{props.aboutMe}</AboutMe>
-      </AboutContainer>
-    </Wrapper>
-  );
+export default function ProfileCard(props: Props): React.ReactElement<Props, any> {
+    return (
+        <Wrapper>
+            <Icon imgSrc={props.imgSrc} />
+            {/* {GameMode[1]} */}
+            <Username>{props.userName}</Username>
+            <BasicInfo>{props.basicInfo}</BasicInfo>
+            <Ranks>
+                <RankLabel>
+                    <RankImg imgSrc={"/images/ranks/rank_"+props.valRank+"_"+props.valRankLvl+".webp"} />
+                    RANK
+                </RankLabel>
+                <RankLabel style={{ textAlign: "center" }}>
+                    <RankImg imgSrc={props.chatRank} />
+                    REPUTATION
+                </RankLabel>
+            </Ranks>
+            <AboutContainer>
+                <Label>ABOUT ME:</Label>
+                <AboutMe>{props.aboutMe}</AboutMe>
+            </AboutContainer>
+        </Wrapper>
+    );
 }
 
 const Wrapper = styled("div")`

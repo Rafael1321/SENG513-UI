@@ -1,6 +1,5 @@
 import * as React from 'react'
 import styled from 'styled-components';
-import { FilterPopup } from '../Shared/FilterPopup';
 import { Agents } from './Agents';
 import { Form, FormType } from './Form';
 
@@ -11,15 +10,8 @@ type Props = {
 
 export default function Start(props : Props) : React.ReactElement{
         
-    const [triggered, setTriggered] = React.useState(true);
-
-    function handleCloseMe(){
-        setTriggered(false);
-    }
-
     return (
         <StartPage>
-            <FilterPopup closeMe={handleCloseMe} triggered={triggered}></FilterPopup>
             <Agents formType={props.formType}></Agents>
             <Form formType={props.formType}></Form>
         </StartPage>

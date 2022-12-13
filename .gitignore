@@ -38,15 +38,5 @@ yarn-debug.log*
 yarn-error.log*
 
 src/assets
-public/assets 
-public/Icons
-public/Images
 public/images
-
-
-# pics
-public/Icons
-public/Images
-
-public/images
-.env
+public/assets

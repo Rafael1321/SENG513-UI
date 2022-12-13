@@ -1,90 +1,170 @@
 import * as React from "react";
 import styled from "styled-components";
 import { useState, useEffect, useContext } from "react";
-
 import LandingCard from "./LandingCard";
-import { LoggedUserContext } from "../../contexts/LoggedUserContext";
-import { SocketContext } from "../../contexts/SocketContext";
-import { EnvConfig } from "../../util/EnvConfig";
+import { LoggedUserContext } from '../../contexts/LoggedUserContext';
+import { SocketContext } from '../../contexts/SocketContext';
+import { EnvConfig } from '../../util/EnvConfig';
+import { MatchedUserContext } from "../../contexts/MatchedUserContext";
+import { Micellaneous } from "../../util/Micellaneous";
+import { CustomToast } from "../Shared/CustomToast";
+import { FilterContext } from "../../contexts/FilterContext";
+import { toast } from "react-toastify";
+import { IMatchFoundDTO, IFindMatchDTO } from '../../models/MatchingModels';
 import { Link } from "react-router-dom";
-import Button from "../Shared/Button";
+import { FilterPopup } from "../Shared/FilterPopup";
 
-export default function Landing(props: any) {
-    // Constants
-    const playerIconSrc = "/Images/Icons/Astra_icon.webp";
+export default function Landing() {
+  
+  // State 
+  const [duoFound, setDuoFound] = useState<boolean>(false);
+  const [findDuo, setFindDuo] = useState<boolean>(false);
+  const [triggered, setTriggered] = React.useState(false);
 
-    // State
-    const [duoFound, setDuoFound] = useState<boolean>(false);
-    const [findDuo, setFindDuo] = useState<boolean>(false);
+  // Refs
+  const pollingTimeout = React.useRef<NodeJS.Timeout>(null);
 
-    // Contexts
-    const loggedUserContext = useContext(LoggedUserContext);
-    const socketContext = useContext(SocketContext);
+  // Contexts
+  const loggedUserContext = useContext(LoggedUserContext);
+  const matchedUserContext = useContext(MatchedUserContext);
+  const filterContext = useContext(FilterContext);
+  const socketContext = useContext(SocketContext);
 
-    useEffect(() => {
-        socketContext.emit("user_connected", loggedUserContext.loggedUser._id);
+  // Use Effects 
 
-        socketContext.on("error_user_connected", (msg: string) => {
-            if (EnvConfig.DEBUG) console.log(msg);
-        });
+  useEffect(() => {
+    socketContext.emit('user_connected', loggedUserContext?.loggedUser?._id);
 
-        socketContext.on("success_user_connected", (msg: string) => {
-            if (EnvConfig.DEBUG) console.log(msg);
-        });
-    }, []);
+    // Messages from server
+    socketContext.on('error_user_connected', handleSuccessOrError);
+    socketContext.on('success_user_connected', handleSuccessOrError);
+    socketContext.on('error_find_matching', handleSuccessOrError);
+    socketContext.on('success_find_matching', handleSuccessOrError);
+    socketContext.on('error_stop_matching', handleSuccessOrError);
+    socketContext.on('success_stop_matching', handleSuccessOrError);
+    socketContext.on('match_found', handleMatchFound);
 
-    /* Handlers */
-
-    function clickedFindDuo(): void {
-        setFindDuo(true);
+    return () => {
+      if(pollingTimeout) clearTimeout(pollingTimeout.current);
     }
+  }, []);
+  
+  /* Handlers */
 
-    function clickedCancel(): void {
-        setFindDuo(false);
-    }
+  function handleCloseMe(){
+    setTriggered(false);
+  }
 
-    /* Helper Functions */
+  function handleSuccessOrError(res : any) : void{
+    if(EnvConfig.DEBUG) console.log(res);
+  }
 
-    function getButton(): any {
-        return findDuo ? (
-            <Cancel onClick={clickedCancel}>&#10005; CANCEL</Cancel>
-        ) : (
-            <FindDuo onClick={clickedFindDuo}>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" id="magnifyingGlass">
-                    <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z" />
-                </svg>
-                FIND DUO
-            </FindDuo>
-        );
-    }
+  async function handleMatchFound(res : IMatchFoundDTO) : Promise<void>{
 
-    return (
-        <LandingPage>
-            <Nav>
-                <Logo>
-                    <h2 id="valorant">VALORANT</h2>
-                    <h1 id="duofinder">DUOFINDER</h1>
-                </Logo>
-                <HistoryButtonWrapper>
-                    <Button url={"/history"} fontSize="1em" text="HISTORY" width="150px" height="45px"></Button>
-                </HistoryButtonWrapper>
-                <HistoryButtonWrapper>
-                    <Button url={"/chat"} fontSize="1em" text="CHAT" width="150px" height="45px"></Button>
-                </HistoryButtonWrapper>
-                <User>
-                    <p id="username">{props.username}</p>
-                    <img id="profilePic" src={playerIconSrc} alt="Player Icon"></img>
-                </User>
-            </Nav>
-            <LandingContent>
-                <Container>
-                    <LandingCard findDuo={findDuo} duoFound={duoFound} imgSrc={playerIconSrc} />
-                    {getButton()}
-                </Container>
-            </LandingContent>
-        </LandingPage>
+    // Store matched user in context
+    matchedUserContext.updateMatchedUser(res.user);
+
+    // Stop timeout
+    if(pollingTimeout) clearTimeout(pollingTimeout.current);
+
+     setDuoFound(true);
+  }
+
+  async function clickedFindDuo() : Promise<void> {
+    setFindDuo(true);
+    
+    socketContext.emit('find_matching', {userId:loggedUserContext?.loggedUser?._id, filters:filterContext.filters} as IFindMatchDTO);
+
+    pollingTimeout.current = setTimeout(() => {            
+      toast.error("Could not find a match. Please try again later!");
+      setFindDuo(false);
+      socketContext.emit('stop_matching', loggedUserContext?.loggedUser?._id);
+    }, 300000); // 5 mins
+  }
+
+  function clickedCancel() : void {
+    setFindDuo(false);
+    if(pollingTimeout) clearTimeout(pollingTimeout.current);
+    socketContext.emit('stop_matching', loggedUserContext?.loggedUser?._id);
+  }
+
+  /* Helper Functions */
+
+  function getButton() : any{
+    return findDuo ? <Cancel onClick={clickedCancel}>&#10005; CANCEL</Cancel> : (
+      <FindDuo onClick={clickedFindDuo}>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" id="magnifyingGlass">
+          <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z" />
+        </svg>
+        FIND DUO
+      </FindDuo>
     );
+  }
+
+  return (<>
+    <CustomToast></CustomToast>
+    <LandingPage>
+      <FilterPopup closeMe={handleCloseMe} triggered={triggered}></FilterPopup>
+      <Nav>
+        <Logo>
+          <h2 id="valorant">VALORANT</h2>
+          <h1 id="duofinder">DUOFINDER</h1>
+        </Logo>
+        <User>
+          <p id="username">{Micellaneous.toTitleCase(loggedUserContext?.loggedUser?.displayName) ?? "<username>"}</p>
+          <img id="profilePic" src={loggedUserContext?.loggedUser?.avatarImage} alt="Player Icon"></img>
+        </User>
+      </Nav>
+      <LandingContent>
+        <Container>
+          <LandingCard findDuo={findDuo} duoFound={duoFound} imgSrc={loggedUserContext?.loggedUser?.avatarImage}/>
+          <ButtonContainer>
+            <div>
+              <ButtonImages src="./images/general/filter.png"></ButtonImages>
+              <Button onClick={() => setTriggered(true)}>CHAT FILTERS</Button>
+            </div>
+            <div>
+              <ButtonImages src="./images/general/history.png"></ButtonImages>
+              <Link style={{color: "#ffffff", textDecoration: "none", fontWeight: "600"}} to={"/history"}>CHAT HISTORY</Link>
+            </div>
+          </ButtonContainer>
+          {getButton()}
+        </Container>
+      </LandingContent>
+    </LandingPage>
+  </>);
 }
+
+
+const ButtonContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-top: 0%;
+  width: 100%;
+`;
+
+const ButtonImages = styled.img`
+  /* height: 100%; */
+  filter: invert();
+  width: 2%;
+`;
+
+const Button = styled.button`
+  font-weight: bold;
+  font-size: 16px;
+  /* height: 100%; */
+  /* margin: 5%; */
+  background: none;
+  padding: 0% 10% 5% 10%;
+  /* background: none; */
+  color: white;
+  border: 0px;
+  :hover {
+    cursor: pointer;
+  }
+`;
 
 const LandingPage = styled.div`
     background-color: #181818;
