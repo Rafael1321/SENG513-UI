@@ -68,7 +68,9 @@ export default function Landing(props: any) {
                 <HistoryButtonWrapper>
                     <Button url={"/history"} fontSize="1em" text="HISTORY" width="150px" height="45px"></Button>
                 </HistoryButtonWrapper>
-                <Link to={"/chat"}>GO TO CHAT </Link>
+                <HistoryButtonWrapper>
+                    <Button url={"/chat"} fontSize="1em" text="CHAT" width="150px" height="45px"></Button>
+                </HistoryButtonWrapper>
                 <User>
                     <p id="username">{props.username}</p>
                     <img id="profilePic" src={playerIconSrc} alt="Player Icon"></img>
