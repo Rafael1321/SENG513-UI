@@ -6,6 +6,7 @@ import LandingCard from "./LandingCard";
 import { LoggedUserContext } from '../../contexts/LoggedUserContext';
 import { SocketContext } from '../../contexts/SocketContext';
 import { EnvConfig } from '../../util/EnvConfig';
+import { Link } from "react-router-dom";
 
 export default function Landing(props: any) {
   
@@ -62,6 +63,7 @@ export default function Landing(props: any) {
           <h2 id="valorant">VALORANT</h2>
           <h1 id="duofinder">DUOFINDER</h1>
         </Logo>
+        <Link to={"/chat"}>GO TO CHAT </Link>
         <User>
           <p id="username">{props.username}</p>
           <img id="profilePic" src={playerIconSrc} alt="Player Icon"></img>
