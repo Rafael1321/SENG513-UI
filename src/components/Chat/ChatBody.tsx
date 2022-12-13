@@ -8,7 +8,7 @@ import { LoggedUserContext } from "../../contexts/LoggedUserContext";
 import { Link } from "react-router-dom";
 import { IUser } from "../../models/AuthModels";
 import { MatchedUserContext } from "../../contexts/MatchedUserContext";
-import { RankType, GameMode } from "../../models/FiltersModels";
+import { RankType, GameMode, Gender } from "../../models/FiltersModels";
 interface Message {
   type: string;
   text: string;
@@ -133,7 +133,7 @@ export default function ChatBody() {
         <ProfileCard
           imgSrc={(matchedUser.matchedUser == null) ? "/images/icons/Jett_icon.webp" : matchedUser.matchedUser.avatarImage}
           userName={(matchedUser.matchedUser == null) ? "HectorSalamanca" : matchedUser.matchedUser.displayName}
-          basicInfo={(matchedUser.matchedUser == null) ? "22F, US West" : matchedUser.matchedUser.age+" "+matchedUser.matchedUser.gender}
+          basicInfo={(matchedUser.matchedUser == null) ? "22F, US West" : matchedUser.matchedUser.age+" "+Gender[matchedUser.matchedUser.gender]}
           userType={(matchedUser.matchedUser == null) ? 0 : matchedUser.matchedUser.playerType}
 
           valRank={(matchedUser.matchedUser == null) ? 6 : matchedUser.matchedUser.rank[0]}
