@@ -1,7 +1,7 @@
 /* Related */
 
 export enum ServerPreference{
-    ne=0,
+    na=0,
     eu=1,
     ap=2,
     kr=3
@@ -24,7 +24,7 @@ export enum RankType{
     gold = 4,
     platinum = 5,
     diamond = 6,
-    ascendent = 7,
+    ascendant = 7,
     immortal = 8,
     radiant = 9
 }

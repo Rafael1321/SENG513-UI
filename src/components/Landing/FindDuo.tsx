@@ -3,7 +3,6 @@ import styled, { keyframes } from "styled-components";
 import { useState, useEffect } from "react";
 import { SocketContext } from "../../contexts/SocketContext";
 import { LoggedUserContext } from "../../contexts/LoggedUserContext";
-import { EnvConfig } from "../../util/EnvConfig";
 
 export default function FindDuo(props: any) {
   // Constants
@@ -38,19 +37,7 @@ export default function FindDuo(props: any) {
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
-    socketContext.emit("find_matching", loggedUserContext?.loggedUser?._id);
-
-    socketContext.on("error_find_matching", (msg: string) => {
-      if (EnvConfig.DEBUG) console.log(msg);
-    });
-
-    socketContext.on("success_find_matching", (msg: string) => {
-      if (EnvConfig.DEBUG) console.log(msg);
-    });
-  }, []);
-
-  useEffect(() => {
-    setTimeout(changeAgent, 1000);
+    setTimeout(changeAgent, 750);
   });
 
   // Helper functions
