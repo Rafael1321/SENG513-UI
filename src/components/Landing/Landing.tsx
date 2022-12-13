@@ -309,4 +309,10 @@ const Agent = styled.img`
   width: 20vw;
   height: 80vh;
   object-fit: cover;
+
+  @media (max-width: 1025px) {
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 1s, opacity 1s;
+  }
 `;

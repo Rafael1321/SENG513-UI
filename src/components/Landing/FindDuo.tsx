@@ -76,6 +76,7 @@ const FindDuoContainer = styled.div`
   justify-content: space-around;
   align-items: center;
   padding: 0 15%;
+  margin: auto 0;
 
   & img,
   div {
@@ -90,6 +91,10 @@ const FindDuoContainer = styled.div`
     @media (max-width: 1025px) {
       height: 8rem;
       width: 8rem;
+    }
+    @media (max-width: 769px) {
+      height: 7rem;
+      width: 7rem;
     }
 
     @media (max-width: 480px) {
