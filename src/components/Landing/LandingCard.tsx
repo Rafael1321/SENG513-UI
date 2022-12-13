@@ -18,7 +18,7 @@ export default function LandingCard(props: Props) {
     if (!props.findDuo) {
       return <Profile></Profile>;
     } else if (props.findDuo && !props.duoFound) {
-      return <FindDuo imgSrc={props.imgSrc}></FindDuo>;
+      return <FindDuo></FindDuo>;
     } else if (props.findDuo && props.duoFound) {
       return <MatchFound></MatchFound>;
     }
