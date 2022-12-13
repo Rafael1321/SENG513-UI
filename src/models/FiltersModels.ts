@@ -36,6 +36,7 @@ export enum RankLevel{
 }
 
 export enum Gender{
+    unknown = -1,
     allGenders = 0,
     woman = 1,
     man = 2,
