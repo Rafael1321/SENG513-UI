@@ -72,7 +72,7 @@ function ChatHistory(props: Props): React.ReactElement {
                 {width > breakpoint && (
                   <SearchContainer>
                     <SearchIconWrapper>
-                      <SearchIcon url={"Icons/search.png"} />
+                      <SearchIcon url={"images/general/search.png"} />
                     </SearchIconWrapper>
                     <SearchInput placeholder="Search Message History" />
                   </SearchContainer>
@@ -88,7 +88,7 @@ function ChatHistory(props: Props): React.ReactElement {
                 )}
               </PlayerCardsWrapper>
 
-              <ChatContainer>.</ChatContainer>
+              <ChatContainer>huihi.</ChatContainer>
             </HistorySection>
 
             {width > breakpoint && (
