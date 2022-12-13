@@ -1,16 +1,13 @@
 .embla {
-  position: relative;
-  background-color: #f7f7f7;
-  padding: 20px;
-  max-width: 670px;
-  margin-left: auto;
-  margin-right: auto;
+    position: relative;
+    background-color: #f7f7f7;
+    padding: 20px;
+    max-width: 670px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
-.embla__viewport {
-  overflow: hidden;
-  width: 100%;
-}
+
 
 .embla__viewport.is-draggable {
     cursor: move;
@@ -21,15 +18,6 @@
     cursor: grabbing;
 }
 
-.embla__container {
-    display: flex;
-    user-select: none;
-    -webkit-touch-callout: none;
-    -khtml-user-select: none;
-    -webkit-tap-highlight-color: transparent;
-    /* This needs to be the same as the margin in History Card */
-    margin-left: -5px;
-}
 
 
 .embla__slide__img {

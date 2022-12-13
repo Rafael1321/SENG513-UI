@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
+import React from "react";
+import styled from "styled-components/macro";
 import ProfilePicture from "../Shared/ProfilePicture";
 
 type Props = {
-    width: string;
     isMain: boolean;
     zIndex: string;
     username: string;
@@ -12,46 +11,26 @@ type Props = {
 };
 
 export default function HistoryCard(props: Props): React.ReactElement {
-    const [width, setWidth] = useState("30%");
+    // const [width, setWidth] = useState("30%");
 
-    useEffect(() => {
-        setWidth(props.width);
-    }, [props.width]);
+    // useEffect(() => {
+    //     setWidth(props.width);
+    // }, [props.width]);
 
     return (
-        <WrapperOuter width={props.width}>
-            <WrapperInner>
-                <Container isMain={props.isMain} zIndex={props.zIndex}>
-                    <UserInfoContainer>
-                        <ProfilePicture size={"100%"} url={props.url} showBorder={false} />
-                        <UsernameWrapper>
-                            <Username>{props.username}</Username>
-                        </UsernameWrapper>
-                    </UserInfoContainer>
-                    <MessagesWrapper>
-                        <Messages>{props.message}</Messages>
-                    </MessagesWrapper>
-                </Container>
-            </WrapperInner>
-        </WrapperOuter>
+        <Container isMain={props.isMain} zIndex={props.zIndex}>
+            <UserInfoContainer>
+                <ProfilePicture size={"100%"} url={props.url} showBorder={false} />
+                <UsernameWrapper>
+                    <Username>{props.username}</Username>
+                </UsernameWrapper>
+            </UserInfoContainer>
+            <MessagesWrapper>
+                <Messages>{props.message}</Messages>
+            </MessagesWrapper>
+        </Container>
     );
 }
-const WrapperOuter = styled.div<{ width: string }>`
-    position: relative;
-    min-width: 40%;
-    /* This needs to be the same as the margin in .embla_container*/
-    padding-left: 5px;
-
-`;
-
-const WrapperInner = styled.div`
-    position: relative;
-    overflow: hidden;
-    height: 190px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-`;
 
 const Container = styled.div<{ isMain: boolean; zIndex: string }>`
     position: relative;
@@ -68,7 +47,6 @@ const Container = styled.div<{ isMain: boolean; zIndex: string }>`
     opacity: ${(props) => (props.isMain ? "1.0" : 0.2)};
     overflow: hidden;
     transition: all 1s;
-
 `;
 
 const MessagesWrapper = styled.div`

@@ -1,41 +1,38 @@
-import { style } from "@mui/system";
 import * as React from "react";
 import styled from "styled-components";
 
 interface Props {
-  imgSrc: string;
-  userName: string;
-  valRank?: string;
-  chatRank: string;
-  basicInfo?: string;
-  userType: string;
-  aboutMe?: string;
+    imgSrc: string;
+    userName: string;
+    valRank?: string;
+    chatRank: string;
+    basicInfo?: string;
+    userType: string;
+    aboutMe?: string;
 }
 
-export default function ProfileCard(
-  props: Props
-): React.ReactElement<Props, any> {
-  return (
-    <Wrapper>
-      <Icon imgSrc={props.imgSrc} />
-      <Username>{props.userName}</Username>
-      <BasicInfo>{props.basicInfo}</BasicInfo>
-      <Ranks>
-        <RankLabel>
-          <RankImg imgSrc={props.valRank} />
-          RANK
-        </RankLabel>
-        <RankLabel style={{ textAlign: "center" }}>
-          <RankImg imgSrc={props.chatRank} />
-          REPUTATION
-        </RankLabel>
-      </Ranks>
-      <AboutContainer>
-        <Label>ABOUT ME:</Label>
-        <AboutMe>{props.aboutMe}</AboutMe>
-      </AboutContainer>
-    </Wrapper>
-  );
+export default function ProfileCard(props: Props): React.ReactElement<Props, any> {
+    return (
+        <Wrapper>
+            <Icon imgSrc={props.imgSrc} />
+            <Username>{props.userName}</Username>
+            <BasicInfo>{props.basicInfo}</BasicInfo>
+            <Ranks>
+                <RankLabel>
+                    <RankImg imgSrc={props.valRank} />
+                    RANK
+                </RankLabel>
+                <RankLabel style={{ textAlign: "center" }}>
+                    <RankImg imgSrc={props.chatRank} />
+                    REPUTATION
+                </RankLabel>
+            </Ranks>
+            <AboutContainer>
+                <Label>ABOUT ME:</Label>
+                <AboutMe>{props.aboutMe}</AboutMe>
+            </AboutContainer>
+        </Wrapper>
+    );
 }
 
 const Wrapper = styled("div")`
@@ -69,19 +66,19 @@ const Wrapper = styled("div")`
 `;
 
 const Icon = styled.img<{ imgSrc: string }>`
-  content: url(${(props) => props.imgSrc});
-  border-radius: 50%;
-  width: 10vw;
-  max-width: 200px;
-  max-height: 200px;
-  aspect-ratio: 1;
-  margin-left: auto;
-  margin-right: auto;
-  display: block;
-  @media all and(max-height: 1000px) {
-    width: 10%;
-    height: 10%;
-  }
+    content: url(${(props) => props.imgSrc});
+    border-radius: 50%;
+    width: 10vw;
+    max-width: 200px;
+    max-height: 200px;
+    aspect-ratio: 1;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    @media all and(max-height: 1000px) {
+        width: 10%;
+        height: 10%;
+    }
 `;
 const Username = styled.p`
   text-align: center;
@@ -99,18 +96,18 @@ const BasicInfo = styled.p`
   }
 `;
 const Ranks = styled.div`
-  display: flex;
-  width: 60%;
-  margin-left: auto;
-  margin-right: auto;
-  justify-content: space-between;
-  @media all and (max-width: 1400px) {
-    flex-direction: column;
-    width: 10%;
-    justify-content: center;
-    margin-top: auto;
-    margin-bottom: auto;
-  }
+    display: flex;
+    width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+    justify-content: space-between;
+    @media all and (max-width: 1400px) {
+        flex-direction: column;
+        width: 10%;
+        justify-content: center;
+        margin-top: auto;
+        margin-bottom: auto;
+    }
 `;
 const RankImg = styled.img<{ imgSrc: string }>`
   content: url(${(props) => props.imgSrc});
@@ -128,21 +125,26 @@ const RankImg = styled.img<{ imgSrc: string }>`
 `;
 
 const AboutContainer = styled.div`
-  text-align: left;
-  overflow: scroll;
-  margin-left: auto;
-  margin-right: auto;
-  @media all and (max-width: 1400px) {
-    width: 40%;
-    height: 90%;
-  }
+    text-align: left;
+    overflow: scroll;
+    margin-left: auto;
+    margin-right: auto;
+    -ms-overflow-style: none; /* Internet Explorer 10+ */
+    scrollbar-width: none; /* Firefox */
+    ::-webkit-scrollbar {
+        display: none;
+    }
+    @media all and (max-width: 1400px) {
+        width: 40%;
+        height: 90%;
+    }
 `;
 
 const AboutMe = styled.p`
-  font-size: min(3vw, 20px);
-  font-weight: 400;
-  font-family: "Arimo", sans-serif;
-  margin: 0;
+    font-size: min(3vw, 20px);
+    font-weight: 400;
+    font-family: "Arimo", sans-serif;
+    margin: 0;
 `;
 const Label = styled.p`
   text-align: left;

@@ -1,16 +1,12 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useContext } from "react";
 import useEmblaCarousel from "embla-carousel-react";
-import { mediaByIndex } from "../../media";
 import "./embla.css";
-import styled from "styled-components";
+import styled from "styled-components/macro";
 import HistoryCard from "./HistoryCard";
 import { Chat } from "./ChatHistory";
+import { WidthContext } from "./ChatHistory";
 
-enum HistoryCardSize {
-    One = "35%",
-    Two = "30%",
-    Three = "10%",
-}
+import ProfileCardUpdated from "./ProfileCardUpdated";
 
 type Props = {
     history: Array<Chat>;
@@ -21,19 +17,11 @@ export const EmblaCarousel = (props: Props) => {
     const [viewportRef, embla] = useEmblaCarousel({
         align: "center",
         skipSnaps: false,
-        draggable: false,
     });
     const [prevBtnEnabled, setPrevBtnEnabled] = useState(false);
     const [nextBtnEnabled, setNextBtnEnabled] = useState(false);
     const [main, setMain] = useState(0);
-
-    const decrement = (val: number) => {
-        setMain((val -= 1));
-    };
-
-    const increment = (val: number) => {
-        setMain((val += 1));
-    };
+    const width = useContext(WidthContext);
 
     const scrollPrev = useCallback(() => {
         embla && embla.scrollPrev();
@@ -59,42 +47,45 @@ export const EmblaCarousel = (props: Props) => {
 
     return (
         <Container>
-            <div className="embla__viewport" ref={viewportRef}>
-                <div className="embla__container">
-                    {/* {props.slides.map((index: any) => (
-                        <div className="embla__slide" key={index}>
-                            <div className="embla__slide__inner">
-                                <img className="embla__slide__img" src={mediaByIndex(index)} alt="A cool cat." />
-                            </div>
-                        </div>
-                    ))} */}
+            <EmblaViewPort ref={viewportRef}>
+                <EmblaContainer>
+                    {props.history.map((chat: Chat) =>
+                        width > 1000 ? (
+                            <WrapperOuter>
+                                <WrapperInner>
+                                    <HistoryCard
+                                        key={chat.key}
+                                        url={chat.profile_url}
+                                        username={chat.username}
+                                        message={chat.last_message}
+                                        isMain={main === chat.key}
+                                        zIndex={main === chat.key ? "3" : "1"}
+                                    />
+                                </WrapperInner>
+                            </WrapperOuter>
+                        ) : (
+                            <WrapperOuter>
+                                <WrapperInner>
+                                    <ProfileCardWrapper>
+                                        <ProfileCardUpdated
+                                            isMain={main === chat.key}
+                                            imgSrc={chat.profile_url}
+                                            userName={chat.username}
+                                            chatRank="Images/chamber.webp"
+                                            userType="gamer"
+                                            valRank="Images/chamber.webp"
+                                            basicInfo="I am basic info"
+                                            aboutMe="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+                                        ></ProfileCardUpdated>
+                                    </ProfileCardWrapper>
+                                </WrapperInner>
+                            </WrapperOuter>
+                        )
+                    )}
+                </EmblaContainer>
+            </EmblaViewPort>
 
-                    {props.history.map((chat: Chat) => (
-                        <HistoryCard
-                            key={chat.key}
-                            width={main === chat.key ? HistoryCardSize.One : HistoryCardSize.Two}
-                            url={chat.profile_url}
-                            username={chat.username}
-                            message={chat.last_message}
-                            isMain={main === chat.key}
-                            zIndex={main === chat.key ? "3" : "1"}
-                        />
-                    ))}
 
-                    {/* {props.history.map((chat: Chat) => (
-                        // <HistoryCard
-                        //     width={main === chat.key ? HistoryCardSize.One : HistoryCardSize.Two}
-                        //     key={chat.key}
-                        //     url={chat.profile_url}
-                        //     username={chat.username}
-                        //     message={chat.last_message}
-                        //     isMain={main === chat.key}
-                        //     zIndex={main === chat.key ? "3" : "1"}
-                        // />
-                        <TestSlide>test</TestSlide>
-                    ))} */}
-                </div>
-            </div>
             <PrevButton onClick={scrollPrev} enabled={prevBtnEnabled} />
             <NextButton onClick={scrollNext} enabled={nextBtnEnabled} />
         </Container>
@@ -122,15 +113,80 @@ export const NextButton = (props: IButtonProps) => (
     </button>
 );
 
-
-
 const Container = styled.div`
     position: relative;
     padding: 2%;
     width: 100%;
     height: 100%;
-    margin-left: auto;
-    margin-right: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    @media all and (max-width: 500px) {
+        height: 90%;
+        padding: 0;
+    }
+`;
+
+const EmblaViewPort = styled.div`
+    position: relative;
+
+    overflow: hidden;
+    width: 95%;
+
+    box-shadow: inset -100px 4px 40px rgba(24, 24, 24, 0.4);
+`;
+
+// For all the cards
+const EmblaContainer = styled.div`
+    position: relative;
+    display: flex;
+    user-select: none;
+    -webkit-touch-callout: none;
+    -khtml-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    /* This needs to be the same as the margin in History Card */
+    margin-left: -1px;
+`;
+
+const ProfileCardWrapper = styled.div`
+    position: relative;
+    padding: 1%;
+    width: 90%;
+    height: 95%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;
+
+// It's parent has no actual width
+const WrapperOuter = styled.div`
+    /* This needs to be the same as the margin in .embla_container*/
+    position: relative;
+    padding-left: 1px;
+
+    @media all and (max-width: 500px) {
+        min-height: 20vh;
+        min-width: 95vw;
+    }
+`;
+
+const WrapperInner = styled.div`
+    position: relative;
+    overflow: hidden;
+    
+    height: 190px;
+    width: 400px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    @media all and (max-width: 500px) {
+        height: 100%;
+        width: 100%;
+        /* background-color: aliceblue; */
+    }
 `;
 
 // const EmblaSlide = styled.div<{ width: string }>`
