@@ -116,7 +116,7 @@ export default function Profile() : React.ReactElement {
         <AboutMeContainer>
 
         <Label>ABOUT ME</Label>
-        <TextArea genE={generalEdit} autoComplete="off" placeholder={bio} disabled={!generalEdit} rows={6}></TextArea>
+        <TextArea onChange={handleAboutMeChange} genE={generalEdit} autoComplete="off" placeholder={aboutMe} disabled={!generalEdit} rows={6}></TextArea>
         </AboutMeContainer>
 
         {/* <RankContainer> */}
@@ -126,7 +126,8 @@ export default function Profile() : React.ReactElement {
               REPUTATION
               </RankLabel>
             <RankLabel>
-            <RankImg imgSrc={(loggedUserContext.loggedUser == null) ? "images/ranks/rank_1_1.webp" : "images/ranks/rank_"+loggedUserContext.loggedUser.rank[0]+"_"+loggedUserContext.loggedUser.rank[1]+".webp"}></RankImg>
+            <RankImg imgSrc={"images/ranks/rank_1_1.webp"}></RankImg>
+            {/* <RankImg imgSrc={(loggedUserContext?.loggedUser == null) ? "images/ranks/rank_1_1.webp" : "images/ranks/rank_"+loggedUserContext?.loggedUser?.rank[0]+"_"+loggedUserContext?.loggedUser?.rank[1]+".webp"}></RankImg> */}
               RANK
             </RankLabel>
           </Ranks>
