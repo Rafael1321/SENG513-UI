@@ -5,7 +5,6 @@ import LandingCard from "./LandingCard";
 import { LoggedUserContext } from '../../contexts/LoggedUserContext';
 import { SocketContext } from '../../contexts/SocketContext';
 import { EnvConfig } from '../../util/EnvConfig';
-import { Link } from "react-router-dom";
 import { MatchedUserContext } from "../../contexts/MatchedUserContext";
 import { Micellaneous } from "../../util/Micellaneous";
 import { CustomToast } from "../Shared/CustomToast";
@@ -15,9 +14,6 @@ import { IMatchFoundDTO, IFindMatchDTO } from '../../models/MatchingModels';
 
 export default function Landing() {
   
-  // Constants
-  const playerIconSrc = "/Images/Icons/Astra_icon.webp";
-
   // State 
   const [duoFound, setDuoFound] = useState<boolean>(false);
   const [findDuo, setFindDuo] = useState<boolean>(false);
@@ -106,15 +102,14 @@ export default function Landing() {
           <h2 id="valorant">VALORANT</h2>
           <h1 id="duofinder">DUOFINDER</h1>
         </Logo>
-        <Link to={"/chat"}>GO TO CHAT </Link>
         <User>
           <p id="username">{Micellaneous.toTitleCase(loggedUserContext?.loggedUser?.displayName) ?? "<username>"}</p>
-          <img id="profilePic" src={playerIconSrc} alt="Player Icon"></img>
+          <img id="profilePic" src={loggedUserContext?.loggedUser?.avatarImage} alt="Player Icon"></img>
         </User>
       </Nav>
       <LandingContent>
         <Container>
-          <LandingCard findDuo={findDuo} duoFound={duoFound} imgSrc={playerIconSrc}/>
+          <LandingCard findDuo={findDuo} duoFound={duoFound} imgSrc={loggedUserContext?.loggedUser?.avatarImage}/>
           {getButton()}
         </Container>
       </LandingContent>
