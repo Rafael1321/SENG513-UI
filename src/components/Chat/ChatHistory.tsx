@@ -1,6 +1,5 @@
 import React, { createContext, useEffect, useState } from "react";
 import Button from "../Shared/Button";
-import HistoryCard from "./HistoryCard";
 import styled from "styled-components/macro";
 import { EmblaCarousel } from "./EmblaCarousel";
 import ProfileCardUpdated from "./ProfileCardUpdated";
@@ -88,7 +87,7 @@ function ChatHistory(props: Props): React.ReactElement {
                 )}
               </PlayerCardsWrapper>
 
-              <ChatContainer>huihi.</ChatContainer>
+              <ChatContainer>Future Chat Goes Here</ChatContainer>
             </HistorySection>
 
             {width > breakpoint && (
@@ -101,9 +100,9 @@ function ChatHistory(props: Props): React.ReactElement {
                   <ProfileCardUpdated
                     imgSrc="images/icons/Neon_icon.webp"
                     userName="IAMNOTAFURRY"
-                    chatRank="images/ranks/rank_4.png"
+                    chatRank="images/reputation_ranks/ToxicWaste.png"
                     userType="gamer"
-                    valRank="images/ranks/rank_6.png"
+                    valRank="images/ranks/rank_7_3.webp"
                     basicInfo="I am basic info"
                     aboutMe="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
                   ></ProfileCardUpdated>
