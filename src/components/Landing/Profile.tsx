@@ -46,13 +46,12 @@ function Profile() {
   ];
 
   // Set init bio
+  const [userId, setUserId] = useState("");
   const [displayName, setDisplayName] = useState("");
   const [age, setAge] = useState(0);
   const [gender, setGender] = useState(Gender.allGenders);
   const [playerType, setPlayerType] = useState(GameMode.competitive);
   const [aboutMe, setAboutMe] = useState("There's nothing here! Edit your profile to liven things up!");
-
-  const [authResponse, setAuthResponse] = useState({});
 
   // To be used for editing user info, init false
   const [generalEdit, setGeneralEdit] = useState(false);
@@ -94,12 +93,14 @@ function Profile() {
   };
 
   useEffect(() => {
+    setUserId(loggedUserContext.loggedUser._id);
     setDisplayName(loggedUserContext.loggedUser.displayName);
     setAge(loggedUserContext.loggedUser.age);
     setGender(loggedUserContext.loggedUser.gender);
     setPlayerType(loggedUserContext.loggedUser.playerType);
     setAboutMe(loggedUserContext.loggedUser.aboutMe);
   }, [
+    loggedUserContext.loggedUser._id,
     loggedUserContext.loggedUser.displayName,
     loggedUserContext.loggedUser.age,
     loggedUserContext.loggedUser.gender,
@@ -108,8 +109,6 @@ function Profile() {
   ]);
 
   useEffect(() => {
-    console.log("Edit Request");
-
     async function updateBackend() {
       const authResponse: IAuthResponse = await AuthService.update({
         userId: loggedUserContext.loggedUser._id,
@@ -119,12 +118,12 @@ function Profile() {
         playerType: playerType,
         aboutMe: aboutMe,
       });
-      setAuthResponse(authResponse);
     }
-    updateBackend()
+    // You can do some fancy checks here if you'd like, lots of work though
 
-    console.log(authResponse);
-  }, [displayName, age, gender, playerType, aboutMe, authResponse, loggedUserContext]);
+    updateBackend();
+
+  }, [displayName]);
 
   return (
     <Grid columns={2}>
@@ -137,7 +136,7 @@ function Profile() {
         // maxLength={15};
         // minLength={1};
         onBlur={(e: React.FormEvent<HTMLInputElement>) => {
-          handleDisplayNameChange(e.currentTarget.value);
+          setDisplayName(e.currentTarget.value);
         }}
         disabled={!generalEdit}
       ></Input>
