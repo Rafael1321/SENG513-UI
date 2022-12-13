@@ -30,7 +30,7 @@ const ChatBubble = styled.div<{ msgType: string }>`
   order: ${(props) => (props.msgType === "received" ? 2 : 1)};
   max-width: 500px;
   padding: 1vw;
-  border-radius: 37px;
+  border-radius: 20px;
   color: black;
   font-family: "Arimo", sans-serif;
   font-size: min(2vw, 20px);

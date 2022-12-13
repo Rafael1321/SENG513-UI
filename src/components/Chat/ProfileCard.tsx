@@ -1,4 +1,3 @@
-import { style } from "@mui/system";
 import * as React from "react";
 import styled from "styled-components";
 
@@ -10,12 +9,11 @@ interface Props {
     basicInfo?: string;
     userType: string;
     aboutMe?: string;
-    isMain?: boolean;
 }
 
 export default function ProfileCard(props: Props): React.ReactElement<Props, any> {
     return (
-        <Wrapper isMain={props.isMain}>
+        <Wrapper>
             <Icon imgSrc={props.imgSrc} />
             <Username>{props.userName}</Username>
             <BasicInfo>{props.basicInfo}</BasicInfo>
@@ -37,40 +35,34 @@ export default function ProfileCard(props: Props): React.ReactElement<Props, any
     );
 }
 
-const Wrapper = styled("div")<{ isMain?: boolean }>`
-    background-color: #282828;
-    margin: 10px;
-    width: 20vw;
-    max-width: 400px;
-    height: 70vh;
-    padding: 5vh;
-    border-radius: 44px;
-    filter: drop-shadow(0px 0px 10px #66c2a9);
-    display: flex;
-    flex-direction: column;
-    overflow: scroll;
-    justify-content: center;
-    -ms-overflow-style: none; /* Internet Explorer 10+ */
-    scrollbar-width: none; /* Firefox */
-    ::-webkit-scrollbar {
-        display: none;
-    }
-    @media all and (max-width: 1400px) {
-        margin-left: auto;
-        margin-right: auto;
-        order: 1;
-        flex-wrap: wrap;
-        width: 90vw;
-        max-width: 90vw;
-        height: 13vh;
-        padding: 2vw;
-        filter: ${(props) => (props.isMain ? "drop-shadow(0px 0px 5px #66c2a9)" : "none")};
-        max-height: 200px;
-        border-radius: 20px;
-    }
-    @media all and (max-height: 1000px) {
-        min-height: 10vw;
-    }
+const Wrapper = styled("div")`
+  background-color: #282828;
+  margin: 10px;
+  width: 20vw;
+  max-width: 400px;
+  height: 70vh;
+  padding: 5vh;
+  border-radius: 44px;
+  filter: drop-shadow(0px 0px 10px #66c2a9);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  @media all and (max-width: 1400px) {
+    margin-left: auto;
+    margin-right: auto;
+    order: 1;
+    flex-wrap: wrap;
+    width: 90vw;
+    max-width: 90vw;
+    height: 13vh;
+    padding: 2vw;
+    filter: drop-shadow(0px 0px 5px #66c2a9);
+    max-height: 200px;
+    border-radius: 20px;
+  }
+  @media all and (max-height: 1000px) {
+    min-height: 10vw;
+  }
 `;
 
 const Icon = styled.img<{ imgSrc: string }>`
@@ -89,19 +81,19 @@ const Icon = styled.img<{ imgSrc: string }>`
     }
 `;
 const Username = styled.p`
-    text-align: center;
-    font-size: min(3vw, 35px);
-    margin: 5px;
-    font-weight: 600;
+  text-align: center;
+  font-size: min(3vw, 25px);
+  margin: 5px;
+  font-weight: 600;
 `;
 const BasicInfo = styled.p`
-    text-align: center;
-    font-size: min(20px, 2vw);
-    font-weight: 400;
-    margin: 0;
-    @media all and (max-width: 1400px) {
-        display: none;
-    }
+  text-align: center;
+  font-size: min(15px, 2vw);
+  font-weight: 400;
+  margin: 0;
+  @media all and (max-width: 1400px) {
+    display: none;
+  }
 `;
 const Ranks = styled.div`
     display: flex;
@@ -118,18 +110,18 @@ const Ranks = styled.div`
     }
 `;
 const RankImg = styled.img<{ imgSrc: string }>`
-    content: url(${(props) => props.imgSrc});
-    justify-content: center;
-    margin-left: auto;
-    margin-right: auto;
-    width: 5vw;
-    max-width: 54px;
-    height: 5vw;
-    max-height: 54px;
-    @media all and(max-height: 1000px) {
-        height: 10%;
-        max-height: 10%;
-    }
+  content: url(${(props) => props.imgSrc});
+  justify-content: center;
+  margin-left: auto;
+  margin-right: auto;
+  width: 5vw;
+  max-width: 50px;
+  height: 5vw;
+  max-height: 50px;
+  @media all and(max-height: 1000px) {
+    height: 10%;
+    max-height: 10%;
+  }
 `;
 
 const AboutContainer = styled.div`
@@ -155,20 +147,21 @@ const AboutMe = styled.p`
     margin: 0;
 `;
 const Label = styled.p`
-    text-align: left;
-    font-size: min(20px, 2vw);
-    font-weight: 600;
-    @media all and (max-width: 1400px) {
-        // visibility: hidden;
-        margin: 0;
-    }
+  text-align: left;
+  font-size: min(20px, 1.2vw);
+  font-weight: 600;
+  @media all and (max-width: 1400px) {
+    // visibility: hidden;
+    margin: 0;
+  }
 `;
 const RankLabel = styled(Label)`
-    text-align: center;
-    font-size: min(20px, 1.5vw);
-    display: flex;
-    flex-direction: column;
-    @media all and (max-width: 1400px) {
-        // visibility: hidden;
-    }
+  text-align: center;
+  font-size: 60%;
+  display: flex;
+  flex-direction: column;
+  @media all and (max-width: 1400px) {
+    font-size: 30%;
+    // visibility: hidden;
+  }
 `;
