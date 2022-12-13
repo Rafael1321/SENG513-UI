@@ -170,6 +170,18 @@ function ChatHistory(props: Props): React.ReactElement {
   );
 }
 
+const RateButton = styled.button`
+  color: white;
+  background-color: #68c9ac;
+`;
+
+const Submit = styled.button``;
+
+const RatingSlider = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
 const MainWrapper = styled.div`
   // applies it to all the children
   * {
