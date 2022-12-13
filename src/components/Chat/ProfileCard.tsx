@@ -1,4 +1,3 @@
-import { style } from "@mui/system";
 import * as React from "react";
 import styled from "styled-components";
 
@@ -10,7 +9,6 @@ interface Props {
   basicInfo?: string;
   userType: string;
   aboutMe?: string;
-  isMain?: boolean;
 }
 
 export default function ProfileCard(
@@ -87,13 +85,13 @@ const Icon = styled.img<{ imgSrc: string }>`
 `;
 const Username = styled.p`
   text-align: center;
-  font-size: min(3vw, 35px);
+  font-size: min(3vw, 25px);
   margin: 5px;
   font-weight: 600;
 `;
 const BasicInfo = styled.p`
   text-align: center;
-  font-size: min(20px, 2vw);
+  font-size: min(15px, 2vw);
   font-weight: 400;
   margin: 0;
   @media all and (max-width: 1400px) {
@@ -120,9 +118,9 @@ const RankImg = styled.img<{ imgSrc: string }>`
   margin-left: auto;
   margin-right: auto;
   width: 5vw;
-  max-width: 54px;
+  max-width: 50px;
   height: 5vw;
-  max-height: 54px;
+  max-height: 50px;
   @media all and(max-height: 1000px) {
     height: 10%;
     max-height: 10%;
@@ -153,7 +151,7 @@ const AboutMe = styled.p`
 `;
 const Label = styled.p`
   text-align: left;
-  font-size: min(20px, 2vw);
+  font-size: min(20px, 1.2vw);
   font-weight: 600;
   @media all and (max-width: 1400px) {
     // visibility: hidden;
@@ -162,10 +160,11 @@ const Label = styled.p`
 `;
 const RankLabel = styled(Label)`
   text-align: center;
-  font-size: min(20px, 1.5vw);
+  font-size: 60%;
   display: flex;
   flex-direction: column;
   @media all and (max-width: 1400px) {
+    font-size: 30%;
     // visibility: hidden;
   }
 `;

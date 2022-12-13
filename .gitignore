@@ -31,6 +31,7 @@ dist/*# See https://help.github.com/articles/ignoring-files/ for more about igno
 .env.development.local
 .env.test.local
 .env.production.local
+.env
 
 npm-debug.log*
 yarn-debug.log*
@@ -40,8 +41,12 @@ src/assets
 public/assets 
 public/Icons
 public/Images
+public/images
+
 
 # pics
 public/Icons
 public/Images
 
+public/images
+.env

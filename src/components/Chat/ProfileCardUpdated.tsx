@@ -1,6 +1,6 @@
-import { style } from "@mui/system";
-import * as React from "react";
-import styled from "styled-components";
+import React, { useContext } from "react";
+import styled from "styled-components/macro";
+import { WidthContext } from "./ChatHistory";
 
 interface Props {
     imgSrc: string;
@@ -14,25 +14,35 @@ interface Props {
 }
 
 export default function ProfileCardUpdated(props: Props): React.ReactElement<Props, any> {
+    const width = useContext(WidthContext);
+
     return (
         <Wrapper isMain={props.isMain}>
-            <Icon imgSrc={props.imgSrc} />
-            <Username>{props.userName}</Username>
-            <BasicInfo>{props.basicInfo}</BasicInfo>
-            <Ranks>
-                <RankLabel>
-                    <RankImg imgSrc={props.valRank} />
-                    RANK
-                </RankLabel>
-                <RankLabel style={{ textAlign: "center" }}>
-                    <RankImg imgSrc={props.chatRank} />
-                    REPUTATION
-                </RankLabel>
-            </Ranks>
-            <AboutContainer>
-                <Label>ABOUT ME:</Label>
-                <AboutMe>{props.aboutMe}</AboutMe>
-            </AboutContainer>
+            <UserImageContainer>
+                {width > 500 && <UserIcon imgSrc={props.imgSrc} />}
+                <div>
+                    <UsernameText>{props.userName}</UsernameText>
+                </div>
+                <RanksContainer>
+                    <RankWrapper>
+                        <RankImg imgSrc={props.valRank} />
+                        <RankLabel>RANK</RankLabel>
+                    </RankWrapper>
+                    <RankWrapper>
+                        <RankImg imgSrc={props.chatRank} />
+                        <RankLabel style={{ textAlign: "center" }}>REP</RankLabel>
+                    </RankWrapper>
+                </RanksContainer>
+            </UserImageContainer>
+
+            {width > 500 && (
+                <AboutMeContainer>
+                    <AboutMeLabel>ABOUT ME:</AboutMeLabel>
+                    <AboutMeWrapper>
+                        <AboutMeText>{props.aboutMe}</AboutMeText>
+                    </AboutMeWrapper>
+                </AboutMeContainer>
+            )}
         </Wrapper>
     );
 }
@@ -42,32 +52,37 @@ const Wrapper = styled("div")<{ isMain?: boolean }>`
     background-color: #282828;
     border-radius: 44px;
     filter: drop-shadow(0px 0px 10px #66c2a9);
-    
-    aspect-ratio: 44/79;
+
+    font-weight: 200;
+    font-size: 15px;
+    text-align: center;
+
+    @media all and (min-width: 1000px) {
+        aspect-ratio: 44/79;
+    }
 
     padding: 5%;
-    
+
     width: 100%;
-    
+    height: 100%;
+
     display: flex;
     flex-direction: column;
-    
-    overflow: scroll;
-    justify-content: center;
-    -ms-overflow-style: none; /* Internet Explorer 10+ */
-    scrollbar-width: none; /* Firefox */
-    ::-webkit-scrollbar {
-        display: none;
+    justify-content: space-evenly;
+    align-items: center;
+
+    overflow: hidden;
+
+    p {
+        margin: 0;
     }
-    
-    @media all and (max-width: 1400px) {
-        height: 100%;
-        width: 100%;
+
+    @media all and (max-width: 1000px) {
+        /* height: 100%; */
+        /* width: 100%; */
 
         border-radius: 20px;
-        
-        margin-left: auto;
-        margin-right: auto;
+
         padding: 2%;
 
         order: 1;
@@ -76,106 +91,143 @@ const Wrapper = styled("div")<{ isMain?: boolean }>`
         filter: ${(props) => (props.isMain ? "drop-shadow(0px 0px 5px #66c2a9)" : "none")};
     }
 
+    @media all and (max-width: 500px) {
+        height: 100%;
+        width: 100%;
+        filter: none;
+        flex-direction: row;
+    }
 `;
 
-const Icon = styled.img<{ imgSrc: string }>`
+const UserImageContainer = styled.div`
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    height: 40%;
+
+    @media all and (max-width: 500px) {
+        width: 50%;
+        height: 100%;
+    }
+`;
+
+const UserIcon = styled.img<{ imgSrc: string }>`
+    position: relative;
     content: url(${(props) => props.imgSrc});
-    border-radius: 50%;
-    width: 10vw;
+    aspect-ratio: 1/1;
+
     max-width: 200px;
     max-height: 200px;
-    aspect-ratio: 1;
+
+    border-radius: 50%;
+    display: block;
+
+    margin-bottom: 5px;
     margin-left: auto;
     margin-right: auto;
-    display: block;
-    @media all and(max-height: 1000px) {
-        width: 10%;
-        height: 10%;
+
+    @media all and (max-width: 500px) {
+        width: 25%;
+        margin-bottom: 5%;
     }
 `;
-const Username = styled.p`
-    text-align: center;
-    font-size: min(3vw, 35px);
-    margin: 5px;
-    font-weight: 600;
-`;
-const BasicInfo = styled.p`
-    text-align: center;
-    font-size: min(20px, 2vw);
-    font-weight: 400;
-    margin: 0;
-    @media all and (max-width: 1400px) {
-        display: none;
+
+const UsernameText = styled.p`
+    font-size: 2rem;
+
+    && {
+        margin-bottom: 5%;
+    }
+
+    @media all and (max-width: 500px) {
+        font-size: 1.5em;
     }
 `;
-const Ranks = styled.div`
+
+const RanksContainer = styled.div`
     position: relative;
-    
+
     display: flex;
     justify-content: center;
     gap: 10%;
 
     width: 100%;
 
-    margin-left: auto;
-    margin-right: auto;
-    
-    @media all and (max-width: 1400px) {
-        width: 10%;
+    margin-bottom: 5%;
+
+    @media all and (max-width: 500px) {
+        width: 100%;
+        height: 30%;
     }
 `;
 const RankImg = styled.img<{ imgSrc: string }>`
     content: url(${(props) => props.imgSrc});
+
+    position: relative;
+
     justify-content: center;
-    margin-left: auto;
-    margin-right: auto;
+
     width: 5vw;
     max-width: 54px;
     height: 5vw;
     max-height: 54px;
-    @media all and(max-height: 1000px) {
-        height: 10%;
-        max-height: 10%;
+
+    aspect-ratio: 1/1;
+
+    @media all and (max-width: 500px) {
+        min-width: 50px;
+        min-height: 50px;
     }
 `;
 
-const AboutContainer = styled.div`
-    text-align: left;
-    overflow: scroll;
-    margin-left: auto;
-    margin-right: auto;
-    -ms-overflow-style: none; /* Internet Explorer 10+ */
-    scrollbar-width: none; /* Firefox */
-    ::-webkit-scrollbar {
-        display: none;
+const AboutMeContainer = styled.div`
+    position: relative;
+    height: 40%;
+    @media all and (max-width: 1000px) {
+        width: 40%;
+        height: 90%;
     }
-    @media all and (max-width: 1400px) {
+
+    @media all and (max-width: 500px) {
         width: 40%;
         height: 90%;
     }
 `;
 
-const AboutMe = styled.p`
-    font-size: min(3vw, 20px);
+const AboutMeLabel = styled.p`
+    text-align: left;
+    font-size: 1.5rem;
+    font-weight: 600;
+`;
+
+const AboutMeWrapper = styled.div`
+    height: 90%;
+    overflow-y: scroll;
+`;
+
+const AboutMeText = styled.p`
+    position: relative;
+    padding: 2%;
+
+    text-align: left;
+    font-size: 1rem;
     font-weight: 400;
     font-family: "Arimo", sans-serif;
-    margin: 0;
 `;
-const Label = styled.p`
-    text-align: left;
-    font-size: min(20px, 2vw);
-    font-weight: 600;
-    @media all and (max-width: 1400px) {
-        // visibility: hidden;
-        margin: 0;
-    }
-`;
-const RankLabel = styled(Label)`
+
+const RankLabel = styled(AboutMeLabel)`
     text-align: center;
     font-size: min(20px, 1.5vw);
     display: flex;
     flex-direction: column;
-    @media all and (max-width: 1400px) {
-        // visibility: hidden;
+
+    @media all and (max-width: 500px) {
+        font-size: 1rem;
     }
 `;
+
+const RankWrapper = styled.div``;

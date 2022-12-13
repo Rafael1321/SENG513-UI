@@ -1,7 +1,7 @@
 import React, { createContext, useEffect, useState } from "react";
 import Button from "../Shared/Button";
 import HistoryCard from "./HistoryCard";
-import styled, { AnyStyledComponent } from "styled-components";
+import styled from "styled-components/macro";
 import { EmblaCarousel } from "./EmblaCarousel";
 import ProfileCardUpdated from "./ProfileCardUpdated";
 import { Slider } from "@mui/material";
@@ -26,32 +26,32 @@ const history = [
   {
     key: 0,
     username: "VividEradicator",
-    profile_url: "Images/astra.webp",
+    profile_url: "images/icons/Astra_icon.webp",
     last_message: "Suggondeez",
   },
   {
     key: 1,
     username: "IAMNOTAFURRY",
-    profile_url: "Images/chamber.webp",
+    profile_url: "images/icons/Chamber_icon.webp",
     last_message: "Bro what are you even saying man?", //Overflow
   },
   {
     key: 2,
     username: "ArcticFox",
-    profile_url: "Images/chamber.webp",
+    profile_url: "images/icons/Omen_icon.webp",
     last_message: "I love chamber so much!",
   },
   {
     key: 3,
     username: "Malder",
-    profile_url: "Images/chamber.webp",
+    profile_url: "images/icons/Breach_icon.webp",
     last_message: "Wtf is this carousel",
   },
 ];
 
 function ChatHistory(props: Props): React.ReactElement {
   const [width, setWidth] = useState(window.innerWidth);
-  const breakpoint = 1400;
+  const breakpoint = 1000;
 
   const [rateClicked, setRateClicked] = useState(false);
   const [rating, setRating] = useState(5);
@@ -83,134 +83,122 @@ function ChatHistory(props: Props): React.ReactElement {
   return (
     <>
       <WidthContext.Provider value={width}>
-        <Wrapper>
-          <HistorySection>
-            <Menu>
-              {width > breakpoint && (
-                <Button
-                  url={"Images/back.png"}
-                  text={"BACK"}
-                  width={"160px"}
-                  height={"70px"}
-                />
-              )}
-              {/* <SearchContainer>
-                            <SearchIconWrapper>
-                            <SearchIcon url={"Icons/search.png"} />
-                            </SearchIconWrapper>
-                            <SearchInput placeholder="Search Message History" />
-                        </SearchContainer> */}
-            </Menu>
-
-            <HistoryContainer>
-              <EmblaCarousel slides={[...slides]} history={history} />
-              {/* {width < breakpoint && (
-                                <RatePlayerWrapper>
-                                    <Button text={"RATE PLAYER"} width={"100%"} height={"100%"} />
-                                </RatePlayerWrapper>
-                            )} */}
-            </HistoryContainer>
-
-            <ChatContainer>.</ChatContainer>
-          </HistorySection>
-
-          {width > breakpoint && (
-            <InfoCardSection>
-              <RatePlayerWrapper>
-                {rateClicked ? (
-                  <RatingSlider>
-                    <label htmlFor="rating">RATE PLAYER</label>
-                    <Slider
-                      size="small"
-                      defaultValue={5}
-                      min={0}
-                      max={10}
-                      step={1}
-                      valueLabelDisplay="auto"
-                      onChange={(e: Event) => {
-                        handleRating(e);
-                      }}
-                    />
-                    <Submit type="button" onClick={commend}>
-                      COMMEND
-                    </Submit>
-                  </RatingSlider>
-                ) : (
-                  <RateButton onClick={handleRateClicked}>
-                    RATE PLAYER
-                  </RateButton>
+        <MainWrapper>
+          <MainContainer>
+            <HistorySection>
+              <Menu>
+                {width > breakpoint && (
+                  <Button
+                    img_url={"images/general/back.png"}
+                    text={"BACK"}
+                    width={"160px"}
+                    height={"70px"}
+                  />
                 )}
-              </RatePlayerWrapper>
+                {width > breakpoint && (
+                  <SearchContainer>
+                    <SearchIconWrapper>
+                      <SearchIcon url={"images/general/search.png"} />
+                    </SearchIconWrapper>
+                    <SearchInput placeholder="Search Message History" />
+                  </SearchContainer>
+                )}
+              </Menu>
 
-              <ProfileCardWrapper>
-                <ProfileCardUpdated
-                  imgSrc="Images/astra.webp"
-                  userName="IAMNOTAFURRY"
-                  chatRank="Images/chamber.webp"
-                  userType="gamer"
-                  valRank="Images/chamber.webp"
-                  basicInfo="I am basic info"
-                  aboutMe="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
-                ></ProfileCardUpdated>
-              </ProfileCardWrapper>
-            </InfoCardSection>
-          )}
-        </Wrapper>
+              <PlayerCardsWrapper>
+                <EmblaCarousel slides={[...slides]} history={history} />
+                {width < breakpoint && (
+                  <RatePlayerWrapper>
+                    <Button
+                      fontSize="2em"
+                      text={"RATE"}
+                      width={"100%"}
+                      height={"100%"}
+                    />
+                  </RatePlayerWrapper>
+                )}
+              </PlayerCardsWrapper>
+
+              <ChatContainer>huihi.</ChatContainer>
+            </HistorySection>
+
+            {width > breakpoint && (
+              <InfoCardSection>
+                <RatePlayerWrapper>
+                  {rateClicked ? (
+                    <RatingSlider>
+                      <label htmlFor="rating">RATE PLAYER</label>
+                      <Slider
+                        size="small"
+                        defaultValue={5}
+                        min={0}
+                        max={10}
+                        step={1}
+                        valueLabelDisplay="auto"
+                        onChange={(e: Event) => {
+                          handleRating(e);
+                        }}
+                      />
+                      <Submit type="button" onClick={commend}>
+                        COMMEND
+                      </Submit>
+                    </RatingSlider>
+                  ) : (
+                    <RateButton onClick={handleRateClicked}>
+                      RATE PLAYER
+                    </RateButton>
+                  )}
+                </RatePlayerWrapper>
+
+                <ProfileCardWrapper>
+                  <ProfileCardUpdated
+                    imgSrc="images/icons/Neon_icon.webp"
+                    userName="IAMNOTAFURRY"
+                    chatRank="images/ranks/rank_4.png"
+                    userType="gamer"
+                    valRank="images/ranks/rank_6.png"
+                    basicInfo="I am basic info"
+                    aboutMe="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+                  ></ProfileCardUpdated>
+                </ProfileCardWrapper>
+              </InfoCardSection>
+            )}
+          </MainContainer>
+        </MainWrapper>
       </WidthContext.Provider>
     </>
   );
 }
 
-const RatingSlider = styled.form`
-  display: flex;
-  flex-direction: column;
-  text-align: center;
-`;
-
-const Submit = styled.button`
-  border: none;
-  border-radius: 4px;
-  color: white;
-  background: #4fa397;
-`;
-
-const RateButton = styled.button`
-  width: 160px;
-  height: 70px;
-  color: white;
-  border-radius: 10px;
-  border: none;
-  font-size: 1rem;
-  background-color: #66c2a9;
-  transition: 0.5s all;
-
-  &:hover {
-    cursor: pointer;
-    box-shadow: 0 0 10px #66cfb3;
+const MainWrapper = styled.div`
+  // applies it to all the children
+  * {
+    box-sizing: border-box;
+    font-family: "Arimo";
   }
+  font-weight: 200;
+  font-size: 15px;
+  display: flex;
+  justify-content: center;
+
+  height: 100vh;
+  width: 100vw;
 `;
 
-const Menu = styled.nav`
-  position: relative;
+const MainContainer = styled.main`
+  position: inherit;
+  max-width: 1500px;
   width: 100%;
+
+  padding: 2%;
+
   display: flex;
+  justify-content: space-between;
   align-items: center;
-`;
-
-const RatePlayerWrapper = styled.div`
-  position: absolute;
-
-  top: 0;
-
-  @media all and (max-width: 1400px) {
-    position: relative;
-    width: 20%;
-    height: 10%;
+  @media all and (max-width: 1000px) {
+    flex-direction: column-reverse;
+    padding: 5%;
   }
-`;
-
-const ProfileCardWrapper = styled.div`
-  max-width: 500px;
 `;
 
 const HistorySection = styled.section`
@@ -219,21 +207,18 @@ const HistorySection = styled.section`
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  width: 70%;
+  width: 60%;
   height: 100%;
-  flex: 1;
 
-  width: 100%;
-
-  @media all and (max-width: 1400px) {
-    height: 50%;
+  @media all and (max-width: 1000px) {
+    height: 100%;
     width: 100%;
   }
 `;
 
 const InfoCardSection = styled.aside`
   position: relative;
-  width: 25%;
+  width: 37%;
   height: 100%;
 
   display: flex;
@@ -244,7 +229,37 @@ const InfoCardSection = styled.aside`
   padding: 2%;
 `;
 
-const HistoryContainer = styled.div`
+const ProfileCardWrapper = styled.div`
+  position: inherit;
+  height: 80%;
+`;
+
+const Menu = styled.nav`
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+`;
+
+const RatePlayerWrapper = styled.div`
+  position: relative;
+
+  display: flex;
+  justify-content: center;
+  align-items: start;
+
+  width: 100%;
+  margin-bottom: 4%;
+
+  @media all and (max-width: 500px) {
+    position: relative;
+    width: 20%;
+    height: 20%;
+  }
+`;
+
+const PlayerCardsWrapper = styled.div`
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -252,17 +267,17 @@ const HistoryContainer = styled.div`
   width: 100%;
   height: 30%;
 
-  @media all and (max-width: 1400px) {
+  // Split screen
+  @media all and (max-width: 1000px) {
     height: 40%;
     flex-direction: column;
   }
 
+  // Mobile
   @media all and (max-width: 500px) {
-    height: 20%;
+    height: 30%;
     flex-direction: column;
   }
-
-  /* border: red solid 1px; */
 `;
 
 const ChatContainer = styled.div`
@@ -288,8 +303,8 @@ const ChatContainer = styled.div`
 
 const SearchContainer = styled.div`
   position: absolute;
-  width: 425px;
-  height: 53px;
+  width: 40%;
+  height: 40px;
 
   top: 1px;
   right: 1px;
@@ -307,6 +322,8 @@ const SearchInput = styled.input`
   background: none;
   flex-grow: 1;
   border: none;
+
+  color: white;
 
   // increase specificity
   && {
@@ -352,28 +369,6 @@ const SearchIcon = styled.img<{ url: string }>`
   aspect-ratio: 1;
 
   content: url(${(props) => props.url});
-`;
-
-const Wrapper = styled.main`
-  * {
-    box-sizing: border-box;
-  }
-
-  position: relative;
-  width: 100vw;
-  height: 100vh;
-  padding: 2%;
-  box-sizing: border-box;
-
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  @media all and (max-width: 1400px) {
-    flex-direction: column-reverse;
-    padding: 5%;
-  }
-
-  font-family: "Arimo";
 `;
 
 export default ChatHistory;

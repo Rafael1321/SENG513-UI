@@ -2,9 +2,70 @@ import * as React from "react";
 import styled from "styled-components";
 import ProfileCard from "./ProfileCard";
 import MessageContainer from "./MessageContainer";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import { SocketContext } from "../../contexts/SocketContext";
+import { LoggedUserContext } from "../../contexts/LoggedUserContext";
+import { Link } from "react-router-dom";
+import { IUser } from '../../models/AuthModels';
+
+
+interface Message {
+  type: string,
+  text: string,
+  userIcon: string
+}
+
+// interface User {
+//   _id: string,
+//   riotId: string,
+//   displayName: string,
+//   gameName: string,
+//   tagLine: string,
+//   avatarImage: string
+// }
 
 export default function ChatBody() {
+  //contexts
+  const loggedUserContext = useContext(LoggedUserContext);
+  const socket = useContext(SocketContext);
+
+  // localStorage.setItem("loggedUser",loggedUserContext);
+  // console.log(loggedUserContext)
+
+  const [outgoingMsgText, setOutText] = useState("");
+  const [incomingMsgText, setInMsg] = useState("");
+  const [messages, setMessages] = useState([]);
+
+  function updateMessages(msg: Message, type: string) {
+    const newMsgs = [
+      ...messages,
+      { type: type, text: msg.text, userIcon: msg.userIcon },
+    ];
+    setMessages(newMsgs);
+  }
+
+  const sendMsg = (userIcon: string, text: string) => {
+    const msg = {
+      type: "sent",
+      text: text,
+      userIcon: userIcon,
+    };
+    updateMessages(msg, "sent");
+    socket.emit("send_msg", msg);
+    // console.log(msg)
+  };
+
+  useEffect(() => {
+    socket.on("receive_msg", (msgData) => {
+      setInMsg(msgData);
+      updateMessages(msgData, "received");
+    });
+  }, [socket, messages]);
+
+  // useEffect(() => {
+  //   console.log(messages);
+  // }, [messages])
+
   const [timer, setTimer] = useState(10);
 
   //   const interval = setInterval(() => {
@@ -16,26 +77,49 @@ export default function ChatBody() {
   //     }
   //   }, 60000);
 
+  function handleClick(userIcon: string, text: string) {
+    console.log("msg was sent");
+    console.log(userIcon);
+    sendMsg(userIcon, text);
+  }
+
+  function sendContactInfo(user : IUser) {
+    const contactMsg = "You wanna play? Let's play! Add me on Valorant! "+user.gameName+"#"+user.tagLine
+    sendMsg(user.avatarImage,contactMsg)
+  }
+
   return (
     <Wrapper>
-      <Exit />
+      <Link to={"/landing"}>
+        <Exit />
+      </Link>
       <LeftColContainer>
         <Timer> 🕐 You have {timer} minutes remaining!</Timer>
         <ChatBox>
-          <MessageContainer
-            msgType="received"
-            senderImg="/assets/jettFurry.png"
-            text="Yo 👋, yo 👋, yo 👋! 1-4-8-3 to the 3 ⭕ℹ🕘 to the 6 🕕 to the 9 💯. representin' the ABQ. What up ⬆, playa 😦🐶? Leave 🍃 at the tone 🍺."
-          />
-          <MessageContainer
-            msgType="sent"
-            senderImg="/assets/cypher.png"
-            text="Bro what are you saying 😭"
-          />
+          {messages.map((msg: Message) => (
+            <MessageContainer
+              msgType={msg.type}
+              senderImg={"/images/icons/" + msg.userIcon}
+              text={msg.text}
+            />
+          ))}
         </ChatBox>
+
         <ChatInputContainer>
-          <ChatInput placeholder="Message"></ChatInput>
-          <ChatBtn>SEND</ChatBtn>
+          <ChatInput
+            placeholder="Message"
+            onChange={(e) => setOutText((e.target as HTMLInputElement).value)}
+          ></ChatInput>
+          <ChatBtn
+            onClick={() =>
+              handleClick(
+                loggedUserContext.loggedUser.avatarImage,
+                outgoingMsgText
+              )
+            }
+          >
+            SEND
+          </ChatBtn>
         </ChatInputContainer>
       </LeftColContainer>
       <RightColContainer>
@@ -51,12 +135,12 @@ export default function ChatBody() {
         />
         <BtnContainer>
           <MobileTimer>🕐 You have {timer} minutes remaining!</MobileTimer>
-          <Btn btnColor="#66c2a9">
-          <BtnIcon imgSrc="/Icons/share.png"/>
-
-            SHARE CONTACT</Btn>
+          <Btn onClick={ () => sendContactInfo(loggedUserContext.loggedUser)} btnColor="#66c2a9">
+            <BtnIcon imgSrc="/Icons/share.png" />
+            SHARE CONTACT
+          </Btn>
           <Btn btnColor="#f94b4b">
-            <BtnIcon imgSrc="/Icons/gonext.png"/>
+            <BtnIcon imgSrc="/Icons/gonext.png" />
             GO NEXT
           </Btn>
         </BtnContainer>
@@ -66,9 +150,10 @@ export default function ChatBody() {
 }
 
 const Wrapper = styled.div`
-  height: 100vh;
+  // height: 100vh;
   width: 100vw;
   display: flex;
+  paddint: 5px;
   flex-wrap: wrap;
   justify-content: center;
 `;
@@ -150,10 +235,10 @@ const BtnContainer = styled.div`
 
 const BtnIcon = styled.img<{ imgSrc: string }>`
   content: url(${(props) => props.imgSrc});
-  width: 5vw;
-  max-width: 30px;
-  height: 5vw;
-  max-height: 30px;
+  width: 4vw;
+  max-width: 20px;
+  height: 4vw;
+  max-height: 20px;
   justify-content: center;
   margin-left: auto;
   margin-right: auto;
@@ -170,7 +255,7 @@ const Btn = styled.div<{ btnColor: string }>`
   justify-content: center;
   margin: 20px;
   padding: 0.5%;
-  margin-top: 20px;
+
   cursor: pointer;
   transition: 0.3s;
   display: flex;
@@ -192,7 +277,7 @@ const ChatInputContainer = styled.div`
   background-color: #182828;
   width: 100%;
   height: 6vh;
-  margin-top: 30px;
+  margin-top: 20px;
   border-radius: 20px;
   color: #dedbdb;
   display: flex;
@@ -234,9 +319,12 @@ const ChatInput = styled.input`
   }
 `;
 
-const ChatBtn = styled.div`
+const ChatBtn = styled.button.attrs({
+  type: "submit",
+})`
   text-align: center;
   color: #ffffff;
+  background: none;
   font-family: "Arimo", sans-serif;
   font-size: 20px;
   right: 20px;
@@ -250,12 +338,14 @@ const ChatBtn = styled.div`
   @media all and (max-width: 1400px) {
     margin-top: 0;
     padding: 1vh;
+    font-size: 80%;
   }
 `;
 
 const ChatBox = styled.div`
   background-color: #282828;
   border-radius: 44px;
+  overflow: scroll;
   width: 55vw;
   height: 70vh;
   padding: 5vh;
@@ -268,10 +358,11 @@ const ChatBox = styled.div`
   justify-content: start;
   @media all and (max-width: 1400px) {
     width: 90vw;
-    height: 55vh;
+    height: 50vh;
     padding: 1vh;
     order: 2;
+    padding: 0;
     border-radius: 20px;
-    background-color: #181818;
+    background: none;
   }
 `;
