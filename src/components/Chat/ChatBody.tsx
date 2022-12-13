@@ -100,7 +100,7 @@ export default function ChatBody() {
         <Exit />
       </Link>
       <LeftColContainer>
-        <Timer> 🕐 You have {timer} minutes remaining!</Timer>
+        <Timer>  🕐 You have {timer} minutes remaining! </Timer>
         <ChatBox>
           {messages.map((msg: Message) => (
             <MessageContainer
@@ -131,12 +131,12 @@ export default function ChatBody() {
       <RightColContainer>
         <TopText>You're chatting with:</TopText>
         <ProfileCard
-          imgSrc="/images/icons/Jett_icon.webp"
+          imgSrc={(matchedUser.matchedUser == null) ? "/images/icons/Jett_icon.webp" : "/images/icons/"+matchedUser.matchedUser.avatarImage}
           userName={(matchedUser.matchedUser == null) ? "HectorSalamanca" : matchedUser.matchedUser.displayName}
           basicInfo={(matchedUser.matchedUser == null) ? "22F, US West" : matchedUser.matchedUser.age+" "+matchedUser.matchedUser.gender}
           userType={(matchedUser.matchedUser == null) ? 0 : matchedUser.matchedUser.playerType}
 
-          valRank={(matchedUser.matchedUser == null) ? 3 : matchedUser.matchedUser.rank[0]}
+          valRank={(matchedUser.matchedUser == null) ? 6 : matchedUser.matchedUser.rank[0]}
           valRankLvl={(matchedUser.matchedUser == null) ? 1 : matchedUser.matchedUser.rank[1]}
           chatRank="/images/reputation_ranks/ToxicWaste.png"
           aboutMe= {(matchedUser.matchedUser == null) ? "This is the about me section." : matchedUser.matchedUser.aboutMe}
@@ -153,7 +153,7 @@ export default function ChatBody() {
           </Btn>
           <Btn btnColor="#f94b4b">
             <BtnIcon imgSrc="/images/chat/gonext.png" />
-            GO NEXT
+            <Link to="/landing" style={{color: "#ffffff", textDecoration: "none"}}> GO NEXT</Link>
           </Btn>
         </BtnContainer>
       </RightColContainer>
