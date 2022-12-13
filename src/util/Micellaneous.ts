@@ -2,6 +2,29 @@ import { Gender, RankLevel, RankType, ServerPreference } from "../models/Filters
 
 export class Micellaneous{
 
+    private static agentIcons: Array<string> = [
+        "/images/icons/Astra_icon.webp",
+        "/images/icons/Breach_icon.webp",
+        "/images/icons/Brimstone_icon.webp",
+        "/images/icons/Chamber_icon.webp",
+        "/images/icons/Cypher_icon.webp",
+        "/images/icons/Fade_icon.webp",
+        "/images/icons/Harbor_icon.webp",
+        "/images/icons/Jett_icon.webp",
+        "/images/icons/KAYO_icon.webp",
+        "/images/icons/Killjoy_icon.webp",
+        "/images/icons/Neon_icon.webp",
+        "/images/icons/Omen_icon.webp",
+        "/images/icons/Phoenix_icon.webp",
+        "/images/icons/Raze_icon.webp",
+        "/images/icons/Reyna_icon.webp",
+        "/images/icons/Sage_icon.webp",
+        "/images/icons/Skye_icon.webp",
+        "/images/icons/Sova_icon.webp",
+        "/images/icons/Viper_icon.webp",
+        "/images/icons/Yoru_icon.webp",
+    ];
+
     // Converts a string to Title Case
     public static toTitleCase(str : string) {
         return str?.replace(
@@ -86,6 +109,17 @@ export class Micellaneous{
                 return longVersion ? "Man" : "M";
             case Gender.nonBinary:
                 return longVersion ? "Non-Binary" : "NB";
+        }
+    }
+
+    // Get a specific icon
+    public static getAgentIcon(idx : number, randomly : boolean = false){
+        if(!randomly){
+            if(idx < 0 || idx >= Micellaneous.agentIcons.length) idx = 0;
+            return Micellaneous.agentIcons[idx];
+        }else{
+            idx = Math.floor(Math.random() * (Micellaneous.agentIcons.length - 1));
+            return Micellaneous.agentIcons[idx];
         }
     }
 }

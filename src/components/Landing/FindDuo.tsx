@@ -1,37 +1,12 @@
 import * as React from "react";
 import styled, { keyframes } from "styled-components";
 import { useState, useEffect } from "react";
-import { SocketContext } from "../../contexts/SocketContext";
 import { LoggedUserContext } from "../../contexts/LoggedUserContext";
+import { Micellaneous } from "../../util/Micellaneous";
 
-export default function FindDuo(props: any) {
-  // Constants
-  const agents: Array<string> = [
-    "/images/Astra_icon.webp",
-    "/images/Breach_icon.webp",
-    "/images/Brimstone_icon.webp",
-    "/images/Chamber_icon.webp",
-    "/images/Cypher_icon.webp",
-    "/images/Fade_icon.webp",
-    "/images/Harbor_icon.webp",
-    "/images/Jett_icon.webp",
-    "/images/KAYO_icon.webp",
-    "/images/Killjoy_icon.webp",
-    "/images/Neon_icon.webp",
-    "/images/Omen_icon.webp",
-    "/images/Phoenix_icon.webp",
-    "/images/Raze_icon.webp",
-    "/images/Reyna_icon.webp",
-    "/images/Sage_icon.webp",
-    "/images/Skye_icon.webp",
-    "/images/Sova_icon.webp",
-    "/images/Viper_icon.webp",
-    "/images/Yoru_icon.webp",
-  ];
-
+export default function FindDuo() {
   // Contexts
   const loggedUserContext = React.useContext(LoggedUserContext);
-  const socketContext = React.useContext(SocketContext);
 
   // State
   const [index, setIndex] = useState(0);
@@ -48,9 +23,9 @@ export default function FindDuo(props: any) {
 
   return (
     <FindDuoContainer>
-      <img src={props.imgSrc} alt="My Icon"></img>
+      <img src={loggedUserContext?.loggedUser?.avatarImage} alt="My Icon"></img>
       <Line></Line>
-      <Teammate icon={agents[index]}>
+      <Teammate icon={Micellaneous.getAgentIcon(index)}>
         <p id="question-mark">&#63;</p>
       </Teammate>
     </FindDuoContainer>
