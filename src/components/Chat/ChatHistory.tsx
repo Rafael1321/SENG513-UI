@@ -1,7 +1,7 @@
 import React, { createContext, useEffect, useState } from "react";
 import Button from "../Shared/Button";
 import HistoryCard from "./HistoryCard";
-import styled from "styled-components";
+import styled from "styled-components/macro";
 import { EmblaCarousel } from "./EmblaCarousel";
 import ProfileCardUpdated from "./ProfileCardUpdated";
 
@@ -67,26 +67,26 @@ function ChatHistory(props: Props): React.ReactElement {
                 <MainWrapper>
                     <MainContainer>
                         <HistorySection>
-                            {/* <Menu>
-                            {width > breakpoint && <Button url={"Images/back.png"} text={"BACK"} width={"160px"} height={"70px"} />}
-                            <SearchContainer>
-                            <SearchIconWrapper>
-                            <SearchIcon url={"Icons/search.png"} />
-                            </SearchIconWrapper>
-                            <SearchInput placeholder="Search Message History" />
-                        </SearchContainer>
-                        </Menu> */}
+                            <Menu>
+                                {width > breakpoint && <Button url={"Images/back.png"} text={"BACK"} width={"160px"} height={"70px"} />}
+                                <SearchContainer>
+                                    <SearchIconWrapper>
+                                        <SearchIcon url={"Icons/search.png"} />
+                                    </SearchIconWrapper>
+                                    <SearchInput placeholder="Search Message History" />
+                                </SearchContainer>
+                            </Menu>
 
-                            {/* <HistoryContainer> */}
-                            {/* <EmblaCarousel slides={[...slides]} history={history} />
-                            {width < breakpoint && (
-                                <RatePlayerWrapper>
-                                    <Button text={"RATE PLAYER"} width={"100%"} height={"100%"} />
-                                </RatePlayerWrapper>
-                            )} */}
-                            {/* </HistoryContainer> */}
+                            <PlayerCardsWrapper>
+                                <EmblaCarousel slides={[...slides]} history={history} />
+                                {width < breakpoint && (
+                                    <RatePlayerWrapper>
+                                        <Button text={"RATE PLAYER"} width={"100%"} height={"100%"} />
+                                    </RatePlayerWrapper>
+                                )}
+                            </PlayerCardsWrapper>
 
-                            {/* <ChatContainer>.</ChatContainer> */}
+                            <ChatContainer>.</ChatContainer>
                         </HistorySection>
 
                         {width > breakpoint && (
@@ -119,7 +119,6 @@ const MainWrapper = styled.div`
     // applies it to all the children
     * {
         box-sizing: border-box;
-        position: relative;
         font-family: "Arimo";
     }
     font-weight: 200;
@@ -157,7 +156,7 @@ const HistorySection = styled.section`
     height: 100%;
 
     @media all and (max-width: 1000px) {
-        height: 50%;
+        height: 100%;
         width: 100%;
     }
 `;
@@ -195,6 +194,7 @@ const RatePlayerWrapper = styled.div`
     align-items: start;
 
     width: 100%;
+    margin-bottom: 4%;
 
     @media all and (max-width: 1000px) {
         position: relative;
@@ -203,7 +203,8 @@ const RatePlayerWrapper = styled.div`
     }
 `;
 
-const HistoryContainer = styled.div`
+const PlayerCardsWrapper = styled.div`
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -219,7 +220,7 @@ const HistoryContainer = styled.div`
 
     // Mobile
     @media all and (max-width: 500px) {
-        height: 20%;
+        height: 30%;
         flex-direction: column;
     }
 `;
@@ -247,8 +248,8 @@ const ChatContainer = styled.div`
 
 const SearchContainer = styled.div`
     position: absolute;
-    width: 425px;
-    height: 53px;
+    width: 40%;
+    height: 40px;
 
     top: 1px;
     right: 1px;
@@ -266,6 +267,8 @@ const SearchInput = styled.input`
     background: none;
     flex-grow: 1;
     border: none;
+
+    color: white;
 
     // increase specificity
     && {

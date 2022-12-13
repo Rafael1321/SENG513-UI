@@ -2,19 +2,13 @@ import React, { useState, useEffect, useCallback, useContext } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import { mediaByIndex } from "../../media";
 import "./embla.css";
-import styled from "styled-components";
+import styled from "styled-components/macro";
 import HistoryCard from "./HistoryCard";
 import { Chat } from "./ChatHistory";
 import { WidthContext } from "./ChatHistory";
 import Button from "../Shared/Button";
 
 import ProfileCardUpdated from "./ProfileCardUpdated";
-
-enum HistoryCardSize {
-    One = "35%",
-    Two = "30%",
-    Three = "10%",
-}
 
 type Props = {
     history: Array<Chat>;
@@ -59,7 +53,7 @@ export const EmblaCarousel = (props: Props) => {
             <EmblaViewPort ref={viewportRef}>
                 <EmblaContainer>
                     {props.history.map((chat: Chat) =>
-                        width > 1400 ? (
+                        width > 1000 ? (
                             <WrapperOuter>
                                 <WrapperInner>
                                     <HistoryCard
@@ -94,14 +88,9 @@ export const EmblaCarousel = (props: Props) => {
                 </EmblaContainer>
             </EmblaViewPort>
 
-            <div className="e"></div>
 
-            {width > 500 && (
-                <>
-                    <PrevButton onClick={scrollPrev} enabled={prevBtnEnabled} />
-                    <NextButton onClick={scrollNext} enabled={nextBtnEnabled} />
-                </>
-            )}
+            <PrevButton onClick={scrollPrev} enabled={prevBtnEnabled} />
+            <NextButton onClick={scrollNext} enabled={nextBtnEnabled} />
         </Container>
     );
 };
@@ -127,13 +116,30 @@ export const NextButton = (props: IButtonProps) => (
     </button>
 );
 
+const Container = styled.div`
+    position: relative;
+    padding: 2%;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+
+    @media all and (max-width: 500px) {
+        height: 90%;
+        padding: 0;
+    }
+`;
+
 const EmblaViewPort = styled.div`
     position: relative;
+
     overflow: hidden;
-    width: 100%;
+    width: 95%;
+
     box-shadow: inset -100px 4px 40px rgba(24, 24, 24, 0.4);
 `;
 
+// For all the cards
 const EmblaContainer = styled.div`
     position: relative;
     display: flex;
@@ -147,9 +153,13 @@ const EmblaContainer = styled.div`
 
 const ProfileCardWrapper = styled.div`
     position: relative;
-    padding: 2%;
-    width: 100%;
-    height: 100%;
+    padding: 1%;
+    width: 90%;
+    height: 95%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: purple;
 `;
 
 const RatePlayerWrapper = styled.div`
@@ -158,53 +168,33 @@ const RatePlayerWrapper = styled.div`
     top: 0;
 `;
 
-const Container = styled.div`
-    position: relative;
-    padding: 2%;
-    width: 100%;
-    height: 80%;
-    margin-left: auto;
-    margin-right: auto;
-    display: flex;
-    align-items: center;
-
-    @media all and (max-width: 500px) {
-        height: 90%;
-        padding: 0;
-    }
-`;
-
+// It's parent has no actual width
 const WrapperOuter = styled.div`
-    position: relative;
-
-    max-width: 400px;
-    width: 30%;
-    min-width: 300px;
-
     /* This needs to be the same as the margin in .embla_container*/
+    position: relative;
     padding-left: 1px;
-    height: 100%;
-
-    @media all and (max-width: 1400px) {
-        min-width: 70%;
-    }
 
     @media all and (max-width: 500px) {
-        min-width: 100%;
+        min-height: 20vh;
+        min-width: 95vw;
     }
 `;
 
 const WrapperInner = styled.div`
     position: relative;
     overflow: hidden;
-    height: 290px;
+    
+    height: 190px;
+    width: 400px;
+
     display: flex;
     justify-content: center;
     align-items: center;
 
     @media all and (max-width: 500px) {
-        min-width: 100px;
-        height: 15vh;
+        height: 100%;
+        width: 100%;
+        /* background-color: aliceblue; */
     }
 `;
 
