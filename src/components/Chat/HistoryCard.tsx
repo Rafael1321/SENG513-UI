@@ -3,7 +3,6 @@ import styled from "styled-components";
 import ProfilePicture from "../Shared/ProfilePicture";
 
 type Props = {
-    width: string;
     isMain: boolean;
     zIndex: string;
     username: string;
@@ -19,7 +18,7 @@ export default function HistoryCard(props: Props): React.ReactElement {
     // }, [props.width]);
 
     return (
-        <WrapperOuter width={props.width}>
+        <WrapperOuter>
             <WrapperInner>
                 <Container isMain={props.isMain} zIndex={props.zIndex}>
                     <UserInfoContainer>
@@ -36,15 +35,20 @@ export default function HistoryCard(props: Props): React.ReactElement {
         </WrapperOuter>
     );
 }
-const WrapperOuter = styled.div<{ width: string }>`
+const WrapperOuter = styled.div`
     position: relative;
     min-width: 20%;
-    aspect-ratio: 31/18;
+    
     /* This needs to be the same as the margin in .embla_container*/
     padding-left: 1px;
+    height: 100%;
 
     @media all and (max-width: 1400px) {
         min-width: 70%;
+    }
+
+    @media all and (max-width: 500px) {
+        min-width: 100%;
     }
 `;
 

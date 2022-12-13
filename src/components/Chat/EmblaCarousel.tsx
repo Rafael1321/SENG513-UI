@@ -1,10 +1,12 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useContext } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import { mediaByIndex } from "../../media";
 import "./embla.css";
 import styled from "styled-components";
 import HistoryCard from "./HistoryCard";
 import { Chat } from "./ChatHistory";
+import { WidthContext } from "./ChatHistory";
+import ProfileCard from "./ProfileCard";
 
 enum HistoryCardSize {
     One = "35%",
@@ -26,14 +28,7 @@ export const EmblaCarousel = (props: Props) => {
     const [prevBtnEnabled, setPrevBtnEnabled] = useState(false);
     const [nextBtnEnabled, setNextBtnEnabled] = useState(false);
     const [main, setMain] = useState(0);
-
-    const decrement = (val: number) => {
-        setMain((val -= 1));
-    };
-
-    const increment = (val: number) => {
-        setMain((val += 1));
-    };
+    const width = useContext(WidthContext);
 
     const scrollPrev = useCallback(() => {
         embla && embla.scrollPrev();
@@ -61,22 +56,31 @@ export const EmblaCarousel = (props: Props) => {
         <Container>
             <div className="embla__viewport" ref={viewportRef}>
                 <div className="embla__container">
-
-                    {props.history.map((chat: Chat) => (
-                        <HistoryCard
-                            key={chat.key}
-                            width={main === chat.key ? HistoryCardSize.One : HistoryCardSize.Two}
-                            url={chat.profile_url}
-                            username={chat.username}
-                            message={chat.last_message}
-                            isMain={main === chat.key}
-                            zIndex={main === chat.key ? "3" : "1"}
-                        />
-                    ))}
-
+                    {props.history.map((chat: Chat) =>
+                        width > 1400 ? (
+                            <HistoryCard
+                                key={chat.key}
+                                url={chat.profile_url}
+                                username={chat.username}
+                                message={chat.last_message}
+                                isMain={main === chat.key}
+                                zIndex={main === chat.key ? "3" : "1"}
+                            />
+                        ) : (
+                            <ProfileCard
+                                imgSrc="Images/astra.webp"
+                                userName="IAMNOTAFURRY"
+                                chatRank="Images/chamber.webp"
+                                userType="gamer"
+                                valRank="Images/chamber.webp"
+                                basicInfo="I am basic info"
+                                aboutMe="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+                            ></ProfileCard>
+                        )
+                    )}
                 </div>
             </div>
-            
+
             <div className="e"></div>
 
             <PrevButton onClick={scrollPrev} enabled={prevBtnEnabled} />
@@ -105,8 +109,6 @@ export const NextButton = (props: IButtonProps) => (
         </svg>
     </button>
 );
-
-
 
 const Container = styled.div`
     position: relative;
