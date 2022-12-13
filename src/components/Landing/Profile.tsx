@@ -1,21 +1,13 @@
-// Imports
-import React, {useState} from "react";
-// import * as React from "react";
+import React, {useState, useContext} from "react";
 import styled from "styled-components";
-// import "./styles.css";
-import Grid from "@mui/material/Grid";
-// import TextField from "@mui/material/TextField";
-import {LoggedUserContext} from '../../contexts/LoggedUserContext';
-
-// To-do:
-// grab current user's data from context
-// store values captured during edit as permanent somewhere (context)
-// send updated info to server
-// watch the colour picker vid to see how to lay out agent icons
-// send all data to context
+import { LoggedUserContext } from '../../contexts/LoggedUserContext';
+import { ServerPreference } from "../../models/FiltersModels";
 
 // Main User Homescreen
-function Profile() {
+export default function Profile() : React.ReactElement {
+
+  // Context
+  const loggedUserContext = useContext(LoggedUserContext);
 
   // Used to set agent icon
   const [icon, setIcon] = useState("./images/icons/Astra_icon.webp");
@@ -44,7 +36,7 @@ function Profile() {
 
   // Set init bio
   const [bio, setBio] = useState("There's nothing here! Edit your profile to liven things up!");
-  const [username, setUsername] = useState("Pee Man The OG");
+  // const [username, setUsername] = useState("Pee Man The OG");
   
   // To be used for editing user info, init false
   const [generalEdit, setGeneralEdit] = useState(false);
@@ -57,10 +49,9 @@ function Profile() {
   // Pick a new (random) profile pic, only if editing is enabled
   const changePfp = () => {
     if (generalEdit) {
-      setIcon(agents[Math.floor(Math.random() * agents.length)]);
+      loggedUserContext.updateLoggedUser({...loggedUserContext.loggedUser, avatarImage: agents[Math.floor(Math.random() * agents.length)]})
     }
   }
-
 
   return (
     
@@ -68,15 +59,14 @@ function Profile() {
       
       <ProfileContainer>
       
-        <Pfp genE={generalEdit} src={icon} onClick={() => changePfp()}></Pfp>
+        <Pfp genE={generalEdit} src={loggedUserContext?.loggedUser?.avatarImage} onClick={() => changePfp()}></Pfp>
 
         <div>
           <Input 
             genE={generalEdit}
-            placeholder={username}
+            placeholder={loggedUserContext?.loggedUser?.displayName ?? '<username>'}
             autoComplete={"off"}
             maxLength={15}
-            // minLength={3}
             disabled={!generalEdit}>
           </Input>
 
@@ -97,10 +87,10 @@ function Profile() {
           {/* <p>years old</p> */}
 
           <Drops genE={generalEdit} disabled={!generalEdit}>
-            <option value={0}>N. America</option>
-            <option value={1}>Europe</option>
-            <option value={2}>Asia Pacific</option>
-            <option value={3}>Korea</option>
+            <option value={ServerPreference.ne}>N. America</option>
+            <option value={ServerPreference.eu}>Europe</option>
+            <option value={ServerPreference.ap}>Asia Pacific</option>
+            <option value={ServerPreference.kr}>Korea</option>
           </Drops>
 
           {/* <p>Competitive</p> */}
@@ -111,7 +101,6 @@ function Profile() {
           <option value={1}>Casual</option>
         </Drops> */}
         <p>Competitive</p>
-
 
       </ProfileContainer>
       
@@ -137,9 +126,6 @@ function Profile() {
     </GridContainer>
   );
 }
-
-export default Profile; 
-
 
 // STYLING 
 const GridContainer = styled.div`
