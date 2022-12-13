@@ -10,6 +10,7 @@ import { IUser } from '../../models/AuthModels';
 import { FiltersService, IFiltersResponse } from '../../services/FiltersService';
 import { FilterContext } from '../../contexts/FilterContext';
 import { IFilters } from '../../models/FiltersModels';
+import { Micellaneous } from '../../util/Micellaneous';
 
 export enum FormType {
   Login = 0,
@@ -92,7 +93,7 @@ export function Form(props: Props): React.ReactElement<Props, any> {
 
             // Call API to attempt registration
             let newUser = { displayName: displayName, gameName : gameName, tagLine : tag,
-                email : email, password : password, avatarImage : 'test.png'};
+                email : email, password : password, avatarImage : Micellaneous.getAgentIcon(0, true)};
             const authResponse : IAuthResponse = await AuthService.register(newUser);
 
             if(authResponse.statusCode !== 201){ // Username already in use or Email already in use
