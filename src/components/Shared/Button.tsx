@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import { fontSize } from "@mui/system";
 
 type Props = {
     text: string;
@@ -80,7 +81,7 @@ const Text = styled.div<{ fontSize: string }>`
     }
 
     @media all and (max-width: 500px) {
-        font-size: 0.25em;
+        font-size: 1rem;
     }
 `;
 

@@ -24,25 +24,25 @@ const history = [
   {
     key: 0,
     username: "VividEradicator",
-    profile_url: "Images/astra.webp",
+    profile_url: "images/icons/Astra_icon.webp",
     last_message: "Suggondeez",
   },
   {
     key: 1,
     username: "IAMNOTAFURRY",
-    profile_url: "Images/chamber.webp",
+    profile_url: "images/icons/Chamber_icon.webp",
     last_message: "Bro what are you even saying man?", //Overflow
   },
   {
     key: 2,
     username: "ArcticFox",
-    profile_url: "Images/chamber.webp",
+    profile_url: "images/icons/Omen_icon.webp",
     last_message: "I love chamber so much!",
   },
   {
     key: 3,
     username: "Malder",
-    profile_url: "Images/chamber.webp",
+    profile_url: "images/icons/Breach_icon.webp",
     last_message: "Wtf is this carousel",
   },
 ];
@@ -68,7 +68,7 @@ function ChatHistory(props: Props): React.ReactElement {
           <MainContainer>
             <HistorySection>
               <Menu>
-                {width > breakpoint && <Button img_url={"Images/back.png"} text={"BACK"} width={"160px"} height={"70px"} />}
+                {width > breakpoint && <Button img_url={"images/general/back.png"} text={"BACK"} width={"160px"} height={"70px"} />}
                 {width > breakpoint && (
                   <SearchContainer>
                     <SearchIconWrapper>
@@ -83,7 +83,7 @@ function ChatHistory(props: Props): React.ReactElement {
                 <EmblaCarousel slides={[...slides]} history={history} />
                 {width < breakpoint && (
                   <RatePlayerWrapper>
-                    <Button text={"RATE"} width={"100%"} height={"100%"} />
+                    <Button fontSize="2em" text={"RATE"} width={"100%"} height={"100%"} />
                   </RatePlayerWrapper>
                 )}
               </PlayerCardsWrapper>
@@ -99,11 +99,11 @@ function ChatHistory(props: Props): React.ReactElement {
 
                 <ProfileCardWrapper>
                   <ProfileCardUpdated
-                    imgSrc="Images/astra.webp"
+                    imgSrc="images/icons/Neon_icon.webp"
                     userName="IAMNOTAFURRY"
-                    chatRank="Images/chamber.webp"
+                    chatRank="images/ranks/rank_4.png"
                     userType="gamer"
-                    valRank="Images/chamber.webp"
+                    valRank="images/ranks/rank_6.png"
                     basicInfo="I am basic info"
                     aboutMe="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
                   ></ProfileCardUpdated>
