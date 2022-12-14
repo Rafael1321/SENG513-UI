@@ -10,6 +10,8 @@ export default function Profile(): React.ReactElement {
   // Context
   const loggedUserContext = useContext(LoggedUserContext);
 
+  console.log(loggedUserContext);
+
   // State
   const [generalEdit, setGeneralEdit] = useState(false);
 
@@ -51,10 +53,6 @@ export default function Profile(): React.ReactElement {
     if (generalEdit) setAge(e.target.value);
   };
 
-  const handlePlayerTypeChange = (e: any) => {
-    if (generalEdit) setPlayerType(e.target.value);
-  };
-
   const handleAboutMeChange = (e: any) => {
     if (generalEdit) setAboutMe(e.target.value);
     let charRemaining = 150 - e.target.value.length;
@@ -71,15 +69,12 @@ export default function Profile(): React.ReactElement {
     };
 
     async function updateBackend() {
-      const authResponse: IAuthResponse = await AuthService.update({
+      await AuthService.update({
         userId: loggedUserContext?.loggedUser?._id,
         ...newValues,
       });
     }
-    // You can do some fancy checks here if you'd like, lots of work though
-
     if (generalEdit === false) {
-      // add some more conditions
       updateBackend();
       loggedUserContext.updateLoggedUser({
         ...loggedUserContext?.loggedUser,
@@ -172,7 +167,6 @@ export default function Profile(): React.ReactElement {
             </CharRemaining>
           </BioContainer>
 
-          {/* <RankContainer> */}
           <RankInfo>
             <Ranks>
               <RankLabel>
@@ -181,24 +175,13 @@ export default function Profile(): React.ReactElement {
               </RankLabel>
             </Ranks>
             <Ranks>
-              <RankLabel>
-                <Heading>RANK</Heading>
+              <RankLabel></RankLabel>
+              <Heading>RANK</Heading>
                 <RankImg
-                  imgSrc={
-                    loggedUserContext?.loggedUser == null
-                      ? "images/ranks/rank_1_1.webp"
-                      : "images/ranks/rank_" +
-                        loggedUserContext?.loggedUser?.rank[0] +
-                        "_" +
-                        loggedUserContext?.loggedUser?.rank[1] +
-                        ".webp"
-                  }
+                  imgSrc={loggedUserContext && loggedUserContext.loggedUser && loggedUserContext.loggedUser.rank?`images/ranks/rank_${loggedUserContext?.loggedUser?.rank[0]}_${loggedUserContext?.loggedUser?.rank[1]}.webp`:"images/ranks/rank_1_1.webp"}
                 ></RankImg>
-              </RankLabel>
             </Ranks>
           </RankInfo>
-          {/* </RankContainer> */}
-          {/* </div> */}
         </DetailsContainer>
       </GridContainer>
     </ProfilePage>
@@ -249,7 +232,6 @@ const GridContainer = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-around;
-  /* padding-bottom: 8%; */
 
   @media (max-width: 769px) {
     flex-direction: column;
@@ -263,7 +245,6 @@ const ProfileContainer = styled.div`
   justify-content: space-evenly;
   align-items: center;
   width: 50%;
-  /* margin: 5%; */
 `;
 
 const PersonInfo = styled.div`
