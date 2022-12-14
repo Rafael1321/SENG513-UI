@@ -183,8 +183,17 @@ export default function Profile(): React.ReactElement {
             <Ranks>
               <RankLabel>
                 <Heading>RANK</Heading>
-                <RankImg imgSrc={"images/ranks/rank_1_1.webp"}></RankImg>
-                {/* <RankImg imgSrc={(loggedUserContext?.loggedUser == null) ? "images/ranks/rank_1_1.webp" : "images/ranks/rank_"+loggedUserContext?.loggedUser?.rank[0]+"_"+loggedUserContext?.loggedUser?.rank[1]+".webp"}></RankImg> */}
+                <RankImg
+                  imgSrc={
+                    loggedUserContext?.loggedUser == null
+                      ? "images/ranks/rank_1_1.webp"
+                      : "images/ranks/rank_" +
+                        loggedUserContext?.loggedUser?.rank[0] +
+                        "_" +
+                        loggedUserContext?.loggedUser?.rank[1] +
+                        ".webp"
+                  }
+                ></RankImg>
               </RankLabel>
             </Ranks>
           </RankInfo>

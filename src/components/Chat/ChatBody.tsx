@@ -6,104 +6,84 @@ import { useState, useEffect, useContext } from "react";
 import { SocketContext } from "../../contexts/SocketContext";
 import { LoggedUserContext } from "../../contexts/LoggedUserContext";
 import { Link } from "react-router-dom";
-import { IUser } from "../../models/AuthModels";
 import { MatchedUserContext } from "../../contexts/MatchedUserContext";
-import { RankType, GameMode, Gender } from "../../models/FiltersModels";
-interface Message {
-  type: string;
-  text: string;
-  userIcon: string;
-}
-
-// interface User {
-//   _id: string,
-//   riotId: string,
-//   displayName: string,
-//   gameName: string,
-//   tagLine: string,
-//   avatarImage: string
-// }
+import { IMessage, IReceiveMsgDTO } from "../../models/ChatModels";
+import { Gender } from "../../models/FiltersModels";
+import { EnvConfig } from "../../util/EnvConfig";
 
 export default function ChatBody() {
-  console.log(MatchedUserContext);
-  //contexts
+  // Contexts
   const loggedUserContext = useContext(LoggedUserContext);
-  const matchedUser = useContext(MatchedUserContext)
+  const matchedUser = useContext(MatchedUserContext);
   const socket = useContext(SocketContext);
 
-  // localStorage.setItem("loggedUser",loggedUserContext);
-  // console.log(loggedUserContext)
+  // State
+  const [messages, setMessages] = useState<IMessage[]>([]);
+  const [typedMessage, setTypedMessage] = useState("");
 
-  const [outgoingMsgText, setOutText] = useState("");
-  const [incomingMsgText, setInMsg] = useState("");
-  const [messages, setMessages] = useState([]);
 
-  function updateMessages(msg: Message, type: string) {
+  // Use State
+  useEffect(() => {
+    socket.on("receive_msg", (receiveMsgDTO: IReceiveMsgDTO) => {
+      // Locally update the messages
+    
+      const newMsgs = [...messages, {userId: matchedUser?.matchedUser?._id,type:"received", text:receiveMsgDTO.msg, userIcon:matchedUser?.matchedUser?.avatarImage}];
+      setMessages(newMsgs);
+    });
+
+    socket.on("error_send_msg", (msg: any) => {
+      if (EnvConfig.DEBUG) console.log(msg);
+    });
+  }, [
+    matchedUser?.matchedUser?._id,
+    matchedUser?.matchedUser?.avatarImage,
+    messages,
+    socket,
+  ]);
+
+ 
+
+  const sendMsg = (sendContactInfo: boolean = false) => {
+    const contactMsg = `You wanna play? Let's play! Add me on Valorant! ${loggedUserContext?.loggedUser?.gameName}#${loggedUserContext?.loggedUser?.tagLine}`;
+  
+    // Locally update the messages
     const newMsgs = [
       ...messages,
-      { type: type, text: msg.text, userIcon: msg.userIcon },
+      {
+        userId: loggedUserContext?.loggedUser?._id,
+        type: "sent",
+        text: sendContactInfo ? contactMsg : typedMessage,
+        userIcon: loggedUserContext?.loggedUser?.avatarImage,
+      },
     ];
     setMessages(newMsgs);
-  }
+    // Store the message in the database
+    // TODO: Add your code here
 
-  const sendMsg = (userIcon: string, text: string) => {
-    const msg = {
-      type: "sent",
-      text: text,
-      userIcon: userIcon,
-    };
-    updateMessages(msg, "sent");
-    socket.emit("send_msg", msg);
-    // console.log(msg)
+    // Notify other users of the message
+    socket.emit("send_msg", matchedUser?.matchedUser?._id, sendContactInfo ? contactMsg : typedMessage);
+
+    setTypedMessage("");  // Clear the typed message
   };
 
-  useEffect(() => {
-    socket.on("receive_msg", (msgData) => {
-      setInMsg(msgData);
-      updateMessages(msgData, "received");
-    });
-  }, [socket, messages]);
-
-  // useEffect(() => {
-  //   console.log(messages);
-  // }, [messages])
-
-  const [timer, setTimer] = useState(10);
-
-  //   const interval = setInterval(() => {
-  //     if (timer !== 0) {
-  //       setTimer(timer - 1);
-  //       console.log(timer);
-  //     } else {
-  //       console.log("you outta time bestie");
-  //     }
-  //   }, 60000);
-
-  function handleClick(userIcon: string, text: string) {
-    console.log("msg was sent");
-    console.log(userIcon);
-    sendMsg(userIcon, text);
-  }
-
-  function sendContactInfo(user: IUser) {
-    const contactMsg =
-      "You wanna play? Let's play! Add me on Valorant! " +
-      user.gameName +
-      "#" +
-      user.tagLine;
-    sendMsg(user.avatarImage, contactMsg);
-  }
+  const updateMsg = (e: any) => {
+    setTypedMessage(e.target.value);
+  };
 
   return (
     <Wrapper>
       <Link to={"/landing"}>
+        {" "}
         <Exit />
       </Link>
+
       <LeftColContainer>
-        <Timer>  🕐 You have {timer} minutes remaining! </Timer>
+        <Timer> 🕐 You have 10 minutes remaining! </Timer>
+
         <ChatBox>
-          {messages.map((msg: Message) => (
+          {messages.map((msg: IMessage, index: number) => (
             <MessageContainer
+              key={msg.userId + index.toString()}
               msgType={msg.type}
               senderImg={msg.userIcon}
               text={msg.text}
@@ -113,47 +93,73 @@ export default function ChatBody() {
 
         <ChatInputContainer>
           <ChatInput
+            value={typedMessage}
             placeholder="Message"
-            onChange={(e) => setOutText((e.target as HTMLInputElement).value)}
+            onChange={updateMsg}
           ></ChatInput>
-          <ChatBtn
-            onClick={() =>
-              handleClick(
-                loggedUserContext.loggedUser.avatarImage,
-                outgoingMsgText
-              )
-            }
-          >
-            SEND
-          </ChatBtn>
+
+          <ChatBtn onClick={() => sendMsg()}>SEND</ChatBtn>
         </ChatInputContainer>
       </LeftColContainer>
+
       <RightColContainer>
         <TopText>You're chatting with:</TopText>
         <ProfileCard
-          imgSrc={(matchedUser.matchedUser == null) ? "/images/icons/Jett_icon.webp" : matchedUser.matchedUser.avatarImage}
-          userName={(matchedUser.matchedUser == null) ? "HectorSalamanca" : matchedUser.matchedUser.displayName}
-          basicInfo={(matchedUser.matchedUser == null) ? "22F, US West" : matchedUser.matchedUser.age+" "+Gender[matchedUser.matchedUser.gender]}
-          userType={(matchedUser.matchedUser == null) ? 0 : matchedUser.matchedUser.playerType}
-
-          valRank={(matchedUser.matchedUser == null) ? 6 : matchedUser.matchedUser.rank[0]}
-          valRankLvl={(matchedUser.matchedUser == null) ? 1 : matchedUser.matchedUser.rank[1]}
+          imgSrc={
+            matchedUser.matchedUser == null
+              ? "/images/icons/Jett_icon.webp"
+              : matchedUser.matchedUser.avatarImage
+          }
+          userName={
+            matchedUser.matchedUser == null
+              ? "HectorSalamanca"
+              : matchedUser.matchedUser.displayName
+          }
+          basicInfo={
+            matchedUser.matchedUser == null
+              ? "22F, US West"
+              : matchedUser.matchedUser.age +
+                " " +
+                Gender[matchedUser.matchedUser.gender]
+          }
+          userType={
+            matchedUser.matchedUser == null
+              ? 0
+              : matchedUser.matchedUser.playerType
+          }
+          valRank={
+            matchedUser.matchedUser == null
+              ? 6
+              : matchedUser.matchedUser.rank[0]
+          }
+          valRankLvl={
+            matchedUser.matchedUser == null
+              ? 1
+              : matchedUser.matchedUser.rank[1]
+          }
           chatRank="/images/reputation_ranks/ToxicWaste.png"
-          aboutMe= {(matchedUser.matchedUser == null) ? "This is the about me section." : matchedUser.matchedUser.aboutMe}
-
+          aboutMe={
+            matchedUser.matchedUser == null
+              ? "This is the about me section."
+              : matchedUser.matchedUser.aboutMe
+          }
         />
+
         <BtnContainer>
-          <MobileTimer>🕐 You have {timer} minutes remaining!</MobileTimer>
-          <Btn
-            onClick={() => sendContactInfo(loggedUserContext.loggedUser)}
-            btnColor="#66c2a9"
-          >
+          <MobileTimer>🕐 You have 10 minutes remaining!</MobileTimer>
+          <Btn onClick={() => sendMsg(true)} btnColor="#66c2a9">
             <BtnIcon imgSrc="/images/chat/share.png" />
             SHARE CONTACT
           </Btn>
           <Btn btnColor="#f94b4b">
             <BtnIcon imgSrc="/images/chat/gonext.png" />
-            <Link to="/landing" style={{color: "#ffffff", textDecoration: "none"}}> GO NEXT</Link>
+            <Link
+              to="/landing"
+              style={{ color: "#ffffff", textDecoration: "none" }}
+            >
+              {" "}
+              GO NEXT
+            </Link>
           </Btn>
         </BtnContainer>
       </RightColContainer>
@@ -162,10 +168,9 @@ export default function ChatBody() {
 }
 
 const Wrapper = styled.div`
-  // height: 100vh;
   width: 100vw;
   display: flex;
-  paddint: 5px;
+  padding: 5px;
   flex-wrap: wrap;
   justify-content: center;
 `;
@@ -309,8 +314,6 @@ const ChatInput = styled.input`
   position: relative;
   width: 100%;
   height: 100%;
-  //   padding-left: 5vh;
-  //   padding-right: 5vh;
   border-radius: 20px;
   color: #dedbdb;
   font-family: "Arimo", sans-serif;
