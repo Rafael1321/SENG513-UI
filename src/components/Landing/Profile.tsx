@@ -1,25 +1,33 @@
-import React, {useState, useContext, useEffect} from "react";
+import React, { useState, useContext, useEffect } from "react";
 import styled from "styled-components";
-import { LoggedUserContext } from '../../contexts/LoggedUserContext';
+import { LoggedUserContext } from "../../contexts/LoggedUserContext";
 import { Gender } from "../../models/FiltersModels";
 import { AuthService, IAuthResponse } from "../../services/AuthService";
-import { Micellaneous } from '../../util/Micellaneous';
+import { Micellaneous } from "../../util/Micellaneous";
 
 // Main User Homescreen
-export default function Profile() : React.ReactElement {
-
+export default function Profile(): React.ReactElement {
   // Context
   const loggedUserContext = useContext(LoggedUserContext);
 
   // State
   const [generalEdit, setGeneralEdit] = useState(false);
 
-  const [displayName, setDisplayName] = useState(loggedUserContext?.loggedUser?.displayName);
+  const [displayName, setDisplayName] = useState(
+    loggedUserContext?.loggedUser?.displayName
+  );
   const [age, setAge] = useState(loggedUserContext?.loggedUser?.age);
   const [gender, setGender] = useState(loggedUserContext?.loggedUser?.gender);
-  const [playerType, setPlayerType] = useState(loggedUserContext?.loggedUser?.playerType);
-  const [aboutMe, setAboutMe] = useState(loggedUserContext?.loggedUser?.aboutMe);
-  const [profilePic , setProfilePic] = useState(loggedUserContext?.loggedUser?.avatarImage);
+  const [playerType, setPlayerType] = useState(
+    loggedUserContext?.loggedUser?.playerType
+  );
+  const [aboutMe, setAboutMe] = useState(
+    loggedUserContext?.loggedUser?.aboutMe
+  );
+  const [profilePic, setProfilePic] = useState(
+    loggedUserContext?.loggedUser?.avatarImage
+  );
+  const [charRemaining, setCharRemaining] = useState(150);
 
   // Handlers
   const edit = () => {
@@ -28,262 +36,473 @@ export default function Profile() : React.ReactElement {
 
   // Pick a new (random) profile pic, only if editing is enabled
   const changePfp = () => {
-    if(generalEdit) setProfilePic(Micellaneous.getAgentIcon(0, true));
+    if (generalEdit) setProfilePic(Micellaneous.getAgentIcon(0, true));
   };
 
-  const handleDisplayNameChange = (e : any) => {
-    if(generalEdit) setDisplayName(e.target.value);
-  }
+  const handleDisplayNameChange = (e: any) => {
+    if (generalEdit) setDisplayName(e.target.value);
+  };
 
-  const handleGenderChange = (e : any) => {
-    if(generalEdit) setGender(e.target.value);
-  }
+  const handleGenderChange = (e: any) => {
+    if (generalEdit) setGender(e.target.value);
+  };
 
-  const handleAgeChange = (e : any) => {
-    if(generalEdit) setAge(e.target.value);
-  }
+  const handleAgeChange = (e: any) => {
+    if (generalEdit) setAge(e.target.value);
+  };
 
-  const handlePlayerTypeChange = (e : any) => {
-    if(generalEdit) setPlayerType(e.target.value);
-  }
+  const handlePlayerTypeChange = (e: any) => {
+    if (generalEdit) setPlayerType(e.target.value);
+  };
 
-  const handleAboutMeChange = (e : any) => {
-    if(generalEdit) setAboutMe(e.target.value);
-  }
+  const handleAboutMeChange = (e: any) => {
+    if (generalEdit) setAboutMe(e.target.value);
+    let charRemaining = 150 - e.target.value.length;
+    setCharRemaining(charRemaining);
+  };
 
   useEffect(() => {
-
     const newValues = {
-     
       displayName: displayName,
       age: age,
       gender: gender,
       playerType: playerType,
       aboutMe: aboutMe,
-    }
+    };
 
     async function updateBackend() {
       const authResponse: IAuthResponse = await AuthService.update({
         userId: loggedUserContext?.loggedUser?._id,
-        ...newValues
+        ...newValues,
       });
     }
     // You can do some fancy checks here if you'd like, lots of work though
-    
-    if (generalEdit === false){ // add some more conditions
+
+    if (generalEdit === false) {
+      // add some more conditions
       updateBackend();
-      loggedUserContext.updateLoggedUser({...loggedUserContext?.loggedUser, ...newValues});
+      loggedUserContext.updateLoggedUser({
+        ...loggedUserContext?.loggedUser,
+        ...newValues,
+      });
     }
-  }, [generalEdit]);    // Depedencies: if this is changed then this useEffect will run.
+  }, [generalEdit]); // Depedencies: if this is changed then this useEffect will run.
 
   return (
-    <GridContainer>
-      <ProfileContainer>
-      
-        <Pfp genE={generalEdit} src={profilePic} onClick={() => changePfp()}></Pfp>
-
-        <div>
-          <Input
+    <ProfilePage>
+      <Edit
+        genE={generalEdit}
+        src="./images/general/edit.png"
+        onClick={() => edit()}
+      ></Edit>
+      <GridContainer>
+        <ProfileContainer>
+          <Pfp
             genE={generalEdit}
-            placeholder={displayName ?? ''}
-            autoComplete={"off"}
-            maxLength={15}
-            disabled={!generalEdit}
-            onChange={handleDisplayNameChange}>
-          </Input>
-          <Edit genE={generalEdit} src="./images/general/edit.png" onClick={() => edit()}></Edit>
-        </div>
+            src={profilePic}
+            onClick={() => changePfp()}
+          ></Pfp>
+          <PersonInfo>
+            <UsernameDiv>
+              <Input
+                genE={generalEdit}
+                placeholder={displayName ?? "Username"}
+                autoComplete={"off"}
+                maxLength={15}
+                disabled={!generalEdit}
+                onChange={handleDisplayNameChange}
+              ></Input>
+            </UsernameDiv>
 
-        <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-          <Drops value={gender} genE={generalEdit} disabled={!generalEdit} onChange={handleGenderChange}>
-            <option value={Gender.unknown}>{'---'}</option>
-            <option value={Gender.woman}>{Micellaneous.genderToString(Gender.woman, generalEdit)}</option>
-            <option value={Gender.man}>{Micellaneous.genderToString(Gender.man, generalEdit)}</option>
-            <option value={Gender.nonBinary}>{Micellaneous.genderToString(Gender.nonBinary, generalEdit)}</option>
-          </Drops>
+            <InfoInputs>
+              <Age
+                genE={generalEdit}
+                disabled={!generalEdit}
+                type="number"
+                placeholder="Age"
+                min="18"
+                max="99"
+                onChange={handleAgeChange}
+              ></Age>
+              <Drops
+                value={gender}
+                genE={generalEdit}
+                disabled={!generalEdit}
+                onChange={handleGenderChange}
+              >
+                <option value={Gender.unknown}>{"Gender"}</option>
+                <option value={Gender.woman}>
+                  {Micellaneous.genderToString(Gender.woman, generalEdit)}
+                </option>
+                <option value={Gender.man}>
+                  {Micellaneous.genderToString(Gender.man, generalEdit)}
+                </option>
+                <option value={Gender.nonBinary}>
+                  {Micellaneous.genderToString(Gender.nonBinary, generalEdit)}
+                </option>
+              </Drops>
 
-          <Age genE={generalEdit} disabled={!generalEdit} type="number" placeholder="18" min="18" max="99" onChange={handleAgeChange}></Age>
+              <span>
+                {Micellaneous.serverPreferenceToString(
+                  loggedUserContext?.loggedUser?.region
+                )}
+              </span>
+              <PlayerType>
+                {Micellaneous.playerTypeToString(playerType) ?? "<unknown>"}
+              </PlayerType>
+            </InfoInputs>
+          </PersonInfo>
+        </ProfileContainer>
 
-          <span>{Micellaneous.serverPreferenceToString(loggedUserContext?.loggedUser?.region)}</span>
-        </div>
+        <DetailsContainer>
+          {/* <div> */}
+          <BioContainer>
+            <Label>ABOUT ME</Label>
+            <TextArea
+              onChange={handleAboutMeChange}
+              genE={generalEdit}
+              autoComplete="off"
+              placeholder="There's nothing here! Edit your profile to liven things up!"
+              disabled={!generalEdit}
+              rows={6}
+              maxLength={150}
+            ></TextArea>
+            <CharRemaining genE={generalEdit}>
+              {charRemaining}/150
+            </CharRemaining>
+          </BioContainer>
 
-        <p>{Micellaneous.playerTypeToString(playerType) ?? '<unknown>'}</p>
-
-      </ProfileContainer>
-
-      <BioContainer>
-        {/* <div> */}
-        <AboutMeContainer>
-
-        <Label>ABOUT ME</Label>
-        <TextArea onChange={handleAboutMeChange} genE={generalEdit} autoComplete="off" placeholder={aboutMe} disabled={!generalEdit} rows={6}></TextArea>
-        </AboutMeContainer>
-
-        {/* <RankContainer> */}
-          <Ranks>
-            <RankLabel>
-            <RankImg imgSrc = "/images/reputation_ranks/ToxicWaste.png"></RankImg>
-              REPUTATION
+          {/* <RankContainer> */}
+          <RankInfo>
+            <Ranks>
+              <RankLabel>
+                <Heading>REPUTATION</Heading>
+                <RankImg imgSrc="/images/reputation_ranks/ToxicWaste.png"></RankImg>
               </RankLabel>
-            <RankLabel>
-            <RankImg imgSrc={"images/ranks/rank_1_1.webp"}></RankImg>
-            {/* <RankImg imgSrc={(loggedUserContext?.loggedUser == null) ? "images/ranks/rank_1_1.webp" : "images/ranks/rank_"+loggedUserContext?.loggedUser?.rank[0]+"_"+loggedUserContext?.loggedUser?.rank[1]+".webp"}></RankImg> */}
-              RANK
-            </RankLabel>
-          </Ranks>
-        {/* </RankContainer> */}
-        {/* </div> */}
-      </BioContainer>
-    </GridContainer>
+            </Ranks>
+            <Ranks>
+              <RankLabel>
+                <Heading>RANK</Heading>
+                <RankImg
+                  imgSrc={
+                    loggedUserContext?.loggedUser == null
+                      ? "images/ranks/rank_1_1.webp"
+                      : "images/ranks/rank_" +
+                        loggedUserContext?.loggedUser?.rank[0] +
+                        "_" +
+                        loggedUserContext?.loggedUser?.rank[1] +
+                        ".webp"
+                  }
+                ></RankImg>
+              </RankLabel>
+            </Ranks>
+          </RankInfo>
+          {/* </RankContainer> */}
+          {/* </div> */}
+        </DetailsContainer>
+      </GridContainer>
+    </ProfilePage>
   );
 }
+
+const ProfilePage = styled.div``;
+const InfoInputs = styled.div`
+  @media (max-width: 769px) {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+`;
+
+const UsernameDiv = styled.div`
+  display: flex;
+`;
+
+const CharRemaining = styled.p<{ genE: boolean }>`
+  color: ${(props) => (props.genE ? "#4a4a4a" : "#282828")};
+  font-size: 0.75rem;
+  font-weight: 300;
+  margin: 0 15% 0 auto;
+
+  @media (max-width: 769px) {
+    font-size: 0.5rem;
+    margin-right: 5%;
+  }
+`;
+
+const Heading = styled.p`
+  margin-top: 0%;
+  margin-bottom: 10%;
+`;
+
+const PlayerType = styled.p`
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 200;
+  @media (max-width: 769px) {
+    font-size: 0.5rem;
+  }
+`;
 
 const GridContainer = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: space-around;
   /* padding-bottom: 8%; */
+
+  @media (max-width: 769px) {
+    flex-direction: column;
+    align-items: center;
+  }
 `;
 
 const ProfileContainer = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-evenly;
   align-items: center;
-  width: 40%;
+  width: 50%;
   /* margin: 5%; */
+`;
+
+const PersonInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding-top: 10%;
+  z-index: 6;
+  @media (max-width: 769px) {
+    padding-top: 5%;
+  }
+`;
+
+const DetailsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  width: 50%;
+  @media (max-width: 769px) {
+    width: 100%;
+
+    flex-direction: column-reverse;
+  }
 `;
 
 const BioContainer = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 60%;
+  justify-content: space-evenly;
+  text-align: left;
+
+  @media (max-width: 769px) {
+    text-align: center;
+  }
 `;
 
-const RankContainer = styled.div`
+const RankInfo = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  /* padding: 0% 0%; */
-  /* margin-right: 10%; */
+  margin-right: 35%;
+  z-index: 2;
+
+  @media (max-width: 769px) {
+    margin: -19.25% 0 5% 0;
+
+    justify-content: space-between;
+  }
 `;
 
 const Drops = styled.select<{ genE: boolean }>`
-  background-color: ${(props) => (props.genE ? "#181818" : "#282828")};
-  /* -webkit-appearance: ${(props) => (props.genE ? "" : "none")}; */
-  /* -moz-appearance: ${(props) => (props.genE ? "" : "none")}; */
+  background-color: ${(props) => (props.genE ? "#383838" : "#282828")};
+  -webkit-appearance: ${(props) => (props.genE ? "" : "none")};
+  -moz-appearance: ${(props) => (props.genE ? "" : "none")};
   border: 0px;
   border-radius: 3px;
   color: white;
   text-align: center;
-  height: 80%;
-  /* width: 10%; */
+  height: 30px;
+  width: ${(props) => (props.genE ? "75px" : "40px")};
+  transition: 0.5s all;
+  font-size: 0.75rem;
   margin-top: 2%;
+  :focus {
+    box-shadow: 0 0 5px #60d6b5;
+    border: none;
+    outline: none;
+  }
+  @media (max-width: 769px) {
+    height: 20px;
+    width: 40px;
+    font-size: 0.5rem;
+  }
 `;
 
 const Age = styled.input<{ genE: boolean }>`
-  background-color: ${(props) => (props.genE ? "#181818" : "#282828")};
+  background-color: ${(props) => (props.genE ? "#383838" : "#282828")};
   border: 0px;
   border-radius: 3px;
   color: white;
   font-family: Arial;
   text-align: center;
-  width: 15%;
-  margin: 0% 2% 0% 2%;
-  height: 70%;
-  font-size: 100%;
+  width: 40px;
+  margin: 0% 2%;
+  height: 28px;
+  font-size: 0.75rem;
+  font-weight: 200;
+  transition: 0.5s all;
   ::placeholder {
     color: white;
+  }
+  :focus {
+    box-shadow: 0 0 5px #60d6b5;
+    border: none;
+    outline: none;
+  }
+  @media (max-width: 769px) {
+    height: 18px;
+    margin-top: 5px;
+    width: 30px;
+    font-size: 0.5rem;
   }
 `;
 
 const Input = styled.input<{ genE: boolean }>`
-  background-color: ${(props) => (props.genE ? "#181818" : "#282828")};
+  background-color: ${(props) => (props.genE ? "#383838" : "#282828")};
   color: white;
   text-align: center;
   text-overflow: ellipsis;
+  margin: 0;
   font-family: Arial, Helvetica, sans-serif;
-  height: 100%;
-  width: 70%;
-  font-size: 200%;
-  border: 0px;
-  border-radius: 7px;
+  height: 30px;
+  width: 200px;
+  font-weight: 600;
+  font-size: 1.5rem;
+  border: none;
+  border-radius: 3px;
+  transition: 0.5s all;
   /* margin-bottom: 5%; */
   ::placeholder {
     color: white;
   }
+  :focus {
+    box-shadow: 0 0 5px #60d6b5;
+    border: none;
+    outline: none;
+  }
+  @media (max-width: 1025px) {
+    font-size: 1rem;
+    width: 150px;
+  }
+  @media (max-width: 769px) {
+    height: 20px;
+    width: 100px;
+  }
 `;
 
 const TextArea = styled.textarea<{ genE: boolean }>`
-  background-color: ${(props) => (props.genE ? "#181818" : "#282828")};
+  background-color: ${(props) => (props.genE ? "#383838" : "#282828")};
   color: white;
-  // width: 80%;
-  // height: 50%;
-  font-family: Arial, Helvetica, sans-serif;
+  width: inherit;
+  margin-right: 15%;
+  font-family: "Poppins", sans-serif;
   resize: none;
-  overflow: hidden;
   border: 0px;
-  border-radius: 20px;
-  padding: 10px;
-  font-size: 140%;
-  /* ::placeholder {
-    color: white;
-  } */
-`;
+  border-radius: 3px;
+  transition: 0.5s all;
+  font-size: 1rem;
+  font-weight: 200;
+  height: 70%;
 
-const Display = styled.p`
-  background-color: #282828;
+  overflow: auto;
+  :focus {
+    box-shadow: 0 0 5px #60d6b5;
+    border: none;
+    outline: none;
+  }
+
+  @media (max-width: 1025px) {
+    height: 60%;
+  }
+  @media (max-width: 769px) {
+    height: 10vh;
+    margin: 2.5% 10%;
+    font-size: 0.7rem;
+
+    ::placeholder {
+      text-align: center;
+    }
+  }
 `;
 
 const Edit = styled.img<{ genE: boolean }>`
-  filter: ${(props) => (props.genE ? "drop-shadow(2px 2px 10px red) invert()" : "invert()")};
-  width: 6%;
-  margin-left: 5px;
+  filter: ${(props) =>
+    props.genE ? "drop-shadow(2px 2px 10px red) invert()" : "invert()"};
+  width: 20px;
+  height: 20px;
+  margin-left: 80%;
+
   :hover {
     filter: drop-shadow(2px 2px 10px red) invert();
     cursor: pointer;
   }
+  @media (max-width: 769px) {
+    margin-top: 5%;
+    margin-right: 5%;
+  }
 `;
 
 const Pfp = styled.img<{ genE: boolean }>`
-  filter: ${(props) => (props.genE ? "drop-shadow(1px 1px 8px #66c2a9) brightness(150%)" : "")};
-  width: 50%;
-  border: 7px solid #66c2a9;
+  filter: ${(props) =>
+    props.genE ? "drop-shadow(1px 1px 8px #66c2a9) brightness(100%)" : ""};
+  aspect-ratio: 1/1;
+  height: 9rem;
+  width: 9rem;
+  border: 5px solid #66c2a9;
   border-radius: 50%;
   background-color: #266152;
-  margin-bottom: 8%;
+  transition: 0.5s all;
+
+  @media (max-width: 1025px) {
+    height: 7.5rem;
+    width: 7.5rem;
+  }
 `;
 
 const Label = styled.p`
-padding-left: 15px;
-text-align: left;
-font-size: min(20px, 1.2vw);
-font-weight: 600;
-  @media all and (max-width: 1400px) {
-    // visibility: hidden;
-    margin: 0;
+  font-size: min(20px, 1.2vw);
+  font-weight: 600;
+  margin: 0;
+
+  @media (max-width: 1025px) {
+    font-size: 0.75rem;
   }
 `;
 
 const RankLabel = styled(Label)`
-padding-left:0px;
-text-align: center;
-font-size: 80%;
-display: flex;
-flex-direction: column;
-
-`
+  padding-left: 0px;
+  text-align: center;
+  font-size: 1rem;
+  display: flex;
+  flex-direction: column;
+  @media (max-width: 1025px) {
+    font-size: 0.75rem;
+  }
+`;
 
 const Ranks = styled.div`
-    display: flex;
-    width: 60%;
-    margin-left: auto;
-    margin-right: auto;
-    justify-content: space-between;
+  margin-top: 5%;
+  margin-left: 0;
 
+  @media (max-width: 769px) {
+    margin-left: 11%;
+    margin-right: 11%;
+  }
+
+  @media (max-width: 769px) {
+  }
 `;
+
 const RankImg = styled.img<{ imgSrc: string }>`
   content: url(${(props) => props.imgSrc});
   justify-content: center;
@@ -298,8 +517,3 @@ const RankImg = styled.img<{ imgSrc: string }>`
     max-height: 10%;
   }
 `;
-
-const AboutMeContainer = styled.div`
-
-
-`
