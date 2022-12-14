@@ -42,6 +42,7 @@ const Card = styled.div`
   justify-content: space-evenly;
 
   @media (max-width: 769px) {
+    width: 380px;
     height: 65vh;
   }
 `;

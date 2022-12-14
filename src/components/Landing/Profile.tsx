@@ -89,7 +89,7 @@ export default function Profile(): React.ReactElement {
   }, [generalEdit]); // Depedencies: if this is changed then this useEffect will run.
 
   return (
-    <div>
+    <ProfilePage>
       <Edit
         genE={generalEdit}
         src="./images/general/edit.png"
@@ -106,12 +106,11 @@ export default function Profile(): React.ReactElement {
             <UsernameDiv>
               <Input
                 genE={generalEdit}
-                placeholder={displayName ?? ""}
+                placeholder={displayName ?? "Username"}
                 autoComplete={"off"}
                 maxLength={15}
                 disabled={!generalEdit}
                 onChange={handleDisplayNameChange}
-                defaultValue="Username"
               ></Input>
             </UsernameDiv>
 
@@ -193,9 +192,11 @@ export default function Profile(): React.ReactElement {
           {/* </div> */}
         </DetailsContainer>
       </GridContainer>
-    </div>
+    </ProfilePage>
   );
 }
+
+const ProfilePage = styled.div``;
 
 const UsernameDiv = styled.div`
   display: flex;
@@ -206,6 +207,11 @@ const CharRemaining = styled.p<{ genE: boolean }>`
   font-size: 0.75rem;
   font-weight: 300;
   margin: 0 15% 0 auto;
+
+  @media (max-width: 769px) {
+    font-size: 0.5rem;
+    margin-right: 5%;
+  }
 `;
 
 const Heading = styled.p`
@@ -217,6 +223,9 @@ const PlayerType = styled.p`
   margin: 0;
   font-size: 0.75rem;
   font-weight: 200;
+  @media (max-width: 769px) {
+    font-size: 0.5rem;
+  }
 `;
 
 const GridContainer = styled.div`
@@ -224,6 +233,11 @@ const GridContainer = styled.div`
   flex-direction: row;
   justify-content: space-around;
   /* padding-bottom: 8%; */
+
+  @media (max-width: 769px) {
+    flex-direction: column;
+    align-items: center;
+  }
 `;
 
 const ProfileContainer = styled.div`
@@ -239,6 +253,10 @@ const PersonInfo = styled.div`
   display: flex;
   flex-direction: column;
   padding-top: 10%;
+  z-index: 6;
+  @media (max-width: 769px) {
+    padding-top: 5%;
+  }
 `;
 
 const DetailsContainer = styled.div`
@@ -246,6 +264,11 @@ const DetailsContainer = styled.div`
   flex-direction: column;
   justify-content: space-evenly;
   width: 50%;
+  @media (max-width: 769px) {
+    width: 100%;
+
+    flex-direction: column-reverse;
+  }
 `;
 
 const BioContainer = styled.div`
@@ -253,6 +276,10 @@ const BioContainer = styled.div`
   flex-direction: column;
   justify-content: space-evenly;
   text-align: left;
+
+  @media (max-width: 769px) {
+    text-align: center;
+  }
 `;
 
 const RankInfo = styled.div`
@@ -260,6 +287,13 @@ const RankInfo = styled.div`
   flex-direction: row;
   justify-content: space-between;
   margin-right: 35%;
+  z-index: 2;
+
+  @media (max-width: 769px) {
+    margin: -19.25% 0 5% 0;
+
+    justify-content: space-between;
+  }
 `;
 
 const Drops = styled.select<{ genE: boolean }>`
@@ -279,6 +313,10 @@ const Drops = styled.select<{ genE: boolean }>`
     box-shadow: 0 0 5px #60d6b5;
     border: none;
     outline: none;
+  }
+  @media (max-width: 769px) {
+    height: 20px;
+    font-size: 0.5rem;
   }
 `;
 
@@ -303,6 +341,10 @@ const Age = styled.input<{ genE: boolean }>`
     border: none;
     outline: none;
   }
+  @media (max-width: 769px) {
+    height: 18px;
+    font-size: 0.5rem;
+  }
 `;
 
 const Input = styled.input<{ genE: boolean }>`
@@ -314,6 +356,7 @@ const Input = styled.input<{ genE: boolean }>`
   font-family: Arial, Helvetica, sans-serif;
   height: 30px;
   width: 200px;
+  font-weight: 600;
   font-size: 1.5rem;
   border: none;
   border-radius: 3px;
@@ -330,6 +373,9 @@ const Input = styled.input<{ genE: boolean }>`
   @media (max-width: 1025px) {
     font-size: 1rem;
     width: 150px;
+  }
+  @media (max-width: 769px) {
+    height: 20px;
   }
 `;
 
@@ -357,6 +403,15 @@ const TextArea = styled.textarea<{ genE: boolean }>`
   @media (max-width: 1025px) {
     height: 60%;
   }
+  @media (max-width: 769px) {
+    height: 10vh;
+    margin: 2.5% 10%;
+    font-size: 0.7rem;
+
+    ::placeholder {
+      text-align: center;
+    }
+  }
 `;
 
 const Edit = styled.img<{ genE: boolean }>`
@@ -369,6 +424,10 @@ const Edit = styled.img<{ genE: boolean }>`
   :hover {
     filter: drop-shadow(2px 2px 10px red) invert();
     cursor: pointer;
+  }
+  @media (max-width: 769px) {
+    margin-top: 5%;
+    margin-right: 5%;
   }
 `;
 
@@ -393,19 +452,34 @@ const Label = styled.p`
   font-size: min(20px, 1.2vw);
   font-weight: 600;
   margin: 0;
+
+  @media (max-width: 1025px) {
+    font-size: 0.75rem;
+  }
 `;
 
 const RankLabel = styled(Label)`
   padding-left: 0px;
   text-align: center;
-  font-size: min(20px, 1.2vw);
+  font-size: 1rem;
   display: flex;
   flex-direction: column;
+  @media (max-width: 1025px) {
+    font-size: 0.75rem;
+  }
 `;
 
 const Ranks = styled.div`
   margin-top: 5%;
   margin-left: 0;
+
+  @media (max-width: 769px) {
+    margin-left: 7%;
+    margin-right: 7%;
+  }
+
+  @media (max-width: 769px) {
+  }
 `;
 
 const RankImg = styled.img<{ imgSrc: string }>`
