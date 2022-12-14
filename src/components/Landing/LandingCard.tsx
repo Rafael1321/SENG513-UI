@@ -28,7 +28,7 @@ export default function LandingCard(props: Props) {
 
 const Card = styled.div`
   background-color: #282828;
-  margin: 5%;
+  margin: 10% 5% 0 5%;
   width: 50vw;
   height: 55vh;
 

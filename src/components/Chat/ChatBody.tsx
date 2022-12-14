@@ -22,13 +22,20 @@ export default function ChatBody() {
   const [messages, setMessages] = useState<IMessage[]>([]);
   const [typedMessage, setTypedMessage] = useState("");
 
-
   // Use State
   useEffect(() => {
     socket.on("receive_msg", (receiveMsgDTO: IReceiveMsgDTO) => {
       // Locally update the messages
-    
-      const newMsgs = [...messages, {userId: matchedUser?.matchedUser?._id,type:"received", text:receiveMsgDTO.msg, userIcon:matchedUser?.matchedUser?.avatarImage}];
+
+      const newMsgs = [
+        ...messages,
+        {
+          userId: matchedUser?.matchedUser?._id,
+          type: "received",
+          text: receiveMsgDTO.msg,
+          userIcon: matchedUser?.matchedUser?.avatarImage,
+        },
+      ];
       setMessages(newMsgs);
     });
 
@@ -44,7 +51,7 @@ export default function ChatBody() {
 
   const sendMsg = async (sendContactInfo: boolean = false) => {
     const contactMsg = `You wanna play? Let's play! Add me on Valorant! ${loggedUserContext?.loggedUser?.gameName}#${loggedUserContext?.loggedUser?.tagLine}`;
-  
+
     // Locally update the messages
     const newMsgs = [
       ...messages,
@@ -56,14 +63,22 @@ export default function ChatBody() {
       },
     ];
     setMessages(newMsgs);
-    
+
     // Store the message in the database
-    await ChatService.save({senderId:loggedUserContext?.loggedUser?._id, receiverId:matchedUser?.matchedUser?._id, message: typedMessage});
+    await ChatService.save({
+      senderId: loggedUserContext?.loggedUser?._id,
+      receiverId: matchedUser?.matchedUser?._id,
+      message: typedMessage,
+    });
 
     // Notify other users of the message
-    socket.emit("send_msg", matchedUser?.matchedUser?._id, sendContactInfo ? contactMsg : typedMessage);
+    socket.emit(
+      "send_msg",
+      matchedUser?.matchedUser?._id,
+      sendContactInfo ? contactMsg : typedMessage
+    );
 
-    setTypedMessage("");  // Clear the typed message
+    setTypedMessage(""); // Clear the typed message
   };
 
   const updateMsg = (e: any) => {
@@ -323,14 +338,13 @@ const ChatInput = styled.input`
   outline: none;
   border: 0;
   position: absolute;
-  &::placeholder {
-    padding: 2%;
-  }
+  box-sizing: border-box;
+  padding: 2%;
+
   @media all and (max-width: 1400px) {
     width: 90vw;
     height: 5vh;
     margin-top: 0;
-    padding: 1vh;
   }
 `;
 
