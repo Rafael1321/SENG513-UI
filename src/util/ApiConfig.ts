@@ -15,6 +15,9 @@ export class ApiConfig{
     public static saveMessageRoute = () => this.baseRoute + `/chats`;
     public static retrieveMessagesRoute = () => this.baseRoute + `/chats`;
 
+    /* Commend */
+    public static saveCommendRoute = () => this.baseRoute + `/commendations`;
+
     /* Filters */
     public static upsertFiltersRoute = () => this.baseRoute + `/filters`;
     public static retrieveFiltersRoute = (retrieveDTO : IRetrieveDTO) => this.baseRoute + `/filters/${retrieveDTO.userId}`;

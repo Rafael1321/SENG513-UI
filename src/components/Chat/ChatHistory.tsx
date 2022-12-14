@@ -1,10 +1,15 @@
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import Button from "../Shared/Button";
 import styled from "styled-components/macro";
 import { EmblaCarousel } from "./EmblaCarousel";
 import ProfileCardUpdated from "./ProfileCardUpdated";
 import { Slider } from "@mui/material";
-import { getValue } from "@mui/system";
+import { CommendationService } from "../../services/CommendationService";
+import { LoggedUserContext } from '../../contexts/LoggedUserContext';
+import { MatchedUserContext } from '../../contexts/MatchedUserContext';
+import { ISaveCommendDTO } from "../../models/CommendationModels";
+import { CustomToast } from "../Shared/CustomToast";
+import { toast } from "react-toastify";
 
 type Props = {};
 
@@ -49,9 +54,20 @@ const history = [
 ];
 
 function ChatHistory(props: Props): React.ReactElement {
+  
+  // Constants
   const [width, setWidth] = useState(window.innerWidth);
   const breakpoint = 1000;
+  const marks = [{value: 1, label: '1'}, {value: 2, label: '2'}, {value: 3, label: '3'},
+                 {value: 4, label: '4'}, {value: 5, label: '5'}, {value: 6, label: '6'},
+                 {value: 7, label: '7'}, {value: 8, label: '8'}, {value: 9, label: '9'},
+                 {value: 10, label: '10'}];
 
+  // Contexts
+  const loggedUserContext = useContext(LoggedUserContext);
+  const matchedUserContext = useContext(MatchedUserContext);
+
+  // State
   const [rateState, setRateState] = useState(0);
   const [rating, setRating] = useState(5);
 
@@ -70,28 +86,37 @@ function ChatHistory(props: Props): React.ReactElement {
   function handleRating(event: Event) {
     let newRating = (event.target as HTMLInputElement).value;
     setRating(+newRating);
-    console.log(rating);
   }
 
-  function commend() {
-    console.log("Last new rating:" + rating);
-    doneRating();
+  async function commend() {
+
+    // TODO: Uncommen Tyler once you can determine the id of the person that you are commending (ask Rafael)
+
+    // const response = await CommendationService.save({commenderId:loggedUserContext?.loggedUser?._id, commendedId:loggedUserContext?.loggedUser?._id, score:rating})
+
+    // if(response.statusCode !== 200){
+    //   toast.error(response.data as string);
+    //   newRating();
+    // }else{
+      doneRating();
+    // }
   }
 
   function displayRating() {
-    if (rateState == 0) {
+    if (rateState === 0) {
       return <RateButton onClick={startRating}>RATE PLAYER</RateButton>;
-    } else if (rateState == 1) {
+    } else if (rateState === 1) {
       return (
-        <RatingSlider>
+        <RatingContainer>
           <label htmlFor="rating">RATE PLAYER</label>
-          <Slider
+          <CustomSlider
             size="small"
             defaultValue={5}
-            min={0}
+            min={1}
             max={10}
             step={1}
-            valueLabelDisplay="auto"
+            marks={marks}
+            valueLabelDisplay="off"
             onChange={(e: Event) => {
               handleRating(e);
             }}
@@ -99,7 +124,7 @@ function ChatHistory(props: Props): React.ReactElement {
           <Commend type="button" onClick={commend}>
             COMMEND
           </Commend>
-        </RatingSlider>
+        </RatingContainer>
       );
     } else if (rateState == 2) {
       return <h4>Rating Recorded!</h4>;
@@ -118,6 +143,7 @@ function ChatHistory(props: Props): React.ReactElement {
 
   return (
     <>
+     <CustomToast></CustomToast>
       <WidthContext.Provider value={width}>
         <MainWrapper>
           <MainContainer>
@@ -207,15 +233,53 @@ const Commend = styled.button`
   background-color: #68c9ac;
   border: none;
   border-radius: 2px;
+  width: 40%;
+  margin-top: 2%;
 
   &:hover {
     cursor: pointer;
   }
 `;
 
-const RatingSlider = styled.div`
+const RatingContainer = styled.div`
   display: flex;
   flex-direction: column;
+  width: 100%;
+  height: auto;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const CustomSlider = styled(Slider)`
+
+  margin: 3% 0;
+
+    & .MuiSlider-thumb {
+      background-color: #BD3944;
+      height: 0.8vw;
+      width: 0.3vw;
+      border-radius: 0;
+    }
+
+    & .MuiSlider-rail {
+      color: #D9D9D9;
+      opacity: 100%;
+      border-radius: 0;
+    }
+
+    & .MuiSlider-track{
+        color: #BD3944;
+    }
+
+    & .MuiSlider-mark{
+        color: white;
+        height: 0.5vw;
+        width: 0.15vw;
+    }
+
+    & 	.MuiSlider-markLabel{
+      color: white;
+    }
 `;
 
 const MainWrapper = styled.div`
