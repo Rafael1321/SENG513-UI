@@ -211,7 +211,7 @@ const ProfileContainer = styled.div`
   flex-direction: column;
   justify-content: space-evenly;
   align-items: center;
-  width: 40%;
+  width: 50%;
   /* margin: 5%; */
 `;
 
@@ -225,15 +225,13 @@ const DetailsContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
-  align-items: center;
-  width: 60%;
+  width: 50%;
 `;
 
 const BioContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
-  width: inherit;
   text-align: left;
 `;
 
@@ -241,7 +239,8 @@ const RankInfo = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  width: inherit;
+
+  margin-right: 35%;
   padding-top: 5%;
 `;
 
@@ -295,8 +294,8 @@ const Input = styled.input<{ genE: boolean }>`
 const TextArea = styled.textarea<{ genE: boolean }>`
   background-color: ${(props) => (props.genE ? "#383838" : "#282828")};
   color: white;
-  // width: 80%;
-  // height: 50%;
+  width: inherit;
+  margin-right: 15%;
   font-family: Arial, Helvetica, sans-serif;
   resize: none;
   overflow: hidden;
