@@ -119,7 +119,7 @@ export default function Profile(): React.ReactElement {
               genE={generalEdit}
               disabled={!generalEdit}
               type="number"
-              placeholder="18"
+              placeholder="Age"
               min="18"
               max="99"
               onChange={handleAgeChange}
@@ -234,7 +234,7 @@ const ProfileContainer = styled.div`
 const PersonInfo = styled.div`
   display: flex;
   flex-direction: column;
-  margin-top: 5%;
+  padding-top: 10%;
 `;
 
 const DetailsContainer = styled.div`
@@ -260,16 +260,16 @@ const RankInfo = styled.div`
 
 const Drops = styled.select<{ genE: boolean }>`
   background-color: ${(props) => (props.genE ? "#383838" : "#282828")};
-  /* -webkit-appearance: ${(props) => (props.genE ? "" : "none")}; */
-  /* -moz-appearance: ${(props) => (props.genE ? "" : "none")}; */
+  -webkit-appearance: ${(props) => (props.genE ? "" : "none")};
+  -moz-appearance: ${(props) => (props.genE ? "" : "none")};
   border: 0px;
   border-radius: 3px;
   color: white;
   text-align: center;
   height: 30px;
+  width: ${(props) => (props.genE ? "75px" : "40px")};
   transition: 0.5s all;
   font-size: 0.75rem;
-  /* width: 10%; */
   margin-top: 2%;
   :focus {
     box-shadow: 0 0 5px #60d6b5;
@@ -285,8 +285,8 @@ const Age = styled.input<{ genE: boolean }>`
   color: white;
   font-family: Arial;
   text-align: center;
-  width: 15%;
-  margin: 0% 2% 0% 2%;
+  width: 40px;
+  margin: 0% 2%;
   height: 28px;
   font-size: 0.75rem;
   font-weight: 200;
