@@ -1,4 +1,4 @@
-import { Gender, RankLevel, RankType, ServerPreference } from "../models/FiltersModels";
+import { GameMode, Gender, RankLevel, RankType, ServerPreference } from "../models/FiltersModels";
 
 export class Micellaneous{
 
@@ -90,7 +90,7 @@ export class Micellaneous{
     public static serverPreferenceToString(serverPref : ServerPreference, longVersion : boolean = false){
         switch(serverPref){
             case ServerPreference.na:
-                return longVersion?'North America':'NA';
+                return longVersion?'N. America':'NA';
             case ServerPreference.eu:
                 return longVersion?'Europe':'EU';
             case ServerPreference.ap:
@@ -121,5 +121,10 @@ export class Micellaneous{
             idx = Math.floor(Math.random() * (Micellaneous.agentIcons.length - 1));
             return Micellaneous.agentIcons[idx];
         }
+    }
+
+    public static playerTypeToString(playerType : GameMode){
+        if(playerType === GameMode.casual) return "Casual";
+        else                               return "Competitive";
     }
 }

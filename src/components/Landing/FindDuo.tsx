@@ -23,7 +23,10 @@ export default function FindDuo() {
 
   return (
     <FindDuoContainer>
-      <Picture icon={loggedUserContext?.loggedUser?.avatarImage}></Picture>
+      <img
+        src={loggedUserContext?.loggedUser?.avatarImage ?? ""}
+        alt="My Icon"
+      ></img>
       <Line></Line>
       <Picture icon={Micellaneous.getAgentIcon(index)} id="teammate">
         <p id="question-mark">&#63;</p>
