@@ -15,6 +15,9 @@ export class ApiConfig{
     public static saveMessageRoute = () => this.baseRoute + `/chats`;
     public static retrieveMessagesRoute = () => this.baseRoute + `/chats`;
 
+    /* History */
+    public static retrieveMatchHistory = (userId : string) => this.baseRoute + `/matchings/${userId}`;
+
     /* Commend */
     public static saveCommendRoute = () => this.baseRoute + `/commendations`;
 

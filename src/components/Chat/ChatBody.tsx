@@ -10,6 +10,7 @@ import { MatchedUserContext } from "../../contexts/MatchedUserContext";
 import { IMessage, IReceiveMsgDTO } from "../../models/ChatModels";
 import { Gender } from "../../models/FiltersModels";
 import { EnvConfig } from "../../util/EnvConfig";
+import { ChatService } from "../../services/ChatService";
 
 export default function ChatBody() {
   // Contexts
@@ -41,9 +42,7 @@ export default function ChatBody() {
     socket,
   ]);
 
- 
-
-  const sendMsg = (sendContactInfo: boolean = false) => {
+  const sendMsg = async (sendContactInfo: boolean = false) => {
     const contactMsg = `You wanna play? Let's play! Add me on Valorant! ${loggedUserContext?.loggedUser?.gameName}#${loggedUserContext?.loggedUser?.tagLine}`;
   
     // Locally update the messages
@@ -57,8 +56,9 @@ export default function ChatBody() {
       },
     ];
     setMessages(newMsgs);
+    
     // Store the message in the database
-    // TODO: Add your code here
+    await ChatService.save({senderId:loggedUserContext?.loggedUser?._id, receiverId:matchedUser?.matchedUser?._id, message: typedMessage});
 
     // Notify other users of the message
     socket.emit("send_msg", matchedUser?.matchedUser?._id, sendContactInfo ? contactMsg : typedMessage);

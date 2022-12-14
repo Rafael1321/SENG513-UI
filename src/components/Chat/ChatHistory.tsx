@@ -6,52 +6,26 @@ import ProfileCardUpdated from "./ProfileCardUpdated";
 import { Slider } from "@mui/material";
 import { CommendationService } from "../../services/CommendationService";
 import { LoggedUserContext } from '../../contexts/LoggedUserContext';
-import { MatchedUserContext } from '../../contexts/MatchedUserContext';
-import { ISaveCommendDTO } from "../../models/CommendationModels";
 import { CustomToast } from "../Shared/CustomToast";
 import { toast } from "react-toastify";
+import { IUser } from "../../models/AuthModels";
+import { MatchingService, IMatchingResponse } from '../../services/MatchingService';
+import { ILoadMsgDTO, IMessage } from "../../models/ChatModels";
+import MessageContainer from "./MessageContainer";
+import { IChatResponse, ChatService } from '../../services/ChatService';
+import { Micellaneous } from "../../util/Micellaneous";
 
 type Props = {};
 
 const SLIDE_COUNT = 5;
 const slides = Array.from(Array(SLIDE_COUNT).keys());
-console.log(slides);
-
-export type Chat = {
-  key: number;
-  username: string;
-  profile_url: string;
-  last_message: string;
-};
 
 export const WidthContext = createContext<number>(1500);
 
-const history = [
-  {
-    key: 0,
-    username: "VividEradicator",
-    profile_url: "images/icons/Astra_icon.webp",
-    last_message: "Suggondeez",
-  },
-  {
-    key: 1,
-    username: "IAMNOTAFURRY",
-    profile_url: "images/icons/Chamber_icon.webp",
-    last_message: "Bro what are you even saying man?", //Overflow
-  },
-  {
-    key: 2,
-    username: "ArcticFox",
-    profile_url: "images/icons/Omen_icon.webp",
-    last_message: "I love chamber so much!",
-  },
-  {
-    key: 3,
-    username: "Malder",
-    profile_url: "images/icons/Breach_icon.webp",
-    last_message: "Wtf is this carousel",
-  },
-];
+export interface IHistoryEntry{
+  key : number;
+  user : IUser;
+}
 
 function ChatHistory(props: Props): React.ReactElement {
   
@@ -65,11 +39,72 @@ function ChatHistory(props: Props): React.ReactElement {
 
   // Contexts
   const loggedUserContext = useContext(LoggedUserContext);
-  const matchedUserContext = useContext(MatchedUserContext);
 
   // State
   const [rateState, setRateState] = useState(0);
   const [rating, setRating] = useState(5);
+  const [history, setHistory] = useState<IHistoryEntry[]>([]);
+  const [filteredHistory, setFilteredHistory] = useState<IHistoryEntry[]>([]);
+  const [messages, setMessages] = useState<IMessage[]>([]);
+  const [main, setMain] = useState<number>(0)
+  const [filter, setFilter] = useState<string>("");
+
+  // Use Effects 
+  React.useEffect(() => {
+
+    const fetchMatchHistory = async () : Promise <void> => {
+
+      const res : IMatchingResponse = await MatchingService.retrieveHistory(loggedUserContext?.loggedUser?._id);
+
+      if(res.statusCode !== 200){
+        toast.error("Could not retrieve match history.")
+        return;
+      }
+
+      setHistory((res.data as IUser[]).map( (user : IUser, index : number) => {
+          return {key: index, user : user};
+      }));
+
+      setFilteredHistory((res.data as IUser[]).map( (user : IUser, index : number) => {
+        return {key: index, user : user};
+      }));
+    }
+
+    fetchMatchHistory();
+
+  }, []);
+
+  React.useEffect(() => {
+
+    const fetchMessages = async () : Promise<void> => {
+
+      const res : IChatResponse = await ChatService.retrieve({senderId : loggedUserContext?.loggedUser?._id, receiverId : history[main]?.user?._id});
+
+      if(res.statusCode !== 200){
+        toast.error("Could not retrieve chat for match.")
+        return;
+      }
+      const loadedMessages = res.data as ILoadMsgDTO[];
+
+      // Update messages to be displayed
+      setMessages(loadedMessages.map( (loadMessage : ILoadMsgDTO) => {
+        return {userId: loadMessage.senderId, 
+         type: (loadMessage.senderId === loggedUserContext?.loggedUser?._id ?"sent":"received"), 
+         text: loadMessage.message, 
+         userIcon:loadMessage.senderId === loggedUserContext?.loggedUser?._id?loggedUserContext?.loggedUser?.avatarImage:history[main].user.avatarImage
+        }
+      }));
+    }
+
+    if(loggedUserContext.loggedUser && history[main]) fetchMessages();
+
+  }, [loggedUserContext, history, main]);
+
+  // Other Functions 
+
+  function mainChanged(main : number){
+    setMain(main);
+  }
 
   function newRating() {
     setRateState(0);
@@ -90,16 +125,14 @@ function ChatHistory(props: Props): React.ReactElement {
 
   async function commend() {
 
-    // TODO: Uncommen Tyler once you can determine the id of the person that you are commending (ask Rafael)
+    const response = await CommendationService.save({commenderId:loggedUserContext?.loggedUser?._id, commendedId: history[main].user._id, score:rating})
 
-    // const response = await CommendationService.save({commenderId:loggedUserContext?.loggedUser?._id, commendedId:loggedUserContext?.loggedUser?._id, score:rating})
-
-    // if(response.statusCode !== 200){
-    //   toast.error(response.data as string);
-    //   newRating();
-    // }else{
+    if(response.statusCode !== 200){
+      toast.error(response.data as string);
+      newRating();
+    }else{
       doneRating();
-    // }
+    }
   }
 
   function displayRating() {
@@ -131,6 +164,11 @@ function ChatHistory(props: Props): React.ReactElement {
     }
   }
 
+  function handleFilter(e : any){
+    console.log(e.target.value);
+    setFilter(e.target.value);
+  }
+
   useEffect(() => {
     const handleResizeWindow = () => setWidth(window.innerWidth);
 
@@ -139,7 +177,23 @@ function ChatHistory(props: Props): React.ReactElement {
     return () => {
       window.removeEventListener("resize", handleResizeWindow);
     };
+  }, []);
+
+  useEffect(() => {
+    window.dispatchEvent(new Event('resize'));
   });
+
+  useEffect(() => {
+    const newHistory = history.filter( (entry : IHistoryEntry) => {
+      if(filter === "") return entry;
+      if(entry.user.displayName.includes(filter)) return entry;
+    });
+    setFilteredHistory(newHistory);
+  }, [filter]);
+
+  function navigate(arg0: string) {
+    throw new Error("Function not implemented.");
+  }
 
   return (
     <>
@@ -151,18 +205,24 @@ function ChatHistory(props: Props): React.ReactElement {
               <Menu>
                 {width > breakpoint && (
                   <Button
-                    img_url={"images/general/back.png"}
                     text={"BACK"}
                     width={"160px"}
                     height={"70px"}
-                  />
+                    url={'../landing'}
+                    img_url={null}
+                    svg={true}
+                  ></Button>
                 )}
                 {width > breakpoint && (
                   <SearchContainer>
                     <SearchIconWrapper>
-                      <SearchIcon url={"images/general/search.png"} />
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                        {/* <!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->  */}
+                        <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/>
+                      </svg>
+                      {/* <SearchIcon url={"images/general/search.png"} /> */}
                     </SearchIconWrapper>
-                    <SearchInput placeholder="Search Message History" />
+                    <SearchInput onChange={handleFilter} placeholder="Search Message History" />
                   </SearchContainer>
                 )}
               </Menu>
@@ -170,22 +230,33 @@ function ChatHistory(props: Props): React.ReactElement {
               <PlayerCardsWrapper>
                 <EmblaCarousel
                   slides={[...slides]}
-                  history={history}
+                  history={filteredHistory}
                   ClickHandler={newRating}
+                  mainChanged={mainChanged}
                 />
                 {width < breakpoint && (
                   <RatePlayerWrapper>
                     <Button
                       fontSize="2em"
-                      text={"RATE"}
-                      width={"100%"}
+                      text={"BACK"}
+                      width={'auto'}
                       height={"100%"}
+                      url={'../landing'}
                     />
                   </RatePlayerWrapper>
                 )}
               </PlayerCardsWrapper>
 
-              <ChatContainer>Future Chat Goes Here</ChatContainer>
+              <ChatContainer>
+                    {messages.map((msg: IMessage, index: number) => (
+                      <MessageContainer
+                        key={msg.userId + index.toString()}
+                        msgType={msg.type}
+                        senderImg={msg.userIcon}
+                        text={msg.text}/>
+                    ))}
+              </ChatContainer>
+            
             </HistorySection>
 
             {width > breakpoint && (
@@ -193,13 +264,12 @@ function ChatHistory(props: Props): React.ReactElement {
                 <RatePlayerWrapper>{displayRating()}</RatePlayerWrapper>
                 <ProfileCardWrapper>
                   <ProfileCardUpdated
-                    imgSrc="images/icons/Neon_icon.webp"
-                    userName="IAMNOTAFURRY"
+                    imgSrc= {history[main]?.user?.avatarImage}
+                    userName={history[main]?.user?.displayName}
                     chatRank="images/reputation_ranks/ToxicWaste.png"
-                    userType="gamer"
-                    valRank="images/ranks/rank_7_3.webp"
-                    basicInfo="I am basic info"
-                    aboutMe="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+                    userType={Micellaneous.playerTypeToString(history[main]?.user?.playerType)}
+                    valRank={`images/ranks/rank_${history[main]?.user?.rank[0]}_${history[main]?.user?.rank[1]}.webp`}
+                    aboutMe={history[main]?.user?.aboutMe}
                   ></ProfileCardUpdated>
                 </ProfileCardWrapper>
               </InfoCardSection>
@@ -342,6 +412,7 @@ const InfoCardSection = styled.aside`
 const ProfileCardWrapper = styled.div`
   position: inherit;
   height: 85%;
+  width: 100%
 `;
 
 const Menu = styled.nav`
@@ -391,19 +462,20 @@ const PlayerCardsWrapper = styled.div`
 `;
 
 const ChatContainer = styled.div`
+  overflow-y: scroll;
+  margin: 10px;
+  margin-left: auto;
+  margin-right: auto;
   position: relative;
   width: 100%;
   height: 70%;
-
   padding: 5%;
   outline: 1px red;
-
   background-color: #282828;
   border-radius: 44px;
-
   display: flex;
-  justify-content: center;
-  /* border: red solid 1px; */
+  flex-direction: column;
+  justify-content: start;
 
   @media all and (max-width: 500px) {
     height: 80%;
@@ -462,6 +534,14 @@ const SearchIconWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+
+
+  & svg{
+    fill: white;
+    width: 1vw;
+    height: 1vw;
+  }
+
 `;
 
 const SearchIcon = styled.img<{ url: string }>`

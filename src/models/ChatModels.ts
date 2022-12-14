@@ -15,6 +15,12 @@ export interface IRetrieveMsgsDTO{
     receiverId : string 
 }
 
+export interface ILoadMsgDTO{
+    senderId : string, 
+    receiverId : string,
+    message: string; 
+}
+
 // Models
 
 export interface IMessage {

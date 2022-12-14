@@ -7,7 +7,6 @@ interface Props {
     userName: string;
     valRank?: string;
     chatRank: string;
-    basicInfo?: string;
     userType: string;
     aboutMe?: string;
     isMain?: boolean;

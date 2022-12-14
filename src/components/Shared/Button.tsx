@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { fontSize } from "@mui/system";
 
 type Props = {
   text: string;
@@ -10,6 +9,7 @@ type Props = {
   img_url?: string;
   fontSize?: string;
   url?: string;
+  svg?: boolean;
 };
 
 function Button(props: Props): React.ReactElement {
@@ -20,7 +20,12 @@ function Button(props: Props): React.ReactElement {
 
   return (
     <Wrapper onClick={onClickHandler} height={props.height} width={props.width}>
-      {props.img_url && <Image url={props.img_url} size={"40px"} />}
+      {props.img_url ? <Image url={props.img_url} size={"40px"} /> : 
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+        {/* <!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --> */}
+        <path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/>
+      </svg>
+      }
       <Text fontSize={props.fontSize}>{props.text}</Text>
     </Wrapper>
   );
@@ -31,6 +36,7 @@ const Wrapper = styled.div<{ width?: string; height?: string }>`
   justify-content: space-evenly;
 
   align-items: center;
+  padding: 1%;
 
   background: #66c2a9;
   background-blend-mode: darken;
@@ -56,6 +62,14 @@ const Wrapper = styled.div<{ width?: string; height?: string }>`
     user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome, Edge, Opera and Firefox */
   }
+
+  svg{
+    fill: white;
+    height: 2vw;
+    width: 2vw;
+  }
+
+
 `;
 
 const Image = styled.img<{ url: string; size: string }>`

@@ -3,19 +3,19 @@ import useEmblaCarousel from "embla-carousel-react";
 import "./embla.css";
 import styled from "styled-components/macro";
 import HistoryCard from "./HistoryCard";
-import { Chat } from "./ChatHistory";
-import { WidthContext } from "./ChatHistory";
+import { IHistoryEntry, WidthContext } from "./ChatHistory";
 
 import ProfileCardUpdated from "./ProfileCardUpdated";
 
 type Props = {
-  history: Array<Chat>;
+  history: Array<IHistoryEntry>;
   slides: Array<number>;
   ClickHandler: () => void;
+  mainChanged : (main : number) => void;
 };
 
 export const EmblaCarousel = (props: Props) => {
-  const [viewportRef, embla] = useEmblaCarousel({
+  let [viewportRef, embla] = useEmblaCarousel({
     align: "center",
     skipSnaps: false,
     draggable: false,
@@ -49,21 +49,24 @@ export const EmblaCarousel = (props: Props) => {
     onSelect();
   }, [embla, onSelect]);
 
+  useEffect(() => {
+    props.mainChanged(main);
+  }, [main]);
+
   return (
     <Container>
       <EmblaViewPort ref={viewportRef}>
         <EmblaContainer>
-          {props.history.map((chat: Chat) =>
+          {props.history.map((entry: IHistoryEntry) => 
             width > 1000 ? (
               <WrapperOuter>
                 <WrapperInner>
                   <HistoryCard
-                    key={chat.key}
-                    url={chat.profile_url}
-                    username={chat.username}
-                    message={chat.last_message}
-                    isMain={main === chat.key}
-                    zIndex={main === chat.key ? "3" : "1"}
+                    key={entry.user._id+entry.key}
+                    url={entry.user.avatarImage}
+                    username={entry.user.displayName}
+                    isMain={main === entry.key}
+                    zIndex={main === entry.key ? "3" : "1"}
                   />
                 </WrapperInner>
               </WrapperOuter>
@@ -72,13 +75,12 @@ export const EmblaCarousel = (props: Props) => {
                 <WrapperInner>
                   <ProfileCardWrapper>
                     <ProfileCardUpdated
-                      isMain={main === chat.key}
-                      imgSrc={chat.profile_url}
-                      userName={chat.username}
+                      isMain={main === entry.key}
+                      imgSrc={entry.user.avatarImage}
+                      userName={entry.user.displayName}
                       chatRank="images/reputation_ranks/ToxicWaste.png"
                       userType="gamer"
                       valRank="images/ranks/rank_7_3.webp"
-                      basicInfo="I am basic info"
                       aboutMe="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
                     ></ProfileCardUpdated>
                   </ProfileCardWrapper>
