@@ -225,53 +225,6 @@ export default function Landing() {
   );
 }
 
-const ButtonContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  margin-top: 0%;
-  width: 100%;
-`;
-
-const ButtonImages = styled.img`
-  /* height: 100%; */
-  filter: invert();
-  width: 2%;
-`;
-
-const Button = styled.button`
-  font-weight: bold;
-  font-size: 1rem;
-  /* height: 100%; */
-  /* margin: 5%; */
-  background: none;
-  padding: 0% 10% 5% 10%;
-  line-break: 100%;
-  /* background: none; */
-  color: white;
-  border: 0px;
-  width: 200px;
-
-  &:hover {
-    cursor: pointer;
-  }
-
-  & #filterIcon {
-    fill: white;
-    width: 20px;
-    height: 20px;
-    line-height: 100%;
-    padding-right: 5%;
-    margin-bottom: -2.5%;
-  }
-
-  @media (max-width: 769px) {
-    margin-top: 5%;
-    font-size: 0.75rem;
-  }
-`;
-
 const LandingPage = styled.div`
   background-color: #181818;
   margin: 0px;
@@ -397,6 +350,47 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-top: 0%;
+  width: 100%;
+`;
+
+const Button = styled.button`
+  font-weight: bold;
+  font-size: 1rem;
+  /* height: 100%; */
+  /* margin: 5%; */
+  background: none;
+  padding: 0% 10% 5% 10%;
+  line-break: 100%;
+  /* background: none; */
+  color: white;
+  border: 0px;
+  width: 200px;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  & #filterIcon {
+    fill: white;
+    width: 20px;
+    height: 20px;
+    line-height: 100%;
+    padding-right: 5%;
+    margin-bottom: -2.5%;
+  }
+
+  @media (max-width: 769px) {
+    margin-top: 5%;
+    font-size: 0.75rem;
+  }
 `;
 
 const History = styled.div`
