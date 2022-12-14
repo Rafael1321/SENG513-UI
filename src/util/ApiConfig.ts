@@ -11,6 +11,10 @@ export class ApiConfig{
     public static updateUserRoute = () => this.baseRoute + `/users/update`;
     public static findUserRoute = (userId : string) => this.baseRoute + `users/${userId}`;
 
+    /* Chat */
+    public static saveMessageRoute = () => this.baseRoute + `/chats`;
+    public static retrieveMessagesRoute = () => this.baseRoute + `/chats`;
+
     /* Filters */
     public static upsertFiltersRoute = () => this.baseRoute + `/filters`;
     public static retrieveFiltersRoute = (retrieveDTO : IRetrieveDTO) => this.baseRoute + `/filters/${retrieveDTO.userId}`;
