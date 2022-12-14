@@ -93,22 +93,6 @@ export default function Profile(): React.ReactElement {
           src={profilePic}
           onClick={() => changePfp()}
         ></Pfp>
-
-        <BioContainer>
-          <Label>ABOUT ME</Label>
-          <TextArea
-            onChange={handleAboutMeChange}
-            genE={generalEdit}
-            autoComplete="off"
-            placeholder={aboutMe}
-            disabled={!generalEdit}
-            rows={6}
-          ></TextArea>
-        </BioContainer>
-      </ProfileContainer>
-
-      <DetailsContainer>
-        {/* <div> */}
         <PersonInfo>
           <div>
             <Input
@@ -165,21 +149,38 @@ export default function Profile(): React.ReactElement {
             </PlayerType>
           </div>
         </PersonInfo>
+      </ProfileContainer>
+
+      <DetailsContainer>
+        {/* <div> */}
+        <BioContainer>
+          <Label>ABOUT ME</Label>
+          <TextArea
+            onChange={handleAboutMeChange}
+            genE={generalEdit}
+            autoComplete="off"
+            placeholder={aboutMe}
+            disabled={!generalEdit}
+            rows={6}
+          ></TextArea>
+        </BioContainer>
 
         {/* <RankContainer> */}
-        <Ranks>
-          <RankLabel>
-            REPUTATION
-            <RankImg imgSrc="/images/reputation_ranks/ToxicWaste.png"></RankImg>
-          </RankLabel>
-        </Ranks>
-        <Ranks>
-          <RankLabel>
-            RANK
-            <RankImg imgSrc={"images/ranks/rank_1_1.webp"}></RankImg>
-            {/* <RankImg imgSrc={(loggedUserContext?.loggedUser == null) ? "images/ranks/rank_1_1.webp" : "images/ranks/rank_"+loggedUserContext?.loggedUser?.rank[0]+"_"+loggedUserContext?.loggedUser?.rank[1]+".webp"}></RankImg> */}
-          </RankLabel>
-        </Ranks>
+        <RankInfo>
+          <Ranks>
+            <RankLabel>
+              <Heading>REPUTATION</Heading>
+              <RankImg imgSrc="/images/reputation_ranks/ToxicWaste.png"></RankImg>
+            </RankLabel>
+          </Ranks>
+          <Ranks>
+            <RankLabel>
+              <Heading>RANK</Heading>
+              <RankImg imgSrc={"images/ranks/rank_1_1.webp"}></RankImg>
+              {/* <RankImg imgSrc={(loggedUserContext?.loggedUser == null) ? "images/ranks/rank_1_1.webp" : "images/ranks/rank_"+loggedUserContext?.loggedUser?.rank[0]+"_"+loggedUserContext?.loggedUser?.rank[1]+".webp"}></RankImg> */}
+            </RankLabel>
+          </Ranks>
+        </RankInfo>
         {/* </RankContainer> */}
         {/* </div> */}
       </DetailsContainer>
@@ -187,16 +188,9 @@ export default function Profile(): React.ReactElement {
   );
 }
 
-const PersonInfo = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-top: 5%;
-`;
-
-const DetailsContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
+const Heading = styled.p`
+  margin-top: 0%;
+  margin-bottom: 10%;
 `;
 
 const PlayerType = styled.p`
@@ -207,26 +201,52 @@ const PlayerType = styled.p`
 
 const GridContainer = styled.div`
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  flex-direction: row;
+  justify-content: space-around;
   /* padding-bottom: 8%; */
 `;
 
 const ProfileContainer = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: space-evenly;
+  align-items: center;
+  width: 40%;
   /* margin: 5%; */
+`;
+
+const PersonInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-top: 5%;
+`;
+
+const DetailsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  width: 60%;
 `;
 
 const BioContainer = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: start;
+  justify-content: space-evenly;
+  width: inherit;
+  text-align: left;
+`;
+
+const RankInfo = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: inherit;
+  padding-top: 5%;
 `;
 
 const Drops = styled.select<{ genE: boolean }>`
-  background-color: ${(props) => (props.genE ? "#4f4f4f" : "#282828")};
+  background-color: ${(props) => (props.genE ? "#383838" : "#282828")};
   /* -webkit-appearance: ${(props) => (props.genE ? "" : "none")}; */
   /* -moz-appearance: ${(props) => (props.genE ? "" : "none")}; */
   border: 0px;
@@ -239,7 +259,7 @@ const Drops = styled.select<{ genE: boolean }>`
 `;
 
 const Age = styled.input<{ genE: boolean }>`
-  background-color: ${(props) => (props.genE ? "#181818" : "#282828")};
+  background-color: ${(props) => (props.genE ? "#383838" : "#282828")};
   border: 0px;
   border-radius: 3px;
   color: white;
@@ -258,7 +278,7 @@ const Age = styled.input<{ genE: boolean }>`
 const Input = styled.input<{ genE: boolean }>`
   background-color: ${(props) => (props.genE ? "#383838" : "#282828")};
   color: white;
-  text-align: left;
+  text-align: center;
   text-overflow: ellipsis;
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
@@ -316,7 +336,6 @@ const Pfp = styled.img<{ genE: boolean }>`
 `;
 
 const Label = styled.p`
-  text-align: left;
   font-size: min(20px, 1.2vw);
   font-weight: 600;
   margin: 0;
@@ -332,6 +351,7 @@ const RankLabel = styled(Label)`
 
 const Ranks = styled.div`
   margin-top: 5%;
+  margin-left: 0;
 `;
 
 const RankImg = styled.img<{ imgSrc: string }>`
