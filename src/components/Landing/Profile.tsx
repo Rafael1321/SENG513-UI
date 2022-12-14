@@ -1,7 +1,8 @@
 import React, { useState, useContext, useEffect } from "react";
+import { toast } from "react-toastify";
 import styled from "styled-components";
 import { LoggedUserContext } from "../../contexts/LoggedUserContext";
-import { Gender } from "../../models/FiltersModels";
+import { GameMode, Gender } from "../../models/FiltersModels";
 import { AuthService, IAuthResponse } from "../../services/AuthService";
 import { Micellaneous } from "../../util/Micellaneous";
 
@@ -9,8 +10,6 @@ import { Micellaneous } from "../../util/Micellaneous";
 export default function Profile(): React.ReactElement {
   // Context
   const loggedUserContext = useContext(LoggedUserContext);
-
-  console.log(loggedUserContext);
 
   // State
   const [generalEdit, setGeneralEdit] = useState(false);
@@ -22,7 +21,7 @@ export default function Profile(): React.ReactElement {
   const [gender, setGender] = useState(loggedUserContext?.loggedUser?.gender);
   const [playerType, setPlayerType] = useState(
     loggedUserContext?.loggedUser?.playerType
-  );
+);
   const [aboutMe, setAboutMe] = useState(
     loggedUserContext?.loggedUser?.aboutMe
   );
@@ -32,13 +31,44 @@ export default function Profile(): React.ReactElement {
   const [charRemaining, setCharRemaining] = useState(150);
 
   // Handlers
-  const edit = () => {
+  const edit = async () => {
+
+    let shouldSave = generalEdit;
     setGeneralEdit(!generalEdit);
+
+    if(shouldSave){
+
+      const newValues = {
+        displayName: displayName,
+        age: age,
+        gender: gender,
+        playerType: playerType,
+        aboutMe: aboutMe,
+        avatarImage: profilePic
+      };
+  
+      const res : IAuthResponse = await AuthService.update({
+        userId: loggedUserContext?.loggedUser?._id,
+        ...newValues,
+      });
+  
+      if(res.statusCode === 200){
+        toast.success("Information retrieved/updated succesfully.");
+        return;
+      }
+
+      loggedUserContext.updateLoggedUser({
+        ...loggedUserContext?.loggedUser,
+        ...newValues,
+      });     
+    }
   };
 
   // Pick a new (random) profile pic, only if editing is enabled
   const changePfp = () => {
-    if (generalEdit) setProfilePic(Micellaneous.getAgentIcon(0, true));
+    if (generalEdit){
+      setProfilePic(Micellaneous.getAgentIcon(0, true));
+    }
   };
 
   const handleDisplayNameChange = (e: any) => {
@@ -59,29 +89,9 @@ export default function Profile(): React.ReactElement {
     setCharRemaining(charRemaining);
   };
 
-  useEffect(() => {
-    const newValues = {
-      displayName: displayName,
-      age: age,
-      gender: gender,
-      playerType: playerType,
-      aboutMe: aboutMe,
-    };
-
-    async function updateBackend() {
-      await AuthService.update({
-        userId: loggedUserContext?.loggedUser?._id,
-        ...newValues,
-      });
-    }
-    if (generalEdit === false) {
-      updateBackend();
-      loggedUserContext.updateLoggedUser({
-        ...loggedUserContext?.loggedUser,
-        ...newValues,
-      });
-    }
-  }, [generalEdit]); // Depedencies: if this is changed then this useEffect will run.
+  const handlePlayerTypeChange = (e : any) => {
+    if(generalEdit) setPlayerType(e.target.value);
+  }
 
   return (
     <ProfilePage>
@@ -98,8 +108,9 @@ export default function Profile(): React.ReactElement {
             onClick={() => changePfp()}
           ></Pfp>
           <PersonInfo>
-            <UsernameDiv>
+            {/* <UsernameDiv> */}
               <Input
+                style={{marginBottom:'10%'}}
                 genE={generalEdit}
                 placeholder={displayName ?? "Username"}
                 autoComplete={"off"}
@@ -107,19 +118,23 @@ export default function Profile(): React.ReactElement {
                 disabled={!generalEdit}
                 onChange={handleDisplayNameChange}
               ></Input>
-            </UsernameDiv>
+            {/* </UsernameDiv> */}
 
             <InfoInputs>
+              <InfoInputsInner>
               <Age
+                style={{width: 'auto', margin:'0 2%'}}
                 genE={generalEdit}
                 disabled={!generalEdit}
                 type="number"
-                placeholder="Age"
+                placeholder={!age || age === 0?'--':`${age}`}
+                value = {!age?18:age}
                 min="18"
                 max="99"
                 onChange={handleAgeChange}
               ></Age>
               <Drops
+                style={{margin:'0 2%'}}
                 value={gender}
                 genE={generalEdit}
                 disabled={!generalEdit}
@@ -136,28 +151,26 @@ export default function Profile(): React.ReactElement {
                   {Micellaneous.genderToString(Gender.nonBinary, generalEdit)}
                 </option>
               </Drops>
+              <ServerPref> { Micellaneous.serverPreferenceToString(loggedUserContext?.loggedUser?.region)}</ServerPref>
 
-              <span>
-                {Micellaneous.serverPreferenceToString(
-                  loggedUserContext?.loggedUser?.region
-                )}
-              </span>
-              <PlayerType>
-                {Micellaneous.playerTypeToString(playerType) ?? "<unknown>"}
-              </PlayerType>
+              </InfoInputsInner>
+              <Drops style={{display: 'block', marginLeft:'auto', marginRight:'auto', width: 'auto', marginTop:'5%'}} value={playerType} genE={generalEdit} disabled={!generalEdit} onChange={handlePlayerTypeChange}>
+                <option value={GameMode.competitive}>{Micellaneous.playerTypeToString(GameMode.competitive)}</option>
+                <option value={GameMode.casual}>{Micellaneous.playerTypeToString(GameMode.casual)}</option>
+              </Drops>
             </InfoInputs>
           </PersonInfo>
         </ProfileContainer>
 
         <DetailsContainer>
-          {/* <div> */}
           <BioContainer>
             <Label>ABOUT ME</Label>
             <TextArea
               onChange={handleAboutMeChange}
+              value={aboutMe}
               genE={generalEdit}
               autoComplete="off"
-              placeholder="There's nothing here! Edit your profile to liven things up!"
+              placeholder={"There's nothing here! Edit your profile to liven things up!"}
               disabled={!generalEdit}
               rows={6}
               maxLength={150}
@@ -198,8 +211,11 @@ const InfoInputs = styled.div`
   }
 `;
 
-const UsernameDiv = styled.div`
-  display: flex;
+const InfoInputsInner = styled.div`
+   display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
 `;
 
 const CharRemaining = styled.p<{ genE: boolean }>`
@@ -217,15 +233,6 @@ const CharRemaining = styled.p<{ genE: boolean }>`
 const Heading = styled.p`
   margin-top: 0%;
   margin-bottom: 10%;
-`;
-
-const PlayerType = styled.p`
-  margin: 0;
-  font-size: 0.75rem;
-  font-weight: 200;
-  @media (max-width: 769px) {
-    font-size: 0.5rem;
-  }
 `;
 
 const GridContainer = styled.div`
@@ -251,7 +258,6 @@ const PersonInfo = styled.div`
   display: flex;
   flex-direction: column;
   padding-top: 10%;
-  z-index: 6;
   @media (max-width: 769px) {
     padding-top: 5%;
   }
@@ -307,6 +313,8 @@ const Drops = styled.select<{ genE: boolean }>`
   transition: 0.5s all;
   font-size: 0.75rem;
   margin-top: 2%;
+  opacity: 100%;
+
   :focus {
     box-shadow: 0 0 5px #60d6b5;
     border: none;
@@ -326,12 +334,12 @@ const Age = styled.input<{ genE: boolean }>`
   color: white;
   font-family: Arial;
   text-align: center;
-  width: 40px;
-  margin: 0% 2%;
   height: 28px;
   font-size: 0.75rem;
   font-weight: 200;
   transition: 0.5s all;
+  padding:0;
+  width: auto;
   ::placeholder {
     color: white;
   }
@@ -362,7 +370,6 @@ const Input = styled.input<{ genE: boolean }>`
   border: none;
   border-radius: 3px;
   transition: 0.5s all;
-  /* margin-bottom: 5%; */
   ::placeholder {
     color: white;
   }
@@ -394,7 +401,7 @@ const TextArea = styled.textarea<{ genE: boolean }>`
   font-size: 1rem;
   font-weight: 200;
   height: 70%;
-
+  
   overflow: auto;
   :focus {
     box-shadow: 0 0 5px #60d6b5;
@@ -496,5 +503,14 @@ const RankImg = styled.img<{ imgSrc: string }>`
   @media all and(max-height: 1000px) {
     height: 10%;
     max-height: 10%;
+  }
+`;
+
+const ServerPref = styled.span`
+  margin: 0 2%;
+  font-size: 0.75rem;
+  @media (max-width: 769px) {
+    margin-top: 5px;
+    font-size: 0.5rem;
   }
 `;

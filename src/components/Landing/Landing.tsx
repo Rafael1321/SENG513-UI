@@ -10,8 +10,7 @@ import { Micellaneous } from "../../util/Micellaneous";
 import { CustomToast } from "../Shared/CustomToast";
 import { FilterContext } from "../../contexts/FilterContext";
 import { toast } from "react-toastify";
-import { IMatchFoundDTO, IFindMatchDTO } from "../../models/MatchingModels";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { FilterPopup } from "../Shared/FilterPopup";
 
 export default function Landing() {
@@ -32,6 +31,13 @@ export default function Landing() {
   const socketContext = useContext(SocketContext);
 
   // Use Effects
+
+  useEffect(() => {
+    // Display a toast if we came from registration screen 
+    if(state?.justRegistered){
+      toast.warning("Please edit your gender and age to be able to be better matched!")
+    }
+  }, []);
 
   useEffect(() => {
     socketContext.emit("user_connected", loggedUserContext?.loggedUser?._id);
@@ -68,7 +74,7 @@ export default function Landing() {
     if (EnvConfig.DEBUG) console.log(res);
   }
 
-  async function handleMatchFound(res: IMatchFoundDTO): Promise<void> {
+  async function handleMatchFound(res: any): Promise<void> {
     // Store matched user in context
     matchedUserContext.updateMatchedUser(res.user);
 
@@ -84,7 +90,7 @@ export default function Landing() {
     socketContext.emit("find_matching", {
       userId: loggedUserContext?.loggedUser?._id,
       filters: filterContext.filters,
-    } as IFindMatchDTO);
+    } as any);
 
     pollingTimeout.current = setTimeout(() => {
       toast.error("Could not find a match. Please try again later!");
