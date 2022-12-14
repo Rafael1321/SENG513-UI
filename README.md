@@ -1,7 +1,9 @@
 # SENG 513 - UI
 
 ## System Requirements
->  </br>
+> Node JS </br>
+> 
+> A database, such as MongoDB </br>
 
 ## Installation
 1. 
