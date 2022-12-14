@@ -12,95 +12,139 @@ import { Gender } from "../../models/FiltersModels";
 import { EnvConfig } from "../../util/EnvConfig";
 
 export default function ChatBody() {
-
   // Contexts
   const loggedUserContext = useContext(LoggedUserContext);
-  const matchedUser = useContext(MatchedUserContext)
+  const matchedUser = useContext(MatchedUserContext);
   const socket = useContext(SocketContext);
 
   // State
   const [messages, setMessages] = useState<IMessage[]>([]);
   const [typedMessage, setTypedMessage] = useState("");
-  
-  // Use State 
+
+
+  // Use State
   useEffect(() => {
-
-    socket.on("receive_msg", (receiveMsgDTO : IReceiveMsgDTO) => {
+    socket.on("receive_msg", (receiveMsgDTO: IReceiveMsgDTO) => {
       // Locally update the messages
-      setMessages([...messages, {userId: matchedUser?.matchedUser?._id,type:"received", text:receiveMsgDTO.msg, userIcon:matchedUser?.matchedUser?.avatarImage}]);
+    
+      const newMsgs = [...messages, {userId: matchedUser?.matchedUser?._id,type:"received", text:receiveMsgDTO.msg, userIcon:matchedUser?.matchedUser?.avatarImage}];
+      setMessages(newMsgs);
     });
 
-    socket.on('error_send_msg', (msg : any) => {
-      if(EnvConfig.DEBUG) console.log(msg);
+    socket.on("error_send_msg", (msg: any) => {
+      if (EnvConfig.DEBUG) console.log(msg);
     });
+  }, [
+    matchedUser?.matchedUser?._id,
+    matchedUser?.matchedUser?.avatarImage,
+    messages,
+    socket,
+  ]);
 
-  }, []);
+ 
 
-  // Handlers
-
-  React.useEffect(() => {
-    console.log(messages);
-  }, [messages])
-
-  const sendMsg = (sendContactInfo : boolean = false) => {
-
+  const sendMsg = (sendContactInfo: boolean = false) => {
     const contactMsg = `You wanna play? Let's play! Add me on Valorant! ${loggedUserContext?.loggedUser?.gameName}#${loggedUserContext?.loggedUser?.tagLine}`;
-
+  
     // Locally update the messages
-    setMessages([...messages, {userId : loggedUserContext?.loggedUser?._id,
-                               type:"sent", 
-                               text: sendContactInfo?contactMsg:typedMessage, 
-                               userIcon:loggedUserContext?.loggedUser?.avatarImage}]);
-
+    const newMsgs = [
+      ...messages,
+      {
+        userId: loggedUserContext?.loggedUser?._id,
+        type: "sent",
+        text: sendContactInfo ? contactMsg : typedMessage,
+        userIcon: loggedUserContext?.loggedUser?.avatarImage,
+      },
+    ];
+    setMessages(newMsgs);
     // Store the message in the database
-    // TODO: Add your code here 
+    // TODO: Add your code here
 
     // Notify other users of the message
-    socket.emit('send_msg', matchedUser?.matchedUser?._id,typedMessage);
+    socket.emit("send_msg", matchedUser?.matchedUser?._id, sendContactInfo ? contactMsg : typedMessage);
 
     setTypedMessage("");  // Clear the typed message
-  }
+  };
 
-  const updateMsg = (e : any) => {
+  const updateMsg = (e: any) => {
     setTypedMessage(e.target.value);
-  }
+  };
 
   return (
     <Wrapper>
-      <Link to={"/landing"}> <Exit/></Link>
+      <Link to={"/landing"}>
+        {" "}
+        <Exit />
+      </Link>
 
       <LeftColContainer>
-        <Timer>  🕐 You have 10 minutes remaining! </Timer>
-        
+        <Timer> 🕐 You have 10 minutes remaining! </Timer>
+
         <ChatBox>
-          {messages.map((msg: IMessage, index : number) => (
-            <MessageContainer key={msg.userId + index.toString()} msgType={msg.type} senderImg={msg.userIcon} text={msg.text} />
+          {messages.map((msg: IMessage, index: number) => (
+            <MessageContainer
+              key={msg.userId + index.toString()}
+              msgType={msg.type}
+              senderImg={msg.userIcon}
+              text={msg.text}
+            />
           ))}
         </ChatBox>
 
         <ChatInputContainer>
-          <ChatInput value={typedMessage} placeholder="Message" onChange={updateMsg}></ChatInput>
+          <ChatInput
+            value={typedMessage}
+            placeholder="Message"
+            onChange={updateMsg}
+          ></ChatInput>
 
-          <ChatBtn onClick={() => sendMsg()}>
-            SEND
-          </ChatBtn>
+          <ChatBtn onClick={() => sendMsg()}>SEND</ChatBtn>
         </ChatInputContainer>
-
       </LeftColContainer>
 
       <RightColContainer>
         <TopText>You're chatting with:</TopText>
         <ProfileCard
-          imgSrc={(matchedUser.matchedUser == null) ? "/images/icons/Jett_icon.webp" : matchedUser.matchedUser.avatarImage}
-          userName={(matchedUser.matchedUser == null) ? "HectorSalamanca" : matchedUser.matchedUser.displayName}
-          basicInfo={(matchedUser.matchedUser == null) ? "22F, US West" : matchedUser.matchedUser.age+" "+Gender[matchedUser.matchedUser.gender]}
-          userType={(matchedUser.matchedUser == null) ? 0 : matchedUser.matchedUser.playerType}
-
-          valRank={(matchedUser.matchedUser == null) ? 6 : matchedUser.matchedUser.rank[0]}
-          valRankLvl={(matchedUser.matchedUser == null) ? 1 : matchedUser.matchedUser.rank[1]}
+          imgSrc={
+            matchedUser.matchedUser == null
+              ? "/images/icons/Jett_icon.webp"
+              : matchedUser.matchedUser.avatarImage
+          }
+          userName={
+            matchedUser.matchedUser == null
+              ? "HectorSalamanca"
+              : matchedUser.matchedUser.displayName
+          }
+          basicInfo={
+            matchedUser.matchedUser == null
+              ? "22F, US West"
+              : matchedUser.matchedUser.age +
+                " " +
+                Gender[matchedUser.matchedUser.gender]
+          }
+          userType={
+            matchedUser.matchedUser == null
+              ? 0
+              : matchedUser.matchedUser.playerType
+          }
+          valRank={
+            matchedUser.matchedUser == null
+              ? 6
+              : matchedUser.matchedUser.rank[0]
+          }
+          valRankLvl={
+            matchedUser.matchedUser == null
+              ? 1
+              : matchedUser.matchedUser.rank[1]
+          }
           chatRank="/images/reputation_ranks/ToxicWaste.png"
-          aboutMe= {(matchedUser.matchedUser == null) ? "This is the about me section." : matchedUser.matchedUser.aboutMe}/>
-        
+          aboutMe={
+            matchedUser.matchedUser == null
+              ? "This is the about me section."
+              : matchedUser.matchedUser.aboutMe
+          }
+        />
+
         <BtnContainer>
           <MobileTimer>🕐 You have 10 minutes remaining!</MobileTimer>
           <Btn onClick={() => sendMsg(true)} btnColor="#66c2a9">
@@ -109,10 +153,15 @@ export default function ChatBody() {
           </Btn>
           <Btn btnColor="#f94b4b">
             <BtnIcon imgSrc="/images/chat/gonext.png" />
-            <Link to="/landing" style={{color: "#ffffff", textDecoration: "none"}}> GO NEXT</Link>
+            <Link
+              to="/landing"
+              style={{ color: "#ffffff", textDecoration: "none" }}
+            >
+              {" "}
+              GO NEXT
+            </Link>
           </Btn>
         </BtnContainer>
-
       </RightColContainer>
     </Wrapper>
   );

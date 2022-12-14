@@ -126,8 +126,8 @@ export default function Profile() : React.ReactElement {
               REPUTATION
               </RankLabel>
             <RankLabel>
-            <RankImg imgSrc={"images/ranks/rank_1_1.webp"}></RankImg>
-            {/* <RankImg imgSrc={(loggedUserContext?.loggedUser == null) ? "images/ranks/rank_1_1.webp" : "images/ranks/rank_"+loggedUserContext?.loggedUser?.rank[0]+"_"+loggedUserContext?.loggedUser?.rank[1]+".webp"}></RankImg> */}
+            {/* <RankImg imgSrc={"images/ranks/rank_1_1.webp"}></RankImg> */}
+            <RankImg imgSrc={(loggedUserContext?.loggedUser == null) ? "images/ranks/rank_1_1.webp" : "images/ranks/rank_"+loggedUserContext?.loggedUser?.rank[0]+"_"+loggedUserContext?.loggedUser?.rank[1]+".webp"}></RankImg>
               RANK
             </RankLabel>
           </Ranks>
