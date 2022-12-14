@@ -27,6 +27,7 @@ export default function Profile(): React.ReactElement {
   const [profilePic, setProfilePic] = useState(
     loggedUserContext?.loggedUser?.avatarImage
   );
+  const [charRemaining, setCharRemaining] = useState(150);
 
   // Handlers
   const edit = () => {
@@ -56,6 +57,8 @@ export default function Profile(): React.ReactElement {
 
   const handleAboutMeChange = (e: any) => {
     if (generalEdit) setAboutMe(e.target.value);
+    let charRemaining = 150 - e.target.value.length;
+    setCharRemaining(charRemaining);
   };
 
   useEffect(() => {
@@ -94,7 +97,7 @@ export default function Profile(): React.ReactElement {
           onClick={() => changePfp()}
         ></Pfp>
         <PersonInfo>
-          <div>
+          <UsernameDiv>
             <Input
               genE={generalEdit}
               placeholder={displayName ?? ""}
@@ -102,22 +105,32 @@ export default function Profile(): React.ReactElement {
               maxLength={15}
               disabled={!generalEdit}
               onChange={handleDisplayNameChange}
+              defaultValue="Username"
             ></Input>
             <Edit
               genE={generalEdit}
               src="./images/general/edit.png"
               onClick={() => edit()}
             ></Edit>
-          </div>
+          </UsernameDiv>
 
           <div>
+            <Age
+              genE={generalEdit}
+              disabled={!generalEdit}
+              type="number"
+              placeholder="18"
+              min="18"
+              max="99"
+              onChange={handleAgeChange}
+            ></Age>
             <Drops
               value={gender}
               genE={generalEdit}
               disabled={!generalEdit}
               onChange={handleGenderChange}
             >
-              <option value={Gender.unknown}>{"---"}</option>
+              <option value={Gender.unknown}>{"Gender"}</option>
               <option value={Gender.woman}>
                 {Micellaneous.genderToString(Gender.woman, generalEdit)}
               </option>
@@ -128,16 +141,6 @@ export default function Profile(): React.ReactElement {
                 {Micellaneous.genderToString(Gender.nonBinary, generalEdit)}
               </option>
             </Drops>
-
-            <Age
-              genE={generalEdit}
-              disabled={!generalEdit}
-              type="number"
-              placeholder="18"
-              min="18"
-              max="99"
-              onChange={handleAgeChange}
-            ></Age>
 
             <span>
               {Micellaneous.serverPreferenceToString(
@@ -159,10 +162,12 @@ export default function Profile(): React.ReactElement {
             onChange={handleAboutMeChange}
             genE={generalEdit}
             autoComplete="off"
-            placeholder={aboutMe}
+            placeholder="There's nothing here! Edit your profile to liven things up!"
             disabled={!generalEdit}
             rows={6}
+            maxLength={150}
           ></TextArea>
+          <CharRemaining genE={generalEdit}>{charRemaining}/150</CharRemaining>
         </BioContainer>
 
         {/* <RankContainer> */}
@@ -187,6 +192,17 @@ export default function Profile(): React.ReactElement {
     </GridContainer>
   );
 }
+
+const UsernameDiv = styled.div`
+  display: flex;
+`;
+
+const CharRemaining = styled.p<{ genE: boolean }>`
+  color: ${(props) => (props.genE ? "#4a4a4a" : "#282828")};
+  font-size: 0.75rem;
+  font-weight: 300;
+  margin: 0 15% 0 auto;
+`;
 
 const Heading = styled.p`
   margin-top: 0%;
@@ -239,9 +255,7 @@ const RankInfo = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-
   margin-right: 35%;
-  padding-top: 5%;
 `;
 
 const Drops = styled.select<{ genE: boolean }>`
@@ -252,9 +266,16 @@ const Drops = styled.select<{ genE: boolean }>`
   border-radius: 3px;
   color: white;
   text-align: center;
-  height: 80%;
+  height: 30px;
+  transition: 0.5s all;
+  font-size: 0.75rem;
   /* width: 10%; */
   margin-top: 2%;
+  :focus {
+    box-shadow: 0 0 5px #60d6b5;
+    border: none;
+    outline: none;
+  }
 `;
 
 const Age = styled.input<{ genE: boolean }>`
@@ -266,11 +287,17 @@ const Age = styled.input<{ genE: boolean }>`
   text-align: center;
   width: 15%;
   margin: 0% 2% 0% 2%;
-  height: 70%;
-  font-size: 1rem;
+  height: 28px;
+  font-size: 0.75rem;
   font-weight: 200;
+  transition: 0.5s all;
   ::placeholder {
     color: white;
+  }
+  :focus {
+    box-shadow: 0 0 5px #60d6b5;
+    border: none;
+    outline: none;
   }
 `;
 
@@ -280,14 +307,22 @@ const Input = styled.input<{ genE: boolean }>`
   text-align: center;
   text-overflow: ellipsis;
   margin: 0;
+  margin-left: 5%;
   font-family: Arial, Helvetica, sans-serif;
-
+  height: 30px;
+  width: 200px;
   font-size: 1.5rem;
   border: none;
-  border-radius: 2px;
+  border-radius: 3px;
+  transition: 0.5s all;
   /* margin-bottom: 5%; */
   ::placeholder {
     color: white;
+  }
+  :focus {
+    box-shadow: 0 0 5px #60d6b5;
+    border: none;
+    outline: none;
   }
 `;
 
@@ -296,27 +331,28 @@ const TextArea = styled.textarea<{ genE: boolean }>`
   color: white;
   width: inherit;
   margin-right: 15%;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Poppins", sans-serif;
   resize: none;
   overflow: hidden;
   border: 0px;
-  border-radius: 4px;
-
+  border-radius: 3px;
+  transition: 0.5s all;
   font-size: 1rem;
-  /* ::placeholder {
-    color: white;
-  } */
-`;
-
-const Display = styled.p`
-  background-color: #282828;
+  font-weight: 200;
+  height: 70%;
+  :focus {
+    box-shadow: 0 0 5px #60d6b5;
+    border: none;
+    outline: none;
+  }
 `;
 
 const Edit = styled.img<{ genE: boolean }>`
   filter: ${(props) =>
     props.genE ? "drop-shadow(2px 2px 10px red) invert()" : "invert()"};
-  width: 6%;
-  margin-left: 5px;
+  width: 20px;
+  height: 20px;
+
   :hover {
     filter: drop-shadow(2px 2px 10px red) invert();
     cursor: pointer;
@@ -325,13 +361,14 @@ const Edit = styled.img<{ genE: boolean }>`
 
 const Pfp = styled.img<{ genE: boolean }>`
   filter: ${(props) =>
-    props.genE ? "drop-shadow(1px 1px 8px #66c2a9) brightness(150%)" : ""};
+    props.genE ? "drop-shadow(1px 1px 8px #66c2a9) brightness(100%)" : ""};
   aspect-ratio: 1/1;
   height: 9rem;
   width: 9rem;
   border: 5px solid #66c2a9;
   border-radius: 50%;
   background-color: #266152;
+  transition: 0.5s all;
 `;
 
 const Label = styled.p`
