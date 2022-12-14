@@ -89,107 +89,111 @@ export default function Profile(): React.ReactElement {
   }, [generalEdit]); // Depedencies: if this is changed then this useEffect will run.
 
   return (
-    <GridContainer>
-      <ProfileContainer>
-        <Pfp
-          genE={generalEdit}
-          src={profilePic}
-          onClick={() => changePfp()}
-        ></Pfp>
-        <PersonInfo>
-          <UsernameDiv>
-            <Input
-              genE={generalEdit}
-              placeholder={displayName ?? ""}
-              autoComplete={"off"}
-              maxLength={15}
-              disabled={!generalEdit}
-              onChange={handleDisplayNameChange}
-              defaultValue="Username"
-            ></Input>
-            <Edit
-              genE={generalEdit}
-              src="./images/general/edit.png"
-              onClick={() => edit()}
-            ></Edit>
-          </UsernameDiv>
-
-          <div>
-            <Age
-              genE={generalEdit}
-              disabled={!generalEdit}
-              type="number"
-              placeholder="Age"
-              min="18"
-              max="99"
-              onChange={handleAgeChange}
-            ></Age>
-            <Drops
-              value={gender}
-              genE={generalEdit}
-              disabled={!generalEdit}
-              onChange={handleGenderChange}
-            >
-              <option value={Gender.unknown}>{"Gender"}</option>
-              <option value={Gender.woman}>
-                {Micellaneous.genderToString(Gender.woman, generalEdit)}
-              </option>
-              <option value={Gender.man}>
-                {Micellaneous.genderToString(Gender.man, generalEdit)}
-              </option>
-              <option value={Gender.nonBinary}>
-                {Micellaneous.genderToString(Gender.nonBinary, generalEdit)}
-              </option>
-            </Drops>
-
-            <span>
-              {Micellaneous.serverPreferenceToString(
-                loggedUserContext?.loggedUser?.region
-              )}
-            </span>
-            <PlayerType>
-              {Micellaneous.playerTypeToString(playerType) ?? "<unknown>"}
-            </PlayerType>
-          </div>
-        </PersonInfo>
-      </ProfileContainer>
-
-      <DetailsContainer>
-        {/* <div> */}
-        <BioContainer>
-          <Label>ABOUT ME</Label>
-          <TextArea
-            onChange={handleAboutMeChange}
+    <div>
+      <Edit
+        genE={generalEdit}
+        src="./images/general/edit.png"
+        onClick={() => edit()}
+      ></Edit>
+      <GridContainer>
+        <ProfileContainer>
+          <Pfp
             genE={generalEdit}
-            autoComplete="off"
-            placeholder="There's nothing here! Edit your profile to liven things up!"
-            disabled={!generalEdit}
-            rows={6}
-            maxLength={150}
-          ></TextArea>
-          <CharRemaining genE={generalEdit}>{charRemaining}/150</CharRemaining>
-        </BioContainer>
+            src={profilePic}
+            onClick={() => changePfp()}
+          ></Pfp>
+          <PersonInfo>
+            <UsernameDiv>
+              <Input
+                genE={generalEdit}
+                placeholder={displayName ?? ""}
+                autoComplete={"off"}
+                maxLength={15}
+                disabled={!generalEdit}
+                onChange={handleDisplayNameChange}
+                defaultValue="Username"
+              ></Input>
+            </UsernameDiv>
 
-        {/* <RankContainer> */}
-        <RankInfo>
-          <Ranks>
-            <RankLabel>
-              <Heading>REPUTATION</Heading>
-              <RankImg imgSrc="/images/reputation_ranks/ToxicWaste.png"></RankImg>
-            </RankLabel>
-          </Ranks>
-          <Ranks>
-            <RankLabel>
-              <Heading>RANK</Heading>
-              <RankImg imgSrc={"images/ranks/rank_1_1.webp"}></RankImg>
-              {/* <RankImg imgSrc={(loggedUserContext?.loggedUser == null) ? "images/ranks/rank_1_1.webp" : "images/ranks/rank_"+loggedUserContext?.loggedUser?.rank[0]+"_"+loggedUserContext?.loggedUser?.rank[1]+".webp"}></RankImg> */}
-            </RankLabel>
-          </Ranks>
-        </RankInfo>
-        {/* </RankContainer> */}
-        {/* </div> */}
-      </DetailsContainer>
-    </GridContainer>
+            <div>
+              <Age
+                genE={generalEdit}
+                disabled={!generalEdit}
+                type="number"
+                placeholder="Age"
+                min="18"
+                max="99"
+                onChange={handleAgeChange}
+              ></Age>
+              <Drops
+                value={gender}
+                genE={generalEdit}
+                disabled={!generalEdit}
+                onChange={handleGenderChange}
+              >
+                <option value={Gender.unknown}>{"Gender"}</option>
+                <option value={Gender.woman}>
+                  {Micellaneous.genderToString(Gender.woman, generalEdit)}
+                </option>
+                <option value={Gender.man}>
+                  {Micellaneous.genderToString(Gender.man, generalEdit)}
+                </option>
+                <option value={Gender.nonBinary}>
+                  {Micellaneous.genderToString(Gender.nonBinary, generalEdit)}
+                </option>
+              </Drops>
+
+              <span>
+                {Micellaneous.serverPreferenceToString(
+                  loggedUserContext?.loggedUser?.region
+                )}
+              </span>
+              <PlayerType>
+                {Micellaneous.playerTypeToString(playerType) ?? "<unknown>"}
+              </PlayerType>
+            </div>
+          </PersonInfo>
+        </ProfileContainer>
+
+        <DetailsContainer>
+          {/* <div> */}
+          <BioContainer>
+            <Label>ABOUT ME</Label>
+            <TextArea
+              onChange={handleAboutMeChange}
+              genE={generalEdit}
+              autoComplete="off"
+              placeholder="There's nothing here! Edit your profile to liven things up!"
+              disabled={!generalEdit}
+              rows={6}
+              maxLength={150}
+            ></TextArea>
+            <CharRemaining genE={generalEdit}>
+              {charRemaining}/150
+            </CharRemaining>
+          </BioContainer>
+
+          {/* <RankContainer> */}
+          <RankInfo>
+            <Ranks>
+              <RankLabel>
+                <Heading>REPUTATION</Heading>
+                <RankImg imgSrc="/images/reputation_ranks/ToxicWaste.png"></RankImg>
+              </RankLabel>
+            </Ranks>
+            <Ranks>
+              <RankLabel>
+                <Heading>RANK</Heading>
+                <RankImg imgSrc={"images/ranks/rank_1_1.webp"}></RankImg>
+                {/* <RankImg imgSrc={(loggedUserContext?.loggedUser == null) ? "images/ranks/rank_1_1.webp" : "images/ranks/rank_"+loggedUserContext?.loggedUser?.rank[0]+"_"+loggedUserContext?.loggedUser?.rank[1]+".webp"}></RankImg> */}
+              </RankLabel>
+            </Ranks>
+          </RankInfo>
+          {/* </RankContainer> */}
+          {/* </div> */}
+        </DetailsContainer>
+      </GridContainer>
+    </div>
   );
 }
 
@@ -307,7 +311,6 @@ const Input = styled.input<{ genE: boolean }>`
   text-align: center;
   text-overflow: ellipsis;
   margin: 0;
-  margin-left: 5%;
   font-family: Arial, Helvetica, sans-serif;
   height: 30px;
   width: 200px;
@@ -324,6 +327,10 @@ const Input = styled.input<{ genE: boolean }>`
     border: none;
     outline: none;
   }
+  @media (max-width: 1025px) {
+    font-size: 1rem;
+    width: 150px;
+  }
 `;
 
 const TextArea = styled.textarea<{ genE: boolean }>`
@@ -333,17 +340,22 @@ const TextArea = styled.textarea<{ genE: boolean }>`
   margin-right: 15%;
   font-family: "Poppins", sans-serif;
   resize: none;
-  overflow: hidden;
   border: 0px;
   border-radius: 3px;
   transition: 0.5s all;
   font-size: 1rem;
   font-weight: 200;
   height: 70%;
+
+  overflow: auto;
   :focus {
     box-shadow: 0 0 5px #60d6b5;
     border: none;
     outline: none;
+  }
+
+  @media (max-width: 1025px) {
+    height: 60%;
   }
 `;
 
@@ -352,6 +364,7 @@ const Edit = styled.img<{ genE: boolean }>`
     props.genE ? "drop-shadow(2px 2px 10px red) invert()" : "invert()"};
   width: 20px;
   height: 20px;
+  margin-left: 80%;
 
   :hover {
     filter: drop-shadow(2px 2px 10px red) invert();
@@ -369,6 +382,11 @@ const Pfp = styled.img<{ genE: boolean }>`
   border-radius: 50%;
   background-color: #266152;
   transition: 0.5s all;
+
+  @media (max-width: 1025px) {
+    height: 7.5rem;
+    width: 7.5rem;
+  }
 `;
 
 const Label = styled.p`
