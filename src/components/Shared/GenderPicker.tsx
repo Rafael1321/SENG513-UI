@@ -37,6 +37,7 @@ export function GenderPicker() : React.ReactElement{
         }
         window.addEventListener('resize', handleWindowResize);
 
+        setGenders(filterContex?.filters?.genders ?? [true, true, true, true]);
     }, []);
 
     /* Handlers */

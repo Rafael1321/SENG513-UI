@@ -23,15 +23,11 @@ type Props = {
 
 export function Form(props: Props): React.ReactElement<Props, any> {
 
-
     /* Logged User Context */
     const loggedUserContext = React.useContext(LoggedUserContext);
     const filterContex = React.useContext(FilterContext);
 
-  /* Form State */
-
-
-
+    /* Form State */
     const [displayName, setDisplayName] = React.useState('');
     const [gameName, setGameName] = React.useState('');
     const [tag, setTag] = React.useState('');
@@ -111,6 +107,9 @@ export function Form(props: Props): React.ReactElement<Props, any> {
                 setLoading(false);
             }
 
+            navigate('../landing', { state: {
+              justRegistered: true,
+            }});
         }else{
 
             setLoading(true);
@@ -131,9 +130,12 @@ export function Form(props: Props): React.ReactElement<Props, any> {
                 filterContex.updateFilter(filtersResponse.data as IFilters);
 
                 setLoading(false);
+
+                navigate('../landing', { state: {
+                  justRegistered: false,
+                }});
             }
         }
-        navigate('../landing');
     }
 
     return (

@@ -22,7 +22,8 @@ export interface IUpdateDTO{
     age : number,
     gender : Gender, 
     playerType : GameMode,
-    aboutMe: string
+    aboutMe: string,
+    avatarImage: string
 }
 
 /* View Models */
