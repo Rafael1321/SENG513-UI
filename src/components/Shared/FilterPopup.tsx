@@ -244,7 +244,7 @@ const Popup = styled.div(
     top: 0;
     right: 0;
     bottom: 0;
-    background-color: rgb(0,0,0,0.4);
+    background-color: rgb(0,0,0,0.7);
     display: ${props.triggered ? "flex" : "none"};
     align-items: center;
     justify-content: center;
@@ -257,7 +257,7 @@ const PopupContent = styled.div`
   flex-direction: column;
   width: 35vw;
   height: 30vw;
-  background-color: #181818;
+  background-color: #282828;
   border-radius: 10%;
   padding: 2vw;
   transition: all 0.25s ease-in-out;

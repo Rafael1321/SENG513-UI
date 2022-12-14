@@ -488,7 +488,7 @@ const Cancel = styled.button`
 `;
 
 const Agent = styled.img`
-  filter: brightness(35%) drop-shadow(0 0 7.5px #66c2aa6c);
+  filter: brightness(70%) drop-shadow(0 0 7.5px #66c2aa6c);
   width: 20vw;
   height: 80vh;
   object-fit: cover;
