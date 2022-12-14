@@ -20,7 +20,13 @@ export function RankSlider() : React.ReactElement{
 
     const [value, setValue] = React.useState<number[]>([5, 6]);
 
-      /* Handlers */
+    /* Use Effect */ 
+    React.useEffect(() => {
+        setValue([toSliderRank(filterContex?.filters?.rankDisparity[0], filterContex?.filters?.rankDisparity[1]), 
+                  toSliderRank(filterContex?.filters?.rankDisparity[2], filterContex?.filters?.rankDisparity[3])]);
+    }, []);
+
+    /* Handlers */
 
     const handleChange = (event: Event, newValue: number | number[], activeThumb: number) : void => {      
         if (!Array.isArray(newValue) || newValue[0] >= newValue[1] || !inCorrectRange(newValue[0]) || !inCorrectRange(newValue[1])) {

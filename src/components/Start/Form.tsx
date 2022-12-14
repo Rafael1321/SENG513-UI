@@ -25,135 +25,120 @@ type Props = {
 };
 
 export function Form(props: Props): React.ReactElement<Props, any> {
-  /* Logged User Context */
-  const loggedUserContext = React.useContext(LoggedUserContext);
-  const filterContex = React.useContext(FilterContext);
 
-  /* Form State */
+    /* Logged User Context */
+    const loggedUserContext = React.useContext(LoggedUserContext);
+    const filterContex = React.useContext(FilterContext);
 
-  const [displayName, setDisplayName] = React.useState("");
-  const [gameName, setGameName] = React.useState("");
-  const [tag, setTag] = React.useState("");
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  const [confirmPassword, setConfirmPassword] = React.useState("");
+    /* Form State */
+    const [displayName, setDisplayName] = React.useState('');
+    const [gameName, setGameName] = React.useState('');
+    const [tag, setTag] = React.useState('');
+    const [email, setEmail] = React.useState('');
+    const [password, setPassword] = React.useState('');
+    const [confirmPassword, setConfirmPassword] = React.useState('');
 
-  const [loading, setLoading] = React.useState<boolean>(false);
+    const [loading, setLoading] = React.useState<boolean>(false);
 
-  /* Navigation */
-  const navigate = useNavigate();
+      /* Navigation */
+    const navigate = useNavigate();
 
-  /* Handlers */
+    /* Handlers */
 
-  // Form
-  const handleDisplayNameChange = (e: any) => {
-    setDisplayName(e.target.value.toLowerCase());
-  };
-  const handleGameNameChange = (e: any) => {
-    setGameName(e.target.value);
-  };
-  const handleTagChange = (e: any) => {
-    setTag(e.target.value.toUpperCase());
-  };
+    // Form
+    const handleDisplayNameChange = (e : any) => { setDisplayName(e.target.value.toLowerCase()); }
+    const handleGameNameChange = (e : any) => { setGameName(e.target.value); }
+    const handleTagChange = (e : any) => { setTag(e.target.value.toUpperCase()); }
 
-  const handleEmailChange = (e: any) => {
-    setEmail(e.target.value.toLowerCase());
-  };
-  const handlePasswordChange = (e: any) => {
-    setPassword(e.target.value);
-  };
-  const handleConfirmPasswordChange = (e: any) => {
-    setConfirmPassword(e.target.value);
-  };
+    const handleEmailChange = (e : any) => { setEmail(e.target.value.toLowerCase()); }
+    const handlePasswordChange = (e : any) => { setPassword(e.target.value); }
+    const handleConfirmPasswordChange = (e : any) => { setConfirmPassword(e.target.value); }
 
-  // Button
-  const handleButtonClick = async (): Promise<void> => {
-    if (loading) {
-      // avoid multiple requests sent to api
-      toast.error("Please wait, your request is being processed.");
-      return;
-    }
+    // Button
+    const handleButtonClick = async () : Promise<void> => {
 
-    // Email and password
-    if (!email) {
-      toast.error("Please provide email.");
-      return;
-    } else if (!password) {
-      toast.error("Please provide a password.");
-      return;
-    }
+        if(loading){ // avoid multiple requests sent to api
+            toast.error("Please wait, your request is being processed.");
+            return; 
+        }
 
-    if (props.formType === FormType.Registration) {
-      // Password, GameName and Tag validation
-      if (!gameName) {
-        toast.error("Please provide a game name");
-        return;
-      } else if (!tag) {
-        toast.error("Please provide a tag");
-        return;
-      } else if (!confirmPassword) {
-        toast.error("Please confirm your password.");
-        return;
-      } else if (password !== confirmPassword) {
-        toast.error("Confirm password does not match password");
-        return;
-      }
+        // Email and password
+        if(!email){
+            toast.error("Please provide email.");
+            return;
+        }else if(!password){
+            toast.error("Please provide a password.");
+            return;
+        }
 
-      setLoading(true);
+        if(props.formType === FormType.Registration){
 
-      // Call API to attempt registration
-      let newUser = {
-        displayName: displayName,
-        gameName: gameName,
-        tagLine: tag,
-        email: email,
-        password: password,
-        avatarImage: Micellaneous.getAgentIcon(0, true),
-      };
-      const authResponse: IAuthResponse = await AuthService.register(newUser);
+            // Password, GameName and Tag validation
+            if(!gameName){
+                toast.error("Please provide a game name");
+                return;
+            }else if(!tag){
+                toast.error("Please provide a tag");
+                return;
+            }else if(!confirmPassword){
+                toast.error("Please confirm your password.");
+                return;
+            }else if(password !== confirmPassword){
+                toast.error("Confirm password does not match password");
+                return;
+            }
+            
+            setLoading(true);
 
-      if (authResponse.statusCode !== 201) {
-        // Username already in use or Email already in use
-        toast.error(authResponse.data as String);
-        setLoading(false);
-        return;
-      } else {
-        loggedUserContext.updateLoggedUser(authResponse.data as IUser);
+            // Call API to attempt registration
+            let newUser = { displayName: displayName, gameName : gameName, tagLine : tag,
+                email : email, password : password, avatarImage : Micellaneous.getAgentIcon(0, true)};
+            const authResponse : IAuthResponse = await AuthService.register(newUser);
 
-        // Creating default filters for new user
-        const filtersResponse: IFiltersResponse = await FiltersService.upsert({
-          userId: (authResponse.data as IUser)._id as string,
-          filters: null,
-        });
-        filterContex.updateFilter(filtersResponse.data as IFilters);
+            if(authResponse.statusCode !== 201){ // Username already in use or Email already in use
+                toast.error(authResponse.data as String);
+                setLoading(false);
+                return;
+            }else{ 
 
-        setLoading(false);
-      }
-    } else {
-      setLoading(true);
+                loggedUserContext.updateLoggedUser(authResponse.data as IUser);
 
-      // Call API to attempt login
-      const authResponse: IAuthResponse = await AuthService.login({
-        email: email,
-        password: password,
-      });
+                // Creating default filters for new user 
+                const filtersResponse : IFiltersResponse = await FiltersService.upsert({userId: ((authResponse.data as IUser)._id as string), filters: null});
+                filterContex.updateFilter(filtersResponse.data as IFilters);
 
-      if (authResponse.statusCode !== 200) {
-        // Wrong email and password combination
-        toast.error(authResponse.data as String);
-        setLoading(false);
-        return;
-      } else {
-        loggedUserContext.updateLoggedUser(authResponse.data as IUser);
+                setLoading(false);
+            }
 
-        // Retrieving existing filters for user
-        const filtersResponse: IFiltersResponse = await FiltersService.retrieve(
-          { userId: (authResponse.data as IUser)._id as string }
-        );
-        filterContex.updateFilter(filtersResponse.data as IFilters);
+            navigate('../landing', { state: {
+              justRegistered: true,
+            }});
+        }else{
 
-        setLoading(false);
-      }
+            setLoading(true);
+
+            // Call API to attempt login
+            const authResponse : IAuthResponse = await AuthService.login({email:email, password:password});
+
+            if(authResponse.statusCode !== 200){  // Wrong email and password combination
+                toast.error(authResponse.data as String);
+                setLoading(false);
+                return;
+            }else{ 
+
+                loggedUserContext.updateLoggedUser(authResponse.data as IUser);
+
+                // Retrieving existing filters for user 
+                const filtersResponse : IFiltersResponse = await FiltersService.retrieve({userId: ((authResponse.data as IUser)._id as string)});
+                filterContex.updateFilter(filtersResponse.data as IFilters);
+
+                setLoading(false);
+
+                navigate('../landing', { state: {
+                  justRegistered: false,
+                }});
+            }
+        }
     }
     navigate("../landing");
   };

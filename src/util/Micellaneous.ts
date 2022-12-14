@@ -123,7 +123,7 @@ export class Micellaneous {
       case ServerPreference.ap:
         return longVersion ? "Asia Pacific" : "AP";
       case ServerPreference.kr:
-        return longVersion ? "Korea :)" : "KR";
+        return longVersion ? "Korea" : "KR";
     }
   }
 
