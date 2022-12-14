@@ -15,11 +15,9 @@ export default function LandingCard(props: Props) {
 
   const displayCard = () => {
     if (!props.findDuo) {
-      //return <Profile></Profile>;
-      return <FindDuo></FindDuo>;
+      return <Profile></Profile>;
     } else if (props.findDuo && !props.duoFound) {
-      return <MatchFound></MatchFound>;
-      //return <FindDuo></FindDuo>;
+      return <FindDuo></FindDuo>;
     } else if (props.findDuo && props.duoFound) {
       return <MatchFound></MatchFound>;
     }

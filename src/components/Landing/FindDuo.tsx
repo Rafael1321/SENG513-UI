@@ -23,10 +23,9 @@ export default function FindDuo() {
 
   return (
     <FindDuoContainer>
-      <img
-        src={loggedUserContext?.loggedUser?.avatarImage ?? ""}
-        alt="My Icon"
-      ></img>
+      <Picture
+        icon={loggedUserContext?.loggedUser?.avatarImage ?? ""}
+      ></Picture>
       <Line></Line>
       <Picture icon={Micellaneous.getAgentIcon(index)} id="teammate">
         <p id="question-mark">&#63;</p>
@@ -141,6 +140,7 @@ const Line = styled.span`
   @media (max-width: 769px) {
     width: 1px;
     height: 100px;
+    margin: 0 10%;
     border: 2.5px solid #66c2a9;
     animation: ${Bounce769} 2.5s ease-in-out infinite alternate;
   }
