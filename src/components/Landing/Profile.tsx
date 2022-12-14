@@ -151,9 +151,8 @@ export default function Profile(): React.ReactElement {
                   {Micellaneous.genderToString(Gender.nonBinary, generalEdit)}
                 </option>
               </Drops>
-              <span style={{margin:'0 2%'}}>
-                { Micellaneous.serverPreferenceToString(loggedUserContext?.loggedUser?.region)}
-              </span>
+              <ServerPref> { Micellaneous.serverPreferenceToString(loggedUserContext?.loggedUser?.region)}</ServerPref>
+
               </InfoInputsInner>
               <Drops style={{display: 'block', marginLeft:'auto', marginRight:'auto', width: 'auto', marginTop:'5%'}} value={playerType} genE={generalEdit} disabled={!generalEdit} onChange={handlePlayerTypeChange}>
                 <option value={GameMode.competitive}>{Micellaneous.playerTypeToString(GameMode.competitive)}</option>
@@ -164,14 +163,14 @@ export default function Profile(): React.ReactElement {
         </ProfileContainer>
 
         <DetailsContainer>
-          {/* <div> */}
           <BioContainer>
             <Label>ABOUT ME</Label>
             <TextArea
               onChange={handleAboutMeChange}
+              value={aboutMe}
               genE={generalEdit}
               autoComplete="off"
-              placeholder={aboutMe?aboutMe:"There's nothing here! Edit your profile to liven things up!"}
+              placeholder={"There's nothing here! Edit your profile to liven things up!"}
               disabled={!generalEdit}
               rows={6}
               maxLength={150}
@@ -335,12 +334,12 @@ const Age = styled.input<{ genE: boolean }>`
   color: white;
   font-family: Arial;
   text-align: center;
-  width: 40px;
-  margin: 0% 2%;
   height: 28px;
   font-size: 0.75rem;
   font-weight: 200;
   transition: 0.5s all;
+  padding:0;
+  width: auto;
   ::placeholder {
     color: white;
   }
@@ -371,7 +370,6 @@ const Input = styled.input<{ genE: boolean }>`
   border: none;
   border-radius: 3px;
   transition: 0.5s all;
-  /* margin-bottom: 5%; */
   ::placeholder {
     color: white;
   }
@@ -409,11 +407,6 @@ const TextArea = styled.textarea<{ genE: boolean }>`
     box-shadow: 0 0 5px #60d6b5;
     border: none;
     outline: none;
-  }
-
-  ::placeholder{
-    opacity: 100%;
-    color: white;
   }
 
   @media (max-width: 1025px) {
@@ -510,5 +503,14 @@ const RankImg = styled.img<{ imgSrc: string }>`
   @media all and(max-height: 1000px) {
     height: 10%;
     max-height: 10%;
+  }
+`;
+
+const ServerPref = styled.span`
+  margin: 0 2%;
+  font-size: 0.75rem;
+  @media (max-width: 769px) {
+    margin-top: 5px;
+    font-size: 0.5rem;
   }
 `;

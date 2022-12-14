@@ -79,9 +79,9 @@ export function FilterPopup(props : Props) : React.ReactElement<Props, any> {
         
         let newAges : number[] = null;
         if(isMin){
-            newAges = [event.target.value, filterContex.filters.ageRange[1]];
+            newAges = [Number(event.target.value), filterContex.filters.ageRange[1]];
         }else{
-            newAges = [filterContex.filters.ageRange[0], event.target.value];
+            newAges = [filterContex.filters.ageRange[0], Number(event.target.value)];
         }
 
         filterContex.updateAgeRange(newAges);
