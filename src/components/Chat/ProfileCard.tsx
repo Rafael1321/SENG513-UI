@@ -1,6 +1,5 @@
 import * as React from "react";
 import styled from "styled-components";
-import { GameMode,RankType } from "../../models/FiltersModels";
 
 interface Props {
     imgSrc: string;
@@ -17,7 +16,6 @@ export default function ProfileCard(props: Props): React.ReactElement<Props, any
     return (
         <Wrapper>
             <Icon imgSrc={props.imgSrc} />
-            {/* {GameMode[1]} */}
             <Username>{props.userName}</Username>
             <BasicInfo>{props.basicInfo}</BasicInfo>
             <Ranks>
@@ -134,7 +132,7 @@ const AboutContainer = styled.div`
   margin-left: auto;
   margin-right: auto;
   -ms-overflow-style: none; /* Internet Explorer 10+ */
-  scrollbar-width: none; /* Firefox */
+  scrollbar-width: none;    /* Firefox */
   ::-webkit-scrollbar {
     display: none;
   }
@@ -155,7 +153,6 @@ const Label = styled.p`
   font-size: min(20px, 1.2vw);
   font-weight: 600;
   @media all and (max-width: 1400px) {
-    // visibility: hidden;
     margin: 0;
   }
 `;
@@ -166,6 +163,5 @@ const RankLabel = styled(Label)`
   flex-direction: column;
   @media all and (max-width: 1400px) {
     font-size: 30%;
-    // visibility: hidden;
   }
 `;
