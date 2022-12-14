@@ -1,16 +1,19 @@
-import * as React from 'react'
-import { Link, useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { AuthService, IAuthResponse } from '../../services/AuthService';
-import { LoggedUserContext } from '../../contexts/LoggedUserContext';
-import { CustomToast } from '../Shared/CustomToast';
-import { IUser } from '../../models/AuthModels';
-import { FiltersService, IFiltersResponse } from '../../services/FiltersService';
-import { FilterContext } from '../../contexts/FilterContext';
-import { IFilters } from '../../models/FiltersModels';
-import { Micellaneous } from '../../util/Micellaneous';
+import * as React from "react";
+import { Link, useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { AuthService, IAuthResponse } from "../../services/AuthService";
+import { LoggedUserContext } from "../../contexts/LoggedUserContext";
+import { CustomToast } from "../Shared/CustomToast";
+import { IUser } from "../../models/AuthModels";
+import {
+  FiltersService,
+  IFiltersResponse,
+} from "../../services/FiltersService";
+import { FilterContext } from "../../contexts/FilterContext";
+import { IFilters } from "../../models/FiltersModels";
+import { Micellaneous } from "../../util/Micellaneous";
 
 export enum FormType {
   Login = 0,
@@ -137,35 +140,87 @@ export function Form(props: Props): React.ReactElement<Props, any> {
             }
         }
     }
+    navigate("../landing");
+  };
 
-    return (
-        <>
-            <CustomToast></CustomToast>
-            <OuterForm>
-                <InnerForm>
-                    <Title>
-                        <p id="title1">VALORANT</p>
-                        <p id="title2">DUOFINDER</p>
-                    </Title>
-                    <Fields>
-                        <p id="subtitle">{props.formType === FormType.Registration?'CREATE ACCOUNT':'LOGIN'}</p>
-                        {props.formType === FormType.Registration?<input type='text' placeholder="DISPLAY NAME (optional)" onChange={handleDisplayNameChange}></input>:''}
-                        {props.formType === FormType.Registration?<InputPair>
-                            <input id='game-name' type='text' placeholder="GAME NAME" onChange={handleGameNameChange}></input>
-                            <input id='tag' type='text' placeholder="TAG" onChange={handleTagChange}></input>
-                        </InputPair>:''}
-                        <input type='email' placeholder="EMAIL" onChange={handleEmailChange}></input>
-                        <input type='password' placeholder="PASSWORD" onChange={handlePasswordChange}></input>
-                        {props.formType === FormType.Registration?<input type='password' placeholder="CONFIRM PASSWORD" onChange={handleConfirmPasswordChange}></input>:''}
-                        {props.formType === FormType.Registration?
-                            <p className='question'>ALREADY HAVE AN ACCOUNT?<Link to='/login'> LOGIN</Link></p>:
-                            <p className="question">DON'T HAVE AN ACCOUNT?<Link to='/register'> REGISTER</Link></p>}
-                    </Fields>
-                    <button onClick={handleButtonClick}>{props.formType === FormType.Registration?'SIGNUP':'START'}</button>
-                </InnerForm>
-            </OuterForm>
-        </>
-    );
+  return (
+    <>
+      <CustomToast></CustomToast>
+      <OuterForm>
+        <InnerForm>
+          <Title>
+            <p id="title1">VALORANT</p>
+            <p id="title2">DUOFINDER</p>
+          </Title>
+          <Fields>
+            <p id="subtitle">
+              {props.formType === FormType.Registration
+                ? "CREATE ACCOUNT"
+                : "LOGIN"}
+            </p>
+            {props.formType === FormType.Registration ? (
+              <input
+                type="text"
+                placeholder="DISPLAY NAME (optional)"
+                onChange={handleDisplayNameChange}
+              ></input>
+            ) : (
+              ""
+            )}
+            {props.formType === FormType.Registration ? (
+              <InputPair>
+                <input
+                  id="game-name"
+                  type="text"
+                  placeholder="GAME NAME"
+                  onChange={handleGameNameChange}
+                ></input>
+                <input
+                  id="tag"
+                  type="text"
+                  placeholder="TAG"
+                  onChange={handleTagChange}
+                ></input>
+              </InputPair>
+            ) : (
+              ""
+            )}
+            <input
+              type="email"
+              placeholder="EMAIL"
+              onChange={handleEmailChange}
+            ></input>
+            <input
+              type="password"
+              placeholder="PASSWORD"
+              onChange={handlePasswordChange}
+            ></input>
+            {props.formType === FormType.Registration ? (
+              <input
+                type="password"
+                placeholder="CONFIRM PASSWORD"
+                onChange={handleConfirmPasswordChange}
+              ></input>
+            ) : (
+              ""
+            )}
+            {props.formType === FormType.Registration ? (
+              <p className="question">
+                ALREADY HAVE AN ACCOUNT?<Link to="/login"> LOGIN</Link>
+              </p>
+            ) : (
+              <p className="question">
+                DON'T HAVE AN ACCOUNT?<Link to="/register"> REGISTER</Link>
+              </p>
+            )}
+          </Fields>
+          <button onClick={handleButtonClick}>
+            {props.formType === FormType.Registration ? "SIGNUP" : "START"}
+          </button>
+        </InnerForm>
+      </OuterForm>
+    </>
+  );
 }
 
 const OuterForm = styled.div`
@@ -184,13 +239,13 @@ const OuterForm = styled.div`
     transform: scale(1.7);
   }
 
-    @media screen and (max-width: 500px) {
-        transform: scale(1.5);
-    }
+  @media screen and (max-width: 500px) {
+    transform: scale(1.5);
+  }
 
-    @media screen and (max-height: 400px) and (orientation:landscape){
-        transform: scale(1.0)
-    }
+  @media screen and (max-height: 400px) and (orientation: landscape) {
+    transform: scale(1);
+  }
 `;
 
 const InnerForm = styled.div`
@@ -227,14 +282,14 @@ const Title = styled.div`
     font-family: "valorant";
   }
 
-    & #title1{
-        font-size: 3.5vw;
-        color: #F94B4B;
-    }
+  & #title1 {
+    font-size: 3.5vw;
+    color: #f94b4b;
+  }
 
-    & #title2{
-        font-size: 4.5vw;
-    }
+  & #title2 {
+    font-size: 4.5vw;
+  }
 `;
 
 const Fields = styled.div`
@@ -269,10 +324,12 @@ const Fields = styled.div`
     border: none;
     background-color: #e6e3e3;
     border-radius: 0.5vw;
+    font-size:1vw;
     width: 15vw;
     height: 10px;
     margin: 5px;
     transition: 0.2s ease-in-out;
+    
 
     &::placeholder {
       color: black;
@@ -289,6 +346,7 @@ const Fields = styled.div`
         border: none;
         background-color: #e6e3e3;
         border-radius: 0.5vw;
+        font-size:1vw;
         width: 15vw;
         height: 10px;
         margin: 5px;
@@ -308,14 +366,14 @@ const Fields = styled.div`
 `;
 
 const InputPair = styled.div`
-    display: flex;
-    flex-direction: row;
+  display: flex;
+  flex-direction: row;
 
-    & #game-name{
-        width: 9.5vw;
-    }
+  & #game-name {
+    width: 9.5vw;
+  }
 
-    & #tag{
-        width: 3vw;
-    }
+  & #tag {
+    width: 3vw;
+  }
 `;
