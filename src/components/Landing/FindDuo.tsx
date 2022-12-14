@@ -1,11 +1,10 @@
 import * as React from "react";
 import styled, { keyframes } from "styled-components";
 import { useState, useEffect } from "react";
-import { LoggedUserContext } from '../../contexts/LoggedUserContext';
+import { LoggedUserContext } from "../../contexts/LoggedUserContext";
 import { Micellaneous } from "../../util/Micellaneous";
 
 export default function FindDuo() {
-  
   // Contexts
   const loggedUserContext = React.useContext(LoggedUserContext);
 
@@ -41,24 +40,28 @@ const FindDuoContainer = styled.div`
   padding: 0 15%;
 
   & img,
-    div {
-      border-radius: 50%;
-      border: 5px solid #66c2a9;
-      height: 9rem;
-      width: 9rem;
-      z-index: 4;
-      transition: all 0.5s ease-in-out;
-      background-color: #266152;
+  div {
+    border-radius: 50%;
+    border: 5px solid #66c2a9;
+    height: 9rem;
+    width: 9rem;
+    z-index: 4;
+    transition: all 0.5s ease-in-out;
+    background-color: #266152;
 
-      @media (max-width: 1025px) {
-        height: 8rem;
-        width: 8rem;
-      }
+    @media (max-width: 1025px) {
+      height: 8rem;
+      width: 8rem;
+    }
+    @media (max-width: 769px) {
+      height: 7.5rem;
+      width: 7.5rem;
+    }
 
-      @media (max-width: 480px) {
-        height: 7rem;
-        width: 7rem;
-      }
+    @media (max-width: 480px) {
+      height: 7rem;
+      width: 7rem;
+    }
   }
 
   @media (max-width: 769px) {

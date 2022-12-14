@@ -15,9 +15,11 @@ export default function LandingCard(props: Props) {
 
   const displayCard = () => {
     if (!props.findDuo) {
-      return <Profile></Profile>;
-    } else if (props.findDuo && !props.duoFound) {
+      //return <Profile></Profile>;
       return <FindDuo></FindDuo>;
+    } else if (props.findDuo && !props.duoFound) {
+      return <MatchFound></MatchFound>;
+      //return <FindDuo></FindDuo>;
     } else if (props.findDuo && props.duoFound) {
       return <MatchFound></MatchFound>;
     }
@@ -41,15 +43,7 @@ const Card = styled.div`
   flex-direction: column;
   justify-content: space-evenly;
 
-  @media (max-width: 1025px) {
-    width: 75vw;
-    justify-content: space-evenly;
-  }
-
   @media (max-width: 769px) {
-    width: 80vw;
     height: 65vh;
-    display: flex;
-    justify-content: space-evenly;
   }
 `;

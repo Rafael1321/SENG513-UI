@@ -15,7 +15,7 @@ export default function MatchFound() {
 
   /* Navigation */
   const navigate = useNavigate();
-
+  /*
   useEffect(() => {
     if (countdown > 0) {
       // Use setTimeout to schedule an update to the countdown state
@@ -32,7 +32,7 @@ export default function MatchFound() {
         navigate("../chat");
       }, 1000);
     }
-  }, [countdown]);
+  }, [countdown]);*/
 
   return (
     <>
@@ -43,9 +43,9 @@ export default function MatchFound() {
             <Teammate
               icon={loggedUserContext?.loggedUser?.avatarImage}
             ></Teammate>
-            <p>
+            <Username>
               {loggedUserContext?.loggedUser?.displayName ?? "<username 1>"}
-            </p>
+            </Username>
           </ProfileDiv>
 
           <CountDownText>{countdown}</CountDownText>
@@ -53,9 +53,9 @@ export default function MatchFound() {
             <Teammate
               icon={matchedUserContext?.matchedUser?.avatarImage}
             ></Teammate>
-            <p>
+            <Username>
               {matchedUserContext?.matchedUser?.displayName ?? "<username 2>"}
-            </p>
+            </Username>
           </ProfileDiv>
         </FindDuoContainer>
       </MatchContainer>
@@ -66,20 +66,33 @@ export default function MatchFound() {
 const MatchContainer = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: space-evenly;
+  margin: 0;
 `;
 
 const ProfileDiv = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-around;
+  align-items: center;
 `;
 
 const MatchFoundText = styled.p`
   font-family: "valorant";
   font-size: 2.8vw;
   margin: 0;
-  padding: 0vw 0;
+
+  @media (max-width: 769px) {
+    margin-bottom: 5%;
+  }
+`;
+
+const Username = styled.p`
+  margin-bottom: 0;
+
+  @media (max-width: 769px) {
+    margin-top: 5%;
+  }
 `;
 
 const CountDownText = styled.p`
@@ -87,32 +100,39 @@ const CountDownText = styled.p`
   font-size: 5vw;
   width: 5vw;
   font-family: "valorant";
+  margin: 0;
+
+  @media (max-width: 769px) {
+    margin: 7.5% 0;
+  }
 `;
 
 const Teammate = styled.img<{ icon: string }>`
-  min-width: 9rem;
-  min-height: 9rem;
-
+  height: 9rem;
+  width: 9rem;
   background: url(${(props) => props.icon});
-
   background-size: contain;
   background-repeat: no-repeat;
 
   display: flex;
   flex-direction: column;
   justify-content: center;
+
   border-color: rgb(102, 194, 169, 0.5);
   border-radius: 50%;
   border: 5px solid #66c2a9;
-  height: 9rem;
-  width: 9rem;
+
   z-index: 4;
   transition: all 0.5s ease-in-out;
   background-color: #266152;
 
   @media (max-width: 1025px) {
-    height: 8rem;
-    width: 8rem;
+    height: 7rem;
+    width: 7rem;
+  }
+  @media (max-width: 769px) {
+    height: 6rem;
+    width: 6rem;
   }
 `;
 
@@ -121,14 +141,11 @@ const FindDuoContainer = styled.div`
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
-  padding: 0 15%;
-
-  @media (max-width: 1025px) {
-    justify-content: space-between;
-  }
+  padding: 2.5% 10%;
 
   @media (max-width: 769px) {
     flex-direction: column;
-    justify-content: space-evenly;
+    justify-content: center;
+    padding: 5% 0;
   }
 `;
