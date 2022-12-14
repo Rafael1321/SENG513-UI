@@ -13,40 +13,14 @@ import { toast } from "react-toastify";
 import { IMatchFoundDTO, IFindMatchDTO } from "../../models/MatchingModels";
 import { Link } from "react-router-dom";
 import { FilterPopup } from "../Shared/FilterPopup";
-import { useNavigate } from "react-router-dom";
 
 export default function Landing() {
-  const backgroundAgents: Array<string> = [
-    "/images/Astra.png",
-    "/images/Breach.png",
-    "/images/Brimstone.png",
-    "/images/Chamber.png",
-    "/images/Cypher.png",
-    "/images/Fade.png",
-    "/images/Harbor.png",
-    "/images/Jett.png",
-    "/images/KAYO.png",
-    "/images/Killjoy.png",
-    "/images/Neon.png",
-    "/images/Omen.png",
-    "/images/Phoenix.png",
-    "/images/Raze.png",
-    "/images/Reyna.png",
-    "/images/Sage.png",
-    "/images/Skye.png",
-    "/images/Sova.png",
-    "/images/Viper.png",
-    "/images/Yoru.png",
-  ];
-
-  const playerIconSrc: string = "/images/Sova_icon.webp";
-  let playerIconIndex: number = 17;
-
   // State
   const [duoFound, setDuoFound] = useState<boolean>(false);
   const [findDuo, setFindDuo] = useState<boolean>(false);
   const [triggered, setTriggered] = React.useState(false);
-  const [agentIndex, setAgentIndex] = useState(0);
+  const [bgAgent1, setBgAgent1] = useState("");
+  const [bgAgent2, setBgAgent2] = useState("");
 
   // Refs
   const pollingTimeout = React.useRef<NodeJS.Timeout>(null);
@@ -77,11 +51,13 @@ export default function Landing() {
   }, []);
 
   useEffect(() => {
-    let index: number = playerIconIndex;
-    while (playerIconIndex === index) {
-      index = Math.floor(Math.random() * 20);
-    }
-    setAgentIndex(index);
+    //        loggedUserContext?.loggedUser?.avatarImage
+    setBgAgent1(
+      Micellaneous.getBackgroundAgent1("/images/icons/Harbor_icon.webp")
+    );
+    setBgAgent2(
+      Micellaneous.getBackgroundAgent2("/images/icons/Harbor_icon.webp")
+    );
   }, []);
 
   /* Handlers */
@@ -124,8 +100,6 @@ export default function Landing() {
     if (pollingTimeout) clearTimeout(pollingTimeout.current);
     socketContext.emit("stop_matching", loggedUserContext?.loggedUser?._id);
   }
-
-  const navigate = useNavigate();
 
   /* Helper Functions */
 
@@ -208,7 +182,7 @@ export default function Landing() {
           </User>
         </Nav>
         <LandingContent>
-          <Agent src={backgroundAgents[playerIconIndex]}></Agent>
+          <Agent src={bgAgent1}></Agent>
           <Container>
             <LandingCard
               findDuo={findDuo}
@@ -218,7 +192,7 @@ export default function Landing() {
             {showChatButtons()}
             {getButton()}
           </Container>
-          <Agent src={backgroundAgents[agentIndex]}></Agent>
+          <Agent src={bgAgent2}></Agent>
         </LandingContent>
       </LandingPage>
     </>
@@ -492,10 +466,13 @@ const Agent = styled.img`
   width: 20vw;
   height: 80vh;
   object-fit: cover;
+  visibility: visible;
+  opacity: 100;
+  transition: visibility 1s, opacity 1s;
 
   @media (max-width: 1024px) {
     visibility: hidden;
     opacity: 0;
-    transition: visibility 1.5s, opacity 1.5s;
+    transition: visibility 1s, opacity 1s;
   }
 `;

@@ -31,26 +31,26 @@ export class Micellaneous {
   ];
 
   private static backgroundAgents: Array<string> = [
-    "/images/Astra.png",
-    "/images/Breach.png",
-    "/images/Brimstone.png",
-    "/images/Chamber.png",
-    "/images/Cypher.png",
-    "/images/Fade.png",
-    "/images/Harbor.png",
-    "/images/Jett.png",
-    "/images/KAYO.png",
-    "/images/Killjoy.png",
-    "/images/Neon.png",
-    "/images/Omen.png",
-    "/images/Phoenix.png",
-    "/images/Raze.png",
-    "/images/Reyna.png",
-    "/images/Sage.png",
-    "/images/Skye.png",
-    "/images/Sova.png",
-    "/images/Viper.png",
-    "/images/Yoru.png",
+    "/images/background/Astra.png",
+    "/images/background/Breach.png",
+    "/images/background/Brimstone.png",
+    "/images/background/Chamber.png",
+    "/images/background/Cypher.png",
+    "/images/background/Fade.png",
+    "/images/background/Harbor.png",
+    "/images/background/Jett.png",
+    "/images/background/KAYO.png",
+    "/images/background/Killjoy.png",
+    "/images/background/Neon.png",
+    "/images/background/Omen.png",
+    "/images/background/Phoenix.png",
+    "/images/background/Raze.png",
+    "/images/background/Reyna.png",
+    "/images/background/Sage.png",
+    "/images/background/Skye.png",
+    "/images/background/Sova.png",
+    "/images/background/Viper.png",
+    "/images/background/Yoru.png",
   ];
 
   // Converts a string to Title Case
@@ -150,7 +150,25 @@ export class Micellaneous {
     }
   }
 
-  public static getAgent(id: number) {}
+  public static getBackgroundAgent1(iconSrc: string) {
+    let index: number = Micellaneous.agentIcons.indexOf(iconSrc);
+    if (index != -1) {
+      return Micellaneous.backgroundAgents[index];
+    }
+    return "";
+  }
+
+  public static getBackgroundAgent2(iconSrc: string) {
+    let bgAgent1: number = Micellaneous.agentIcons.indexOf(iconSrc);
+    if (bgAgent1 != -1) {
+      let bgAgent2: number = bgAgent1;
+      while (bgAgent1 === bgAgent2) {
+        bgAgent2 = Math.floor(Math.random() * 20);
+        return Micellaneous.backgroundAgents[bgAgent2];
+      }
+    }
+    return "";
+  }
 
   public static playerTypeToString(playerType: GameMode) {
     if (playerType === GameMode.casual) return "Casual";
