@@ -51,13 +51,11 @@ export default function Landing() {
   }, []);
 
   useEffect(() => {
-    //        loggedUserContext?.loggedUser?.avatarImage
-    setBgAgent1(
-      Micellaneous.getBackgroundAgent1("/images/icons/Harbor_icon.webp")
+    let bgAgents = Micellaneous.getBackgroundAgents(
+      loggedUserContext?.loggedUser?.avatarImage
     );
-    setBgAgent2(
-      Micellaneous.getBackgroundAgent2("/images/icons/Harbor_icon.webp")
-    );
+    setBgAgent1(bgAgents[0]);
+    setBgAgent2(bgAgents[1]);
   }, []);
 
   /* Handlers */

@@ -150,22 +150,18 @@ export class Micellaneous {
     }
   }
 
-  public static getBackgroundAgent1(iconSrc: string) {
-    let index: number = Micellaneous.agentIcons.indexOf(iconSrc);
-    if (index != -1) {
-      return Micellaneous.backgroundAgents[index];
-    }
-    return "";
-  }
-
-  public static getBackgroundAgent2(iconSrc: string) {
-    let bgAgent1: number = Micellaneous.agentIcons.indexOf(iconSrc);
-    if (bgAgent1 != -1) {
+  public static getBackgroundAgents(iconSrc: string) {
+    const bgAgent1: number = Micellaneous.agentIcons.indexOf(iconSrc);
+    if (bgAgent1 !== -1) {
       let bgAgent2: number = bgAgent1;
       while (bgAgent1 === bgAgent2) {
         bgAgent2 = Math.floor(Math.random() * 20);
-        return Micellaneous.backgroundAgents[bgAgent2];
       }
+      const bgAgents = [
+        Micellaneous.backgroundAgents[bgAgent1],
+        Micellaneous.backgroundAgents[bgAgent2],
+      ];
+      return bgAgents;
     }
     return "";
   }
