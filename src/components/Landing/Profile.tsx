@@ -114,7 +114,7 @@ export default function Profile(): React.ReactElement {
               ></Input>
             </UsernameDiv>
 
-            <div>
+            <InfoInputs>
               <Age
                 genE={generalEdit}
                 disabled={!generalEdit}
@@ -150,7 +150,7 @@ export default function Profile(): React.ReactElement {
               <PlayerType>
                 {Micellaneous.playerTypeToString(playerType) ?? "<unknown>"}
               </PlayerType>
-            </div>
+            </InfoInputs>
           </PersonInfo>
         </ProfileContainer>
 
@@ -197,6 +197,14 @@ export default function Profile(): React.ReactElement {
 }
 
 const ProfilePage = styled.div``;
+const InfoInputs = styled.div`
+  @media (max-width: 769px) {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+`;
 
 const UsernameDiv = styled.div`
   display: flex;
@@ -316,6 +324,7 @@ const Drops = styled.select<{ genE: boolean }>`
   }
   @media (max-width: 769px) {
     height: 20px;
+    width: 40px;
     font-size: 0.5rem;
   }
 `;
@@ -343,6 +352,8 @@ const Age = styled.input<{ genE: boolean }>`
   }
   @media (max-width: 769px) {
     height: 18px;
+    margin-top: 5px;
+    width: 30px;
     font-size: 0.5rem;
   }
 `;
@@ -376,6 +387,7 @@ const Input = styled.input<{ genE: boolean }>`
   }
   @media (max-width: 769px) {
     height: 20px;
+    width: 100px;
   }
 `;
 
@@ -474,8 +486,8 @@ const Ranks = styled.div`
   margin-left: 0;
 
   @media (max-width: 769px) {
-    margin-left: 7%;
-    margin-right: 7%;
+    margin-left: 11%;
+    margin-right: 11%;
   }
 
   @media (max-width: 769px) {
