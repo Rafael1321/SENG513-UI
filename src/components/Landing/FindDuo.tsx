@@ -1,11 +1,10 @@
 import * as React from "react";
 import styled, { keyframes } from "styled-components";
 import { useState, useEffect } from "react";
-import { LoggedUserContext } from '../../contexts/LoggedUserContext';
+import { LoggedUserContext } from "../../contexts/LoggedUserContext";
 import { Micellaneous } from "../../util/Micellaneous";
 
 export default function FindDuo() {
-  
   // Contexts
   const loggedUserContext = React.useContext(LoggedUserContext);
 
@@ -24,11 +23,13 @@ export default function FindDuo() {
 
   return (
     <FindDuoContainer>
-      <img src={loggedUserContext?.loggedUser?.avatarImage ?? ""} alt="My Icon"></img>
+      <Picture
+        icon={loggedUserContext?.loggedUser?.avatarImage ?? ""}
+      ></Picture>
       <Line></Line>
-      <Teammate icon={Micellaneous.getAgentIcon(index)}>
+      <Picture icon={Micellaneous.getAgentIcon(index)} id="teammate">
         <p id="question-mark">&#63;</p>
-      </Teammate>
+      </Picture>
     </FindDuoContainer>
   );
 }
@@ -40,46 +41,29 @@ const FindDuoContainer = styled.div`
   align-items: center;
   padding: 0 15%;
 
-  & img,
-    div {
-      border-radius: 50%;
-      border: 5px solid #66c2a9;
-      height: 9rem;
-      width: 9rem;
-      z-index: 4;
-      transition: all 0.5s ease-in-out;
-      background-color: #266152;
-
-      @media (max-width: 1025px) {
-        height: 8rem;
-        width: 8rem;
-      }
-
-      @media (max-width: 480px) {
-        height: 7rem;
-        width: 7rem;
-      }
-  }
-
   @media (max-width: 769px) {
     flex-direction: column;
   }
 `;
 
-const Teammate = styled.div<{ icon: string }>`
-  min-width: 9rem;
-  min-height: 9rem;
+const Picture = styled.div<{ icon: string }>`
+  width: 9rem;
+  height: 9rem;
 
-  background: linear-gradient(rgba(0, 0, 0, 1), rgba(8, 71, 50, 0.2)),
-    url(${(props) => props.icon});
-
+  background: url(${(props) => props.icon});
   background-size: contain;
   background-repeat: no-repeat;
+  background-color: #266152;
+  aspect-ratio: 1/1;
 
   display: flex;
   flex-direction: column;
   justify-content: center;
   border-color: rgb(102, 194, 169, 0.5);
+  border-radius: 50%;
+  border: 5px solid #66c2a9;
+  z-index: 4;
+  transition: all 0.5s ease-in-out;
 
   & #question-mark {
     font-size: 5rem;
@@ -88,13 +72,23 @@ const Teammate = styled.div<{ icon: string }>`
     color: #c3c3c3;
     z-index: 6;
   }
-  @media (max-width: 1025px) {
-    min-height: 8rem;
-    min-width: 8rem;
+
+  & #teammate {
+    background: linear-gradient(rgba(0, 0, 0, 1), rgba(8, 71, 50, 0.2));
   }
+
+  @media (max-width: 1025px) {
+    height: 8rem;
+    width: 8rem;
+  }
+  @media (max-width: 769px) {
+    height: 7.5rem;
+    width: 7.5rem;
+  }
+
   @media (max-width: 480px) {
-    min-height: 7rem;
-    min-width: 7rem;
+    height: 7rem;
+    width: 7rem;
   }
 `;
 
@@ -146,6 +140,7 @@ const Line = styled.span`
   @media (max-width: 769px) {
     width: 1px;
     height: 100px;
+    margin: 0 10%;
     border: 2.5px solid #66c2a9;
     animation: ${Bounce769} 2.5s ease-in-out infinite alternate;
   }

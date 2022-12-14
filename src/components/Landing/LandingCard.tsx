@@ -41,15 +41,7 @@ const Card = styled.div`
   flex-direction: column;
   justify-content: space-evenly;
 
-  @media (max-width: 1025px) {
-    width: 75vw;
-    justify-content: space-evenly;
-  }
-
   @media (max-width: 769px) {
-    width: 80vw;
     height: 65vh;
-    display: flex;
-    justify-content: space-evenly;
   }
 `;
