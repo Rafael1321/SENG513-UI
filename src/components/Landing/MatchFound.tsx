@@ -15,7 +15,7 @@ export default function MatchFound() {
 
   /* Navigation */
   const navigate = useNavigate();
-  /*
+  
   useEffect(() => {
     if (countdown > 0) {
       // Use setTimeout to schedule an update to the countdown state
@@ -32,7 +32,7 @@ export default function MatchFound() {
         navigate("../chat");
       }, 1000);
     }
-  }, [countdown]);*/
+  }, [countdown]);
 
   return (
     <>

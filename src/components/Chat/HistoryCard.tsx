@@ -6,7 +6,7 @@ type Props = {
     isMain: boolean;
     zIndex: string;
     username: string;
-    message: string;
+    // message: string;
     url: string;
 };
 
@@ -25,9 +25,9 @@ export default function HistoryCard(props: Props): React.ReactElement {
                     <Username>{props.username}</Username>
                 </UsernameWrapper>
             </UserInfoContainer>
-            <MessagesWrapper>
+            {/* <MessagesWrapper>
                 <Messages>{props.message}</Messages>
-            </MessagesWrapper>
+            </MessagesWrapper> */}
         </Container>
     );
 }

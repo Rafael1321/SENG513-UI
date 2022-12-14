@@ -31,6 +31,7 @@ const Wrapper = styled.div<{ width?: string; height?: string }>`
   justify-content: space-evenly;
 
   align-items: center;
+  padding: 1%;
 
   background: #66c2a9;
   background-blend-mode: darken;

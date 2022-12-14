@@ -36,6 +36,10 @@ export function FilterPopup(props : Props) : React.ReactElement<Props, any> {
     const maxAgeInput = React.useRef(null);
 
     React.useEffect(() => {
+        window.dispatchEvent(new Event('resize'));
+    });
+
+    React.useEffect(() => {
         let serverPrefDivHeight = serverPrefDiv?.current?.clientHeight ?? 0
         let gameModeTitleHeight = gameModeTitle?.current?.clientHeight ?? 0
         setAgeRangeHeight(serverPrefDivHeight + gameModeTitleHeight);

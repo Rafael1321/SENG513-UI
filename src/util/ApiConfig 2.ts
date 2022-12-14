@@ -11,17 +11,10 @@ export class ApiConfig{
     public static updateUserRoute = () => this.baseRoute + `/users/update`;
     public static findUserRoute = (userId : string) => this.baseRoute + `users/${userId}`;
 
-    /* Chat */
-    public static saveMessageRoute = () => this.baseRoute + `/chats`;
-    public static retrieveMessagesRoute = () => this.baseRoute + `/chats`;
-
-    /* History */
-    public static retrieveMatchHistory = (userId : string) => this.baseRoute + `/matchings/${userId}`;
-
-    /* Commend */
-    public static saveCommendRoute = () => this.baseRoute + `/commendations`;
-
     /* Filters */
     public static upsertFiltersRoute = () => this.baseRoute + `/filters`;
     public static retrieveFiltersRoute = (retrieveDTO : IRetrieveDTO) => this.baseRoute + `/filters/${retrieveDTO.userId}`;
+
+    /* Matching */ 
+    public static findMatchRoute = () => this.baseRoute + `/matchings`
 }
