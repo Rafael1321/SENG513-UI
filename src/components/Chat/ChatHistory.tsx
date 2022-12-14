@@ -6,13 +6,11 @@ import ProfileCardUpdated from "./ProfileCardUpdated";
 import { Slider } from "@mui/material";
 import { CommendationService } from "../../services/CommendationService";
 import { LoggedUserContext } from '../../contexts/LoggedUserContext';
-import { MatchedUserContext } from '../../contexts/MatchedUserContext';
-import { ISaveCommendDTO } from "../../models/CommendationModels";
 import { CustomToast } from "../Shared/CustomToast";
 import { toast } from "react-toastify";
 import { IUser } from "../../models/AuthModels";
 import { MatchingService, IMatchingResponse } from '../../services/MatchingService';
-import { IMessage } from "../../models/ChatModels";
+import { ILoadMsgDTO, IMessage } from "../../models/ChatModels";
 import MessageContainer from "./MessageContainer";
 import { IChatResponse, ChatService } from '../../services/ChatService';
 import { Micellaneous } from "../../util/Micellaneous";
@@ -21,43 +19,8 @@ type Props = {};
 
 const SLIDE_COUNT = 5;
 const slides = Array.from(Array(SLIDE_COUNT).keys());
-// console.log(slides);
-
-// export type Chat = {
-//   key: number;
-//   username: string;
-//   profile_url: string;
-//   last_message: string;
-// };
 
 export const WidthContext = createContext<number>(1500);
-
-// const history = [
-//   {
-//     key: 0,
-//     username: "VividEradicator",
-//     profile_url: "images/icons/Astra_icon.webp",
-//     last_message: "Suggondeez",
-//   },
-//   {
-//     key: 1,
-//     username: "IAMNOTAFURRY",
-//     profile_url: "images/icons/Chamber_icon.webp",
-//     last_message: "Bro what are you even saying man?", //Overflow
-//   },
-//   {
-//     key: 2,
-//     username: "ArcticFox",
-//     profile_url: "images/icons/Omen_icon.webp",
-//     last_message: "I love chamber so much!",
-//   },
-//   {
-//     key: 3,
-//     username: "Malder",
-//     profile_url: "images/icons/Breach_icon.webp",
-//     last_message: "Wtf is this carousel",
-//   },
-// ];
 
 export interface IHistoryEntry{
   key : number;
@@ -115,17 +78,27 @@ function ChatHistory(props: Props): React.ReactElement {
 
     const fetchMessages = async () : Promise<void> => {
 
-      const res : IChatResponse = await ChatService.retrieve({senderId : loggedUserContext?.loggedUser._id, receiverId : filteredHistory[main].user._id});
+      const res : IChatResponse = await ChatService.retrieve({senderId : loggedUserContext?.loggedUser?._id, receiverId : history[main]?.user?._id});
 
       if(res.statusCode !== 200){
         toast.error("Could not retrieve chat for match.")
         return;
       }
+      const loadedMessages = res.data as ILoadMsgDTO[];
 
       // Update messages to be displayed
+      setMessages(loadedMessages.map( (loadMessage : ILoadMsgDTO) => {
+        return {userId: loadMessage.senderId, 
+         type: (loadMessage.senderId === loggedUserContext?.loggedUser?._id ?"sent":"received"), 
+         text: loadMessage.message, 
+         userIcon:loadMessage.senderId === loggedUserContext?.loggedUser?._id?loggedUserContext?.loggedUser?.avatarImage:history[main].user.avatarImage
+        }
+      }));
     }
 
-  }, [main]);
+    if(loggedUserContext.loggedUser && history[main]) fetchMessages();
+
+  }, [loggedUserContext, history, main]);
 
   // Other Functions 
 
@@ -232,17 +205,22 @@ function ChatHistory(props: Props): React.ReactElement {
               <Menu>
                 {width > breakpoint && (
                   <Button
-                    img_url={"images/general/back.png"}
                     text={"BACK"}
                     width={"160px"}
                     height={"70px"}
                     url={'../landing'}
-                  />
+                    img_url={null}
+                    svg={true}
+                  ></Button>
                 )}
                 {width > breakpoint && (
                   <SearchContainer>
                     <SearchIconWrapper>
-                      <SearchIcon url={"images/general/search.png"} />
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                        {/* <!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->  */}
+                        <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/>
+                      </svg>
+                      {/* <SearchIcon url={"images/general/search.png"} /> */}
                     </SearchIconWrapper>
                     <SearchInput onChange={handleFilter} placeholder="Search Message History" />
                   </SearchContainer>
@@ -260,9 +238,10 @@ function ChatHistory(props: Props): React.ReactElement {
                   <RatePlayerWrapper>
                     <Button
                       fontSize="2em"
-                      text={"RATE"}
+                      text={"BACK"}
                       width={'auto'}
                       height={"100%"}
+                      url={'../landing'}
                     />
                   </RatePlayerWrapper>
                 )}
@@ -301,31 +280,6 @@ function ChatHistory(props: Props): React.ReactElement {
     </>
   );
 }
-
-const ChatBox = styled.div`
-  background-color: #282828;
-  border-radius: 44px;
-  overflow-y: scroll;
-  width: 55vw;
-  height: 70vh;
-  padding: 5vh;
-  margin: 10px;
-  margin-left: auto;
-  margin-right: auto;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  justify-content: start;
-  @media all and (max-width: 1400px) {
-    width: 90vw;
-    height: 50vh;
-    padding: 1vh;
-    order: 2;
-    padding: 0;
-    border-radius: 20px;
-    background: none;
-  }
-`;
 
 const RateButton = styled.button`
   color: white;
@@ -508,19 +462,20 @@ const PlayerCardsWrapper = styled.div`
 `;
 
 const ChatContainer = styled.div`
+  overflow-y: scroll;
+  margin: 10px;
+  margin-left: auto;
+  margin-right: auto;
   position: relative;
   width: 100%;
   height: 70%;
-
   padding: 5%;
   outline: 1px red;
-
   background-color: #282828;
   border-radius: 44px;
-
   display: flex;
-  justify-content: center;
-  /* border: red solid 1px; */
+  flex-direction: column;
+  justify-content: start;
 
   @media all and (max-width: 500px) {
     height: 80%;
@@ -579,6 +534,14 @@ const SearchIconWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+
+
+  & svg{
+    fill: white;
+    width: 1vw;
+    height: 1vw;
+  }
+
 `;
 
 const SearchIcon = styled.img<{ url: string }>`
