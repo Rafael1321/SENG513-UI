@@ -16,7 +16,7 @@ export default function ChatBody() {
   // Contexts
   const loggedUserContext = useContext(LoggedUserContext);
   const matchedUser = useContext(MatchedUserContext);
-  const socket = useContext(SocketContext);
+  const socketContext = useContext(SocketContext);
 
   // State
   const [messages, setMessages] = useState<IMessage[]>([]);
@@ -25,21 +25,21 @@ export default function ChatBody() {
 
   // Use State
   useEffect(() => {
-    socket.on("receive_msg", (receiveMsgDTO: IReceiveMsgDTO) => {
+    socketContext?.socket?.on("receive_msg", (receiveMsgDTO: IReceiveMsgDTO) => {
       // Locally update the messages
     
       const newMsgs = [...messages, {userId: matchedUser?.matchedUser?._id,type:"received", text:receiveMsgDTO.msg, userIcon:matchedUser?.matchedUser?.avatarImage}];
       setMessages(newMsgs);
     });
 
-    socket.on("error_send_msg", (msg: any) => {
+    socketContext?.socket?.on("error_send_msg", (msg: any) => {
       if (EnvConfig.DEBUG) console.log(msg);
     });
   }, [
     matchedUser?.matchedUser?._id,
     matchedUser?.matchedUser?.avatarImage,
     messages,
-    socket,
+    socketContext.socket,
   ]);
 
   const sendMsg = async (sendContactInfo: boolean = false) => {
@@ -61,7 +61,7 @@ export default function ChatBody() {
     await ChatService.save({senderId:loggedUserContext?.loggedUser?._id, receiverId:matchedUser?.matchedUser?._id, message: typedMessage});
 
     // Notify other users of the message
-    socket.emit("send_msg", matchedUser?.matchedUser?._id, sendContactInfo ? contactMsg : typedMessage);
+    socketContext?.socket?.emit("send_msg", matchedUser?.matchedUser?._id, sendContactInfo ? contactMsg : typedMessage);
 
     setTypedMessage("");  // Clear the typed message
   };
@@ -70,9 +70,13 @@ export default function ChatBody() {
     setTypedMessage(e.target.value);
   };
 
+  function navigate(arg0: string) {
+    throw new Error("Function not implemented.");
+  }
+
   return (
     <Wrapper>
-      <Link to={"/landing"}>
+      <Link onClick={() => { localStorage.removeItem("matchedUser") } } to={"/landing"}>
         {" "}
         <Exit />
       </Link>
@@ -145,13 +149,13 @@ export default function ChatBody() {
           }
         />
 
-        <BtnContainer>
+        <BtnContainer>/images/general/edit.png
           <MobileTimer>🕐 You have 10 minutes remaining!</MobileTimer>
           <Btn onClick={() => sendMsg(true)} btnColor="#66c2a9">
             <BtnIcon imgSrc="/images/chat/share.png" />
             SHARE CONTACT
           </Btn>
-          <Btn btnColor="#f94b4b">
+          <Btn onClick={() => { localStorage.removeItem('matchedUser'); navigate('../landing'); }} btnColor="#f94b4b">
             <BtnIcon imgSrc="/images/chat/gonext.png" />
             <Link
               to="/landing"
