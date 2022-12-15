@@ -4,13 +4,24 @@ The following System Requirements and Installation steps are required for runnin
 If you are accessing the project remotely (via ___ LINK HERE), you may skip to the Usage section of this document. </br>
 
 ## System Requirements
+Ensure that the following are already installed on your operating system of choice. </br>
 > Node JS </br>
-> NOT DONE </br>
+> NPM </br>
 > A basic database, such as MongoDB
 
 ## Installation
-1. Clone or download the code found within the GitHub repository </br>
-1b. This can be done from within VS Code, by cloning https://github.com/Rafael1321/SENG513-UI </br>
+User Interface
+1. Clone or download the code found within the GitHub SENG513-UI repository, to a path/of/your/choosing </br>
+1b. This can be done from within VS Code, via `git clone https://github.com/Rafael1321/SENG513-UI.git` </br>
+2. Using the command prompt, `cd ~path/of/your/choosing/SENG513-UI` will navigate you to the proper directory </br>
+3. Install all required project dependencies using `npm i` </br>
+4. Run the application with `npm start` </br>
+API
+1. Clone or download the code found within the GitHub SENG513-API repository, to a path/of/your/choosing </br>
+1b. This can be done from within VS Code, via `git clone https://github.com/Rafael1321/SENG513-API.git` </br>
+2. Using the command prompt, `cd ~path/of/your/choosing/SENG513-API` will navigate you to the proper directory </br>
+3. Install all required project dependencies using `npm i` </br>
+4. Run the application with `npm start` </br> 
 
 ## Usage
 The following steps can be used to experience the full functionality of the application. </br>
