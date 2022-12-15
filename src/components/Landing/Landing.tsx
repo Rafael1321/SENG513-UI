@@ -12,6 +12,7 @@ import { toast } from "react-toastify";
 import { Link, useLocation } from "react-router-dom";
 import { FilterPopup } from "../Shared/FilterPopup";
 import { SocketContext } from '../../contexts/SocketContext';
+import { unstable_renderSubtreeIntoContainer } from "react-dom";
 
 export default function Landing() {
   
@@ -88,6 +89,12 @@ export default function Landing() {
   }
 
   async function clickedFindDuo(): Promise<void> {
+    
+    if(localStorage.getItem("matchedUser")){
+      navigate('./chat')
+      return;
+    }
+    
     setFindDuo(true);
 
     socketContext?.socket?.emit("find_matching", {
@@ -495,3 +502,7 @@ const Agent = styled.img`
     transition: visibility 1s, opacity 1s;
   }
 `;
+function navigate(arg0: string) {
+  throw new Error("Function not implemented.");
+}
+

@@ -20,10 +20,11 @@ export const FilterContext = React.createContext<FiltersContextType | null>(null
 
 export function FilterProvider({children} : Props) { 
 
-    const [filters, setFilters] = React.useState<IFilters | null>(null);
+    const [filters, setFilters] = React.useState<IFilters | null>(localStorage.getItem("filters")?JSON.parse(localStorage.getItem("filters")):null);
     
     React.useEffect(() => {
         if(EnvConfig.DEBUG) console.log(`Filters: ${filters ?? "NULL"}`);
+        if(filters) localStorage.setItem('filters', JSON.stringify(filters));
     }, [filters]); 
 
     function updateServerPreference (serverPreference : number) : void{

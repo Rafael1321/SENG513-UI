@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import { toast } from "react-toastify";
 import styled from "styled-components";
 import { LoggedUserContext } from "../../contexts/LoggedUserContext";
@@ -53,7 +53,7 @@ export default function Profile(): React.ReactElement {
       });
   
       if(res.statusCode === 200){
-        toast.success("Information retrieved/updated succesfully.");
+        toast.success("Information updated succesfully.");
         return;
       }
 

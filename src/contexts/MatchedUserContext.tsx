@@ -15,10 +15,11 @@ export const MatchedUserContext = React.createContext<MatchedUserContextType | n
 
 export function MatchedUserProvider({children} : Props) { 
 
-    const [matchedUser, setMatchedUser] = React.useState<IUser | null>(null);
+    const [matchedUser, setMatchedUser] = React.useState<IUser | null>(localStorage.getItem("matchedUser")?JSON.parse(localStorage.getItem("matchedUser")):null);
     
     React.useEffect(() => {
         if(EnvConfig.DEBUG) console.log(`Matched User: ${matchedUser ?? "NULL"}`);
+        if(matchedUser) localStorage.setItem('matchedUser', JSON.stringify(matchedUser));
     }, [matchedUser]); 
 
     const updateMatchedUser = (loggedUser: IUser) : void => {

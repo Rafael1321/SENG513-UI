@@ -56,13 +56,13 @@ export function Form(props: Props): React.ReactElement<Props, any> {
     }, [loggedUserContext.loggedUser, navigateNext]);
 
     React.useEffect(() => {
-      if(socketContext.socket){
+      if(socketContext.socket && navigateNext){
         console.log(socketContext.socket);
         navigate('../landing', { state: {
           justRegistered: navigateNext.justRegistered,
         }});
       }
-    }, [socketContext.socket])
+    }, [socketContext.socket, navigateNext])
 
     /* Handlers */
 

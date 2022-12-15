@@ -70,9 +70,13 @@ export default function ChatBody() {
     setTypedMessage(e.target.value);
   };
 
+  function navigate(arg0: string) {
+    throw new Error("Function not implemented.");
+  }
+
   return (
     <Wrapper>
-      <Link to={"/landing"}>
+      <Link onClick={() => { localStorage.removeItem("matchedUser") } } to={"/landing"}>
         {" "}
         <Exit />
       </Link>
@@ -145,13 +149,13 @@ export default function ChatBody() {
           }
         />
 
-        <BtnContainer>
+        <BtnContainer>/images/general/edit.png
           <MobileTimer>🕐 You have 10 minutes remaining!</MobileTimer>
           <Btn onClick={() => sendMsg(true)} btnColor="#66c2a9">
             <BtnIcon imgSrc="/images/chat/share.png" />
             SHARE CONTACT
           </Btn>
-          <Btn btnColor="#f94b4b">
+          <Btn onClick={() => { localStorage.removeItem('matchedUser'); navigate('../landing'); }} btnColor="#f94b4b">
             <BtnIcon imgSrc="/images/chat/gonext.png" />
             <Link
               to="/landing"

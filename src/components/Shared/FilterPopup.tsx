@@ -114,7 +114,7 @@ export function FilterPopup(props : Props) : React.ReactElement<Props, any> {
                 toast.error(filterResponse.data);
                 return;
             }else{
-                toast.success("Filters saved succesfully");
+                toast.success("Filters saved successfully");
                 props.closeMe();
             }
         }catch(err){
@@ -133,7 +133,7 @@ export function FilterPopup(props : Props) : React.ReactElement<Props, any> {
                 <div id='body'>
                     <div id='left'>
                         <div style={{height: '25%'}} id='server-pref' className='row' ref={serverPrefDiv}>
-                            <p>Sever Preferences:</p>
+                            <p>Server Preferences:</p>
                             <div className='selects'>
                                 <select value={filterContex?.filters?.serverPreference ?? ServerPreference.na} className="sever-preferences" onChange={handleServerPrefChange}>
                                     <option value={ServerPreference.na}>{Micellaneous.serverPreferenceToString(ServerPreference.na, true)}</option>

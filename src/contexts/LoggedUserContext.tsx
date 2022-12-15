@@ -15,10 +15,11 @@ export const LoggedUserContext = React.createContext<LoggedUserContextType | nul
 
 export function LoggedUserProvider({children} : Props) { 
 
-    const [loggedUser, setLoggedUser] = React.useState<IUser | null>(null);
+    const [loggedUser, setLoggedUser] = React.useState<IUser | null>(localStorage.getItem("loggedUser")?JSON.parse(localStorage.getItem("loggedUser")):null);
     
     React.useEffect(() => {
         if(EnvConfig.DEBUG) console.log(`LoggeddUser: ${loggedUser ?? "NULL"}`);
+        if(loggedUser) localStorage.setItem('loggedUser', JSON.stringify(loggedUser));
     }, [loggedUser]); 
 
     const updateLoggedUser = (loggedUser: IUser) : void => {
