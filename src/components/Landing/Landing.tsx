@@ -12,6 +12,7 @@ import { FilterContext } from "../../contexts/FilterContext";
 import { toast } from "react-toastify";
 import { Link, useLocation } from "react-router-dom";
 import { FilterPopup } from "../Shared/FilterPopup";
+import { useNavigate } from "react-router-dom";
 
 export default function Landing() {
   
@@ -24,6 +25,7 @@ export default function Landing() {
 
   const [bgAgent1, setBgAgent1] = useState("");
   const [bgAgent2, setBgAgent2] = useState("");
+  const [logout, setLogout] = useState(false);
 
   // Refs
   const pollingTimeout = React.useRef<NodeJS.Timeout>(null);
@@ -34,6 +36,7 @@ export default function Landing() {
   const filterContext = useContext(FilterContext);
   const socketContext = useContext(SocketContext);
 
+  const navigate = useNavigate();
   // Use Effects
 
   useEffect(() => {
@@ -89,6 +92,12 @@ export default function Landing() {
     setDuoFound(true);
   }
 
+  const handleLogout = () =>{ 
+    localStorage.clear();
+    navigate('../login');
+    //socketContext.closeSocket();
+  }
+
   async function clickedFindDuo(): Promise<void> {
     setFindDuo(true);
 
@@ -110,6 +119,9 @@ export default function Landing() {
     socketContext.emit("stop_matching", loggedUserContext?.loggedUser?._id);
   }
 
+  function clickedUser(): void{
+    setLogout(!logout);
+  }
   /* Helper Functions */
 
   function getButton(): any {
@@ -170,6 +182,26 @@ export default function Landing() {
     );
   }
 
+  function showLogout(){
+    return logout ?
+    (<User>
+       <StopLogout onClick={clickedUser}>&#10005;</StopLogout>
+       <Logout onClick={handleLogout}>LOGOUT</Logout>
+    </User>
+   )
+     :  
+    (<User onClick={clickedUser}>
+      <p id="username">
+        {Micellaneous.toTitleCase(
+        loggedUserContext?.loggedUser?.displayName
+        ) ?? "<username>"}
+      </p>
+      <img id="profilePic"
+        src={loggedUserContext?.loggedUser?.avatarImage}
+        alt="Player Icon">
+      </img>
+    </User>);
+  }
 
 
 
@@ -186,18 +218,9 @@ export default function Landing() {
             <h2 id="valorant">VALORANT</h2>
             <h1 id="duofinder">DUOFINDER</h1>
           </Logo>
-          <User>
-            <p id="username">
-              {Micellaneous.toTitleCase(
-                loggedUserContext?.loggedUser?.displayName
-              ) ?? "<username>"}
-            </p>
-            <img
-              id="profilePic"
-              src={loggedUserContext?.loggedUser?.avatarImage}
-              alt="Player Icon"
-            ></img>
-          </User>
+          <UserDiv>
+            {showLogout()}
+          </UserDiv>
         </Nav>
         <LandingContent>
           <Agent src={bgAgent1}></Agent>
@@ -246,7 +269,6 @@ const Button = styled.button`
   :hover {
     cursor: pointer;
   }
-
 
   & #filterIcon {
     fill: white;
@@ -342,15 +364,28 @@ const Logo = styled.div`
   }
 `;
 
-const User = styled.div`
-  display: flex;
-  flex-direction: row;
+const UserDiv = styled.div`
   margin-left: auto;
-  padding-right: 1rem;
+  padding-right: 2rem;
+  cursor:pointer;
   font-family: "Poppins", sans-serif;
   font-size: 1rem;
   font-weight: 300;
+
+  @media (max-width: 769px) {
+    padding-right: 0;
+    margin: 2.5% auto;
+  }
+`
+
+const User = styled.div`
+  display: flex;
+  flex-direction: row;
   transition: all 0.25s ease-in-out;
+
+  @media (max-width: 769px) {
+    font-size: 0.75rem;
+  }
 
   & #username {
     color: white;
@@ -358,25 +393,42 @@ const User = styled.div`
   }
 
   & #profilePic {
-    background-color: white;
     border: none;
     border-radius: 50%;
     height: 50px;
     width: 50px;
     background-color: #425852;
-
     @media (max-width: 769px) {
       height: 40px;
       width: 40px;
     }
   }
-
-  @media (max-width: 769px) {
-    font-size: 0.75rem;
-    padding-right: 0;
-    margin: 2.5% auto;
-  }
 `;
+
+const StopLogout = styled.button`
+  color:white;
+  background:transparent;
+  border: none;
+  transition:0.5s all;
+  &:hover{
+    cursor:pointer;
+    color: #f94b4b;
+  }
+`
+
+const Logout = styled.button`
+    background-color:transparent;
+    color:white;
+    border:none;
+    border-radius: 3px;
+    transition: 0.5s all;
+    cursor:pointer;
+    height:56px;
+
+    &:hover{
+      color: #f94b4b;
+    } 
+`
 
 const LandingContent = styled.div`
   display: flex;
