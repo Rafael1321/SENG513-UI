@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { useState, useEffect, useContext } from "react";
 import LandingCard from "./LandingCard";
 import { LoggedUserContext } from "../../contexts/LoggedUserContext";
-import { SocketContext } from "../../contexts/SocketContext";
 import { EnvConfig } from "../../util/EnvConfig";
 import { MatchedUserContext } from "../../contexts/MatchedUserContext";
 import { Micellaneous } from "../../util/Micellaneous";
@@ -12,6 +11,8 @@ import { FilterContext } from "../../contexts/FilterContext";
 import { toast } from "react-toastify";
 import { Link, useLocation } from "react-router-dom";
 import { FilterPopup } from "../Shared/FilterPopup";
+import { SocketContext } from '../../contexts/SocketContext';
+import { unstable_renderSubtreeIntoContainer } from "react-dom";
 
 export default function Landing() {
   
@@ -44,16 +45,14 @@ export default function Landing() {
   }, []);
 
   useEffect(() => {
-    socketContext.emit("user_connected", loggedUserContext?.loggedUser?._id);
-
     // Messages from server
-    socketContext.on("error_user_connected", handleSuccessOrError);
-    socketContext.on("success_user_connected", handleSuccessOrError);
-    socketContext.on("error_find_matching", handleSuccessOrError);
-    socketContext.on("success_find_matching", handleSuccessOrError);
-    socketContext.on("error_stop_matching", handleSuccessOrError);
-    socketContext.on("success_stop_matching", handleSuccessOrError);
-    socketContext.on("match_found", handleMatchFound);
+    socketContext?.socket?.on("error_user_connected", handleSuccessOrError);
+    socketContext?.socket?.on("success_user_connected", handleSuccessOrError);
+    socketContext?.socket?.on("error_find_matching", handleSuccessOrError);
+    socketContext?.socket?.on("success_find_matching", handleSuccessOrError);
+    socketContext?.socket?.on("error_stop_matching", handleSuccessOrError);
+    socketContext?.socket?.on("success_stop_matching", handleSuccessOrError);
+    socketContext?.socket?.on("match_found", handleMatchFound);
 
     return () => {
       if (pollingTimeout) clearTimeout(pollingTimeout.current);
@@ -90,9 +89,15 @@ export default function Landing() {
   }
 
   async function clickedFindDuo(): Promise<void> {
+    
+    if(localStorage.getItem("matchedUser")){
+      navigate('./chat')
+      return;
+    }
+    
     setFindDuo(true);
 
-    socketContext.emit("find_matching", {
+    socketContext?.socket?.emit("find_matching", {
       userId: loggedUserContext?.loggedUser?._id,
       filters: filterContext.filters,
     } as any);
@@ -100,14 +105,14 @@ export default function Landing() {
     pollingTimeout.current = setTimeout(() => {
       toast.error("Could not find a match. Please try again later!");
       setFindDuo(false);
-      socketContext.emit("stop_matching", loggedUserContext?.loggedUser?._id);
+      socketContext?.socket?.emit("stop_matching", loggedUserContext?.loggedUser?._id);
     }, 300000); // 5 mins
   }
 
   function clickedCancel(): void {
     setFindDuo(false);
     if (pollingTimeout) clearTimeout(pollingTimeout.current);
-    socketContext.emit("stop_matching", loggedUserContext?.loggedUser?._id);
+    socketContext?.socket?.emit("stop_matching", loggedUserContext?.loggedUser?._id);
   }
 
   /* Helper Functions */
@@ -455,7 +460,7 @@ const History = styled.div`
   flex-direction: row;
 `;
 
-const HistoryLink = styled.a`
+const HistoryLink = styled.div`
   color: white;
   text-decoration: none;
   font-weight: bold;
@@ -497,3 +502,7 @@ const Agent = styled.img`
     transition: visibility 1s, opacity 1s;
   }
 `;
+function navigate(arg0: string) {
+  throw new Error("Function not implemented.");
+}
+
