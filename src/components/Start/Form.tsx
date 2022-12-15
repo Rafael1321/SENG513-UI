@@ -273,6 +273,7 @@ const Fields = styled.div`
     height: 10px;
     margin: 5px;
     transition: 0.2s ease-in-out;
+    font-size: 1vw;
 
     &::placeholder {
       color: black;
@@ -293,7 +294,7 @@ const Fields = styled.div`
         height: 10px;
         margin: 5px;
         transition: 0.2s ease-in-out;
-
+        font-size: 1vw;
         &::placeholder{
             color: black;
             font-size: 0.8vw;
@@ -305,6 +306,7 @@ const Fields = styled.div`
             background-color: #bcbaba; 
         }
     }
+  }
 `;
 
 const InputPair = styled.div`

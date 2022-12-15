@@ -14,37 +14,16 @@ import { Link, useLocation } from "react-router-dom";
 import { FilterPopup } from "../Shared/FilterPopup";
 
 export default function Landing() {
-  const backgroundAgents: Array<string> = [
-    "/images/Astra.png",
-    "/images/Breach.png",
-    "/images/Brimstone.png",
-    "/images/Chamber.png",
-    "/images/Cypher.png",
-    "/images/Fade.png",
-    "/images/Harbor.png",
-    "/images/Jett.png",
-    "/images/KAYO.png",
-    "/images/Killjoy.png",
-    "/images/Neon.png",
-    "/images/Omen.png",
-    "/images/Phoenix.png",
-    "/images/Raze.png",
-    "/images/Reyna.png",
-    "/images/Sage.png",
-    "/images/Skye.png",
-    "/images/Sova.png",
-    "/images/Viper.png",
-    "/images/Yoru.png",
-  ];
-
-  let playerIconIndex: number = 17;
+  
   const {state} = useLocation();
   
   // State
   const [duoFound, setDuoFound] = useState<boolean>(false);
   const [findDuo, setFindDuo] = useState<boolean>(false);
   const [triggered, setTriggered] = React.useState(false);
-  const [agentIndex, setAgentIndex] = useState(0);
+
+  const [bgAgent1, setBgAgent1] = useState("");
+  const [bgAgent2, setBgAgent2] = useState("");
 
   // Refs
   const pollingTimeout = React.useRef<NodeJS.Timeout>(null);
@@ -82,11 +61,12 @@ export default function Landing() {
   }, []);
 
   useEffect(() => {
-    let index: number = playerIconIndex;
-    while (playerIconIndex === index) {
-      index = Math.floor(Math.random() * 20);
-    }
-    setAgentIndex(index);
+         
+    let bgAgents = Micellaneous.getBackgroundAgents(
+      loggedUserContext?.loggedUser?.avatarImage
+    );
+    setBgAgent1(bgAgents[0]);
+    setBgAgent2(bgAgents[1]);
   }, []);
 
   /* Handlers */
@@ -149,6 +129,43 @@ export default function Landing() {
     );
   }
 
+
+  function showChatButtons(): any {
+    return findDuo || duoFound ? (
+      <div></div>
+    ) : (
+      <ButtonContainer>
+        <div>
+          <Button id="filter" onClick={() => setTriggered(true)}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 512 512"
+              id="filterIcon"
+            >
+              <path d="M0 416c0-17.7 14.3-32 32-32l54.7 0c12.3-28.3 40.5-48 73.3-48s61 19.7 73.3 48L480 384c17.7 0 32 14.3 32 32s-14.3 32-32 32l-246.7 0c-12.3 28.3-40.5 48-73.3 48s-61-19.7-73.3-48L32 448c-17.7 0-32-14.3-32-32zm192 0c0-17.7-14.3-32-32-32s-32 14.3-32 32s14.3 32 32 32s32-14.3 32-32zM384 256c0-17.7-14.3-32-32-32s-32 14.3-32 32s14.3 32 32 32s32-14.3 32-32zm-32-80c32.8 0 61 19.7 73.3 48l54.7 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-54.7 0c-12.3 28.3-40.5 48-73.3 48s-61-19.7-73.3-48L32 288c-17.7 0-32-14.3-32-32s14.3-32 32-32l246.7 0c12.3-28.3 40.5-48 73.3-48zM192 64c-17.7 0-32 14.3-32 32s14.3 32 32 32s32-14.3 32-32s-14.3-32-32-32zm73.3 0L480 64c17.7 0 32 14.3 32 32s-14.3 32-32 32l-214.7 0c-12.3 28.3-40.5 48-73.3 48s-61-19.7-73.3-48L32 128C14.3 128 0 113.7 0 96S14.3 64 32 64l86.7 0C131 35.7 159.2 16 192 16s61 19.7 73.3 48z" />
+            </svg>
+            CHAT FILTERS
+          </Button>
+        </div>
+        <History>
+          <HistoryLink href={"/history"}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 512 512"
+              id="historyIcon"
+            >
+              <path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z" />
+            </svg>
+            CHAT HISTORY
+          </HistoryLink>
+        </History>
+      </ButtonContainer>
+    );
+  }
+
+
+
+
   return (
     <>
       <CustomToast></CustomToast>
@@ -176,35 +193,17 @@ export default function Landing() {
           </User>
         </Nav>
         <LandingContent>
-          <Agent src={backgroundAgents[playerIconIndex]}></Agent>
+          <Agent src={bgAgent1}></Agent>
           <Container>
             <LandingCard
               findDuo={findDuo}
               duoFound={duoFound}
               imgSrc={loggedUserContext?.loggedUser?.avatarImage}
             />
-            <ButtonContainer>
-              <div>
-                <ButtonImages src="./images/general/filter.png"></ButtonImages>
-                <Button onClick={() => setTriggered(true)}>CHAT FILTERS</Button>
-              </div>
-              <div>
-                <ButtonImages src="./images/general/history.png"></ButtonImages>
-                <Link
-                  style={{
-                    color: "#ffffff",
-                    textDecoration: "none",
-                    fontWeight: "600",
-                  }}
-                  to={"/history"}
-                >
-                  CHAT HISTORY
-                </Link>
-              </div>
-            </ButtonContainer>
+          {showChatButtons()}
             {getButton()}
           </Container>
-          <Agent src={backgroundAgents[agentIndex]}></Agent>
+          <Agent src={bgAgent2}></Agent>
         </LandingContent>
       </LandingPage>
     </>
@@ -228,7 +227,7 @@ const ButtonImages = styled.img`
 
 const Button = styled.button`
   font-weight: bold;
-  font-size: 16px;
+  font-size: 1rem;
   /* height: 100%; */
   /* margin: 5%; */
   background: none;
@@ -236,9 +235,27 @@ const Button = styled.button`
   /* background: none; */
   color: white;
   border: 0px;
+  width: 200px;
   :hover {
     cursor: pointer;
   }
+
+
+  & #filterIcon {
+    fill: white;
+    width: 20px;
+    height: 20px;
+    line-height: 100%;
+    padding-right: 5%;
+    margin-bottom: -2.5%;
+  }
+
+  @media (max-width: 769px) {
+    margin-top: 5%;
+    font-size: 0.75rem;
+  }
+
+
 `;
 
 const LandingPage = styled.div`
@@ -426,15 +443,50 @@ const HistoryButtonWrapper = styled.div`
   margin-left: 15px;
 `;
 
+const History = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
+
+const HistoryLink = styled.a`
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1rem;
+  background: none;
+  padding: 0% 10% 5% 10%;
+  line-break: 100%;
+  border: 0px;
+  width: 200px;
+
+  & #historyIcon {
+    fill: white;
+    width: 20px;
+    height: 20px;
+    line-height: 100%;
+    padding-right: 5%;
+    margin-bottom: -2.5%;
+  }
+
+  @media (max-width: 769px) {
+    font-size: 0.75rem;
+    margin-top: 5%;
+  }
+`;
+
 const Agent = styled.img`
   filter: brightness(35%) drop-shadow(0 0 7.5px #66c2aa6c);
   width: 20vw;
   height: 80vh;
   object-fit: cover;
 
+  visibility: visible;
+  opacity: 100;
+  transition: visibility 1s, opacity 1s;
+
   @media (max-width: 1024px) {
     visibility: hidden;
     opacity: 0;
-    transition: visibility 1.5s, opacity 1.5s;
+    transition: visibility 1s, opacity 1s;
   }
 `;
