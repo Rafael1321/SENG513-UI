@@ -13,7 +13,6 @@ import { Link, useLocation } from "react-router-dom";
 import { FilterPopup } from "../Shared/FilterPopup";
 import { useNavigate } from "react-router-dom";
 import { SocketContext } from '../../contexts/SocketContext';
-import { unstable_renderSubtreeIntoContainer } from "react-dom";
 
 export default function Landing() {
   
@@ -94,7 +93,7 @@ export default function Landing() {
   const handleLogout = () =>{ 
     localStorage.clear();
     navigate('../login');
-    //socketContext.closeSocket();
+    socketContext.closeSocket();
   }
 
   async function clickedFindDuo(): Promise<void> {
