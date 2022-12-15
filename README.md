@@ -1,13 +1,14 @@
 # SENG 513 - UI
 
+The following System Requirements and Installation steps are required for running the project locally. </br>
+If you are accessing the project remotely (via ___ LINK HERE), you may skip to the Usage section of this document. </br>
+
 ## System Requirements
 > Node JS </br>
 > NOT DONE </br>
 > A basic database, such as MongoDB
 
 ## Installation
-Note that these instructions are only for running the code locally. </br>
-The hosted version can be accessed at ___ DO NOT FORGET THIS </br>
 1. Clone or download the code found within the GitHub repository </br>
 1b. This can be done from within VS Code, by cloning https://github.com/Rafael1321/SENG513-UI </br>
 
@@ -40,4 +41,3 @@ Martha Ibarra </br>
 Rafael Flores Souza </br>
 Richard Gingrich </br>
 Tyler Chen 
-
