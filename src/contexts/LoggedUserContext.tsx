@@ -18,7 +18,7 @@ export function LoggedUserProvider({children} : Props) {
     const [loggedUser, setLoggedUser] = React.useState<IUser | null>(null);
     
     React.useEffect(() => {
-        if(EnvConfig.DEBUG) console.log(loggedUser);
+        if(EnvConfig.DEBUG) console.log(`LoggeddUser: ${loggedUser ?? "NULL"}`);
     }, [loggedUser]); 
 
     const updateLoggedUser = (loggedUser: IUser) : void => {

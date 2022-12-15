@@ -8,7 +8,7 @@ import { FilterProvider } from './contexts/FilterContext';
 import { LoggedUserProvider } from './contexts/LoggedUserContext';
 import { MatchedUserProvider } from './contexts/MatchedUserContext';
 import Landing from "./components/Landing/Landing";
-import { socket, SocketContext } from "./contexts/SocketContext";
+import { SocketProvider } from './contexts/SocketContext';
 
 function App() {
 
@@ -16,7 +16,7 @@ function App() {
           <LoggedUserProvider>
           <FilterProvider>
           <MatchedUserProvider>
-          <SocketContext.Provider value={socket}>
+          <SocketProvider>
             <Routes>
               <Route path="/" element={<Start formType={FormType.Registration}></Start>} />
               <Route path="/register" element={<Start formType={FormType.Registration}></Start>} />
@@ -25,7 +25,7 @@ function App() {
               <Route path="/history" element={<ChatHistory />} />
               <Route path="/chat" element={<ChatBody />} />
             </Routes>
-          </SocketContext.Provider>
+          </SocketProvider>
           </MatchedUserProvider>
           </FilterProvider>
           </LoggedUserProvider> 

@@ -18,7 +18,7 @@ export function MatchedUserProvider({children} : Props) {
     const [matchedUser, setMatchedUser] = React.useState<IUser | null>(null);
     
     React.useEffect(() => {
-        if(EnvConfig.DEBUG) console.log(matchedUser);
+        if(EnvConfig.DEBUG) console.log(`Matched User: ${matchedUser ?? "NULL"}`);
     }, [matchedUser]); 
 
     const updateMatchedUser = (loggedUser: IUser) : void => {

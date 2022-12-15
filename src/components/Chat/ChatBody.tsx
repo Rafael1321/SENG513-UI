@@ -16,7 +16,7 @@ export default function ChatBody() {
   // Contexts
   const loggedUserContext = useContext(LoggedUserContext);
   const matchedUser = useContext(MatchedUserContext);
-  const socket = useContext(SocketContext);
+  const socketContext = useContext(SocketContext);
 
   // State
   const [messages, setMessages] = useState<IMessage[]>([]);
@@ -25,21 +25,21 @@ export default function ChatBody() {
 
   // Use State
   useEffect(() => {
-    socket.on("receive_msg", (receiveMsgDTO: IReceiveMsgDTO) => {
+    socketContext?.socket?.on("receive_msg", (receiveMsgDTO: IReceiveMsgDTO) => {
       // Locally update the messages
     
       const newMsgs = [...messages, {userId: matchedUser?.matchedUser?._id,type:"received", text:receiveMsgDTO.msg, userIcon:matchedUser?.matchedUser?.avatarImage}];
       setMessages(newMsgs);
     });
 
-    socket.on("error_send_msg", (msg: any) => {
+    socketContext?.socket?.on("error_send_msg", (msg: any) => {
       if (EnvConfig.DEBUG) console.log(msg);
     });
   }, [
     matchedUser?.matchedUser?._id,
     matchedUser?.matchedUser?.avatarImage,
     messages,
-    socket,
+    socketContext.socket,
   ]);
 
   const sendMsg = async (sendContactInfo: boolean = false) => {
@@ -61,7 +61,7 @@ export default function ChatBody() {
     await ChatService.save({senderId:loggedUserContext?.loggedUser?._id, receiverId:matchedUser?.matchedUser?._id, message: typedMessage});
 
     // Notify other users of the message
-    socket.emit("send_msg", matchedUser?.matchedUser?._id, sendContactInfo ? contactMsg : typedMessage);
+    socketContext?.socket?.emit("send_msg", matchedUser?.matchedUser?._id, sendContactInfo ? contactMsg : typedMessage);
 
     setTypedMessage("");  // Clear the typed message
   };

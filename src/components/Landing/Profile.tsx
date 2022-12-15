@@ -467,7 +467,7 @@ const Label = styled.p`
   }
 `;
 
-const RankLabel = styled(Label)`
+const RankLabel = styled.div`
   padding-left: 0px;
   text-align: center;
   font-size: 1rem;

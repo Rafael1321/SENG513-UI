@@ -11,6 +11,7 @@ import { FiltersService, IFiltersResponse } from '../../services/FiltersService'
 import { FilterContext } from '../../contexts/FilterContext';
 import { IFilters } from '../../models/FiltersModels';
 import { Micellaneous } from '../../util/Micellaneous';
+import { SocketContext } from '../../contexts/SocketContext';
 
 export enum FormType {
   Login = 0,
@@ -21,11 +22,17 @@ type Props = {
   formType: FormType;
 };
 
+interface INav{
+  justRegistered : boolean;
+}
+
+
 export function Form(props: Props): React.ReactElement<Props, any> {
 
     /* Logged User Context */
     const loggedUserContext = React.useContext(LoggedUserContext);
     const filterContex = React.useContext(FilterContext);
+    const socketContext = React.useContext(SocketContext);
 
     /* Form State */
     const [displayName, setDisplayName] = React.useState('');
@@ -34,11 +41,28 @@ export function Form(props: Props): React.ReactElement<Props, any> {
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [confirmPassword, setConfirmPassword] = React.useState('');
+    const [navigateNext, setNavigateNext] = React.useState<INav>(null);
 
     const [loading, setLoading] = React.useState<boolean>(false);
 
-      /* Navigation */
+    /* Navigation */
     const navigate = useNavigate();
+
+    /* Use Effect */
+    React.useEffect(() => {
+      if(loggedUserContext.loggedUser && navigateNext){
+        socketContext.updateSocket(loggedUserContext?.loggedUser?._id);
+      }
+    }, [loggedUserContext.loggedUser, navigateNext]);
+
+    React.useEffect(() => {
+      if(socketContext.socket){
+        console.log(socketContext.socket);
+        navigate('../landing', { state: {
+          justRegistered: navigateNext.justRegistered,
+        }});
+      }
+    }, [socketContext.socket])
 
     /* Handlers */
 
@@ -107,9 +131,7 @@ export function Form(props: Props): React.ReactElement<Props, any> {
                 setLoading(false);
             }
 
-            navigate('../landing', { state: {
-              justRegistered: true,
-            }});
+            setNavigateNext({justRegistered: true});
         }else{
 
             setLoading(true);
@@ -131,9 +153,7 @@ export function Form(props: Props): React.ReactElement<Props, any> {
 
                 setLoading(false);
 
-                navigate('../landing', { state: {
-                  justRegistered: false,
-                }});
+                setNavigateNext({justRegistered: false});
             }
         }
     }

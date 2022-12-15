@@ -23,7 +23,7 @@ export function FilterProvider({children} : Props) {
     const [filters, setFilters] = React.useState<IFilters | null>(null);
     
     React.useEffect(() => {
-        if(EnvConfig.DEBUG) console.log(filters);
+        if(EnvConfig.DEBUG) console.log(`Filters: ${filters ?? "NULL"}`);
     }, [filters]); 
 
     function updateServerPreference (serverPreference : number) : void{
