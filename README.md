@@ -1,4 +1,4 @@
-# SENG 513 - UI
+# SENG 513 - UI / API
 
 The following System Requirements and Installation steps are required for running the project locally. </br>
 If you are accessing the project remotely (via ___ LINK HERE), you may skip to the Usage section of this document. </br>
