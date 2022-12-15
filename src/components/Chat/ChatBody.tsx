@@ -149,7 +149,7 @@ export default function ChatBody() {
           }
         />
 
-        <BtnContainer>/images/general/edit.png
+        <BtnContainer>
           <MobileTimer>🕐 You have 10 minutes remaining!</MobileTimer>
           <Btn onClick={() => sendMsg(true)} btnColor="#66c2a9">
             <BtnIcon imgSrc="/images/chat/share.png" />
