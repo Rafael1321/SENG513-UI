@@ -4,6 +4,7 @@ The following System Requirements and Installation steps are required for runnin
 If you are accessing the project remotely ([vivideradicator.ca](http://www.vivideradicator.ca)), you may skip to the Usage section of this document. <br>
 
 ## System Requirements
+
 Ensure that the following are already installed on your operating system of choice. <br>
 > Node JS <br>
 > NPM <br>
@@ -27,7 +28,9 @@ Instructions can be found at https://www.mongodb.com/docs/manual/installation/ <
 3. Install all required project dependencies using `npm i` <br>
 4. Run the application with `npm start` <br> 
 
+
 ## Usage
+
 The following steps can be used to experience the full functionality of the application. </br>
 
 1. You will be greeted by the login/account registration page <br>
@@ -62,8 +65,8 @@ Polishing of the app, squashing of several major bugs.  <br>
 Small UI adjustments, ensuring all systems work as they should. <br>
 <br>
 
-
 ## Contributors and Credit
+
 Gaganjot Brar <br>
 Harkamal Randhawa <br>
 Martha Ibarra <br>
