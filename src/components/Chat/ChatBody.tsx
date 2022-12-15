@@ -323,9 +323,9 @@ const ChatInput = styled.input`
   outline: none;
   border: 0;
   position: absolute;
-  &::placeholder {
-    padding: 2%;
-  }
+  box-sizing: border-box;
+  padding: 2%;
+
   @media all and (max-width: 1400px) {
     width: 90vw;
     height: 5vh;
