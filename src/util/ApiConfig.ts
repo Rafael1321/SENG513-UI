@@ -12,8 +12,8 @@ export class ApiConfig{
     public static findUserRoute = (userId : string) => this.baseRoute + `users/${userId}`;
 
     /* Chat */
-    public static saveMessageRoute = () => this.baseRoute + `/chats`;
-    public static retrieveMessagesRoute = () => this.baseRoute + `/chats`;
+    public static saveMessageRoute = () => this.baseRoute + `/chats/save`;
+    public static retrieveMessagesRoute = () => this.baseRoute + `/chats/retrieve`;
 
     /* History */
     public static retrieveMatchHistory = (userId : string) => this.baseRoute + `/matchings/${userId}`;
