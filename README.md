@@ -1,7 +1,7 @@
 # SENG 513 - UI / API
 
 The following System Requirements and Installation steps are required for running the project locally. </br>
-If you are accessing the project remotely (vivideradicator.ca), you may skip to the Usage section of this document. </br>
+If you are accessing the project remotely ([vivideradicator.ca](vivideradicator.ca)), you may skip to the Usage section of this document. </br>
 
 ## System Requirements
 Ensure that the following are already installed on your operating system of choice. </br>
