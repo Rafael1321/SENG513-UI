@@ -24,7 +24,6 @@ Use-state-based system, where changes were not saved and lost upon refreshing/ex
 </br>
 *v2.0* </br>
 Introduced save states and a backend. User information now saved. </br>
-</br>
 *v2.1* </br>
 Real-time data share between users made possible with sockets. </br>
 </br>
