@@ -16,6 +16,8 @@ User Interface
 2. Using the command prompt, `cd ~path/of/your/choosing/SENG513-UI` will navigate you to the proper directory </br>
 3. Install all required project dependencies using `npm i` </br>
 4. Run the application with `npm start` </br>
+</br>
+
 API
 1. Clone or download the code found within the GitHub SENG513-API repository, to a path/of/your/choosing </br>
 1b. This can be done from within VS Code, via `git clone https://github.com/Rafael1321/SENG513-API.git` </br>
