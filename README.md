@@ -44,7 +44,8 @@ DO NOT use real password information here, it is not yet encrypted <br>
 5. Once connected, you may send messages in real-time to the other user. Pushing the 'Share Contact' button will automatically send your in-game information to the other user <br>
 5b. Move onto another connection with the "Next" button, or return to your profile page by clicking the 'x' in the top-right corner <br>
 6. Once back on your profile page, view your past matches with the 'Chat History' button <br>
-7. You may re-read past messages and give a rating to anyone you have talked to previously. To give a rating, press the top-right 'Rate Player' button <br>
+6b. You may re-read past messages and give a rating to anyone you have talked to previously. To give a rating, press the top-right 'Rate Player' button <br>
+7. Enjoy!
 
 ## Version History
 *v1.0* <br>
