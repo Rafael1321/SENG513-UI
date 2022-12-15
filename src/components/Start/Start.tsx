@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Agents } from './Agents';
 import { Form, FormType } from './Form';
@@ -9,7 +10,15 @@ type Props = {
 }
 
 export default function Start(props : Props) : React.ReactElement{
-        
+    
+    const navigate = useNavigate();
+
+    React.useEffect(() => {
+        if(localStorage.getItem('loggedUser')){
+            navigate('../landing');
+        }
+    }, []);
+
     return (
         <StartPage>
             <Agents formType={props.formType}></Agents>

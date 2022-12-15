@@ -7,10 +7,12 @@ import { SocketContext } from "../../contexts/SocketContext";
 import { LoggedUserContext } from "../../contexts/LoggedUserContext";
 import { Link } from "react-router-dom";
 import { MatchedUserContext } from "../../contexts/MatchedUserContext";
-import { IMessage, IReceiveMsgDTO } from "../../models/ChatModels";
+import { ILoadMsgDTO, IMessage, IReceiveMsgDTO } from "../../models/ChatModels";
 import { Gender } from "../../models/FiltersModels";
 import { EnvConfig } from "../../util/EnvConfig";
-import { ChatService } from "../../services/ChatService";
+import { ChatService, IChatResponse } from "../../services/ChatService";
+import { useLocalStorage } from "usehooks-ts";
+import { toast } from "react-toastify";
 
 export default function ChatBody() {
   // Contexts
@@ -24,6 +26,32 @@ export default function ChatBody() {
 
 
   // Use State
+  useEffect(() => {
+
+    const fetchMessages = async () : Promise<void> => {
+
+      const res : IChatResponse = await ChatService.retrieve({senderId : loggedUserContext?.loggedUser?._id, receiverId : matchedUser?.matchedUser?._id});
+
+      if(res.statusCode !== 200){
+        toast.error("Could not retrieve chat for match.")
+        return;
+      }
+      const loadedMessages = res.data as ILoadMsgDTO[];
+
+      // Update messages to be displayed
+      setMessages(loadedMessages.map( (loadMessage : ILoadMsgDTO) => {
+        return {userId: loadMessage.senderId, 
+         type: (loadMessage.senderId === loggedUserContext?.loggedUser?._id ?"sent":"received"), 
+         text: loadMessage.message, 
+         userIcon:loadMessage.senderId === loggedUserContext?.loggedUser?._id?loggedUserContext?.loggedUser?.avatarImage:matchedUser?.matchedUser?.avatarImage
+        }
+      }));
+    }
+
+    if(localStorage.getItem("loggedUser") && localStorage.getItem("matchedUser")) fetchMessages();
+
+  }, []);
+
   useEffect(() => {
     socketContext?.socket?.on("receive_msg", (receiveMsgDTO: IReceiveMsgDTO) => {
       // Locally update the messages
